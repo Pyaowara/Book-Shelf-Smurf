@@ -1,6 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
+import { BookListComponent } from './app/book-list/book-list.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter, Routes } from '@angular/router';
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+const routes: Routes = [
+  { path: 'books', component: BookListComponent },
+  { path: '', redirectTo: '/books', pathMatch: 'full' }
+];
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideHttpClient(), // Provide HTTP client
+    provideRouter(routes)
+  ],
+});
