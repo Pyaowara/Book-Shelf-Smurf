@@ -5,8 +5,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'books', component: BookListComponent },
-  { path: '', redirectTo: '/books', pathMatch: 'full' }
+  { path: '', component: BookListComponent}
 ];
 
 bootstrapApplication(AppComponent, {
