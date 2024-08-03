@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
     //ปรับตรงorigin เป็นpath ปัจจุบันที่ใช้
-    origin: '*',
+    origin: ['https://books-spark.vercel.app', 'http://localhost:4200'],
     credentials: true
 }));
 
