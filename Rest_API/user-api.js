@@ -19,7 +19,8 @@ const pool = mysql.createPool({
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: 'http://localhost:4200',
+    //ปรับตรงorigin เป็นpath ปัจจุบันที่ใช้
+    origin: 'https://books-spark.vercel.app/',
     credentials: true
 }));
 
