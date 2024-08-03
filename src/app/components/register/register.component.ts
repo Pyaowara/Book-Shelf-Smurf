@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RegisterService } from '../../services/register-service/register.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -18,9 +18,9 @@ export class RegisterComponent {
     users_password: '',
   };
 
-  constructor(private registerService: RegisterService){}
+  constructor(private authService: AuthService){}
   register(){
-    this.registerService.register(this.users).subscribe(
+    this.authService.register(this.users).subscribe(
       (message: string) => {
         this.registerMessage = message;
       }

@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BookListComponent } from './components/book-list/book-list.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/login/login.component'
 import { RegisterComponent } from './components/register/register.component';
 
 @Component({
@@ -11,4 +11,4 @@ import { RegisterComponent } from './components/register/register.component';
   styleUrls: ['./app.component.css'],
   imports: [RouterOutlet, BookListComponent, LoginComponent, RegisterComponent] // Include BookListComponent here
 })
-export class AppComponent {}
+export class AppComponent{}

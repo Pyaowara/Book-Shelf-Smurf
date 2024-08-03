@@ -5,7 +5,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, Routes } from '@angular/router';
 import { LoginComponent } from './app/components/login/login.component';
 import { RegisterComponent } from './app/components/register/register.component';
-import { loginAuthGuard } from './app/guard/login-auth.guard';
+import { loginAuthGuard } from './app/auth/guard/login-auth.guard';
 
 
 

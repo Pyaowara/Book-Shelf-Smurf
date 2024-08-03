@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoginService } from '../../services/login-service/login.service';
+import { AuthService } from '../../auth/auth.service'
 import { RouterModule }from '@angular/router';
 
 
@@ -11,18 +11,22 @@ import { RouterModule }from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   loginMessage: string = '';
   users = {
     users_username: '',
     users_password: ''
   };
 
-  constructor(private loginService: LoginService,
+  constructor(private authService: AuthService,
   ) { }
   
+  ngOnInit() :void{
+    this.authService.verifyToken().subscribe();
+  }
+  
   login() {
-    this.loginService.login(this.users).subscribe(
+    this.authService.login(this.users).subscribe(
       (message: string) => {
         this.loginMessage = message;
       }
