@@ -11,19 +11,14 @@ import { RouterModule }from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent{
   loginMessage: string = '';
   users = {
     users_username: '',
     users_password: ''
   };
 
-  constructor(private authService: AuthService,
-  ) { }
-  
-  ngOnInit() :void{
-    this.authService.verifyToken().subscribe();
-  }
+  constructor(private authService: AuthService) { }
   
   login() {
     this.authService.login(this.users).subscribe(

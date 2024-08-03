@@ -17,12 +17,7 @@ const pool = mysql.createPool({
 });
 
 app.use(express.json());
-app.use(cookieParser())
-app.use(cors({
-    //ปรับตรงorigin เป็นpath ปัจจุบันที่ใช้
-    origin: ['https://books-spark.vercel.app', 'http://localhost:4200'],
-    credentials: true
-}));
+app.use(cors())
 
 app.post('/register', async (req, res) => {
     const { users_email, users_username, users_password} = req.body;
@@ -58,14 +53,6 @@ app.post('/login', async (req, res) => {
         const match = await bcrypt.compare(users_password, userData.users_password);
 
         if (match) {
-            const token = jwt.sign({users_username}, 'itkmitl');
-            res.cookie('token', token, {
-                maxAge: 300000,
-                secure: false,
-                httpOnly: true,
-                sameSite: "lax",
-            })
-
             res.status(200).json({
                 message: 'Login successful',
             });
@@ -82,24 +69,6 @@ app.post('/login', async (req, res) => {
         console.error('Database error:', err);
         res.status(500).send(err.message);
     }
-});
-
-app.get('/verify', (req, res) => {
-    const token = req.cookies.token;
-
-    if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
-    }
-
-    jwt.verify(token, 'itkmitl', (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Invalid token' });
-        }
-        res.status(200).json({
-            message: 'Token is valid',
-            username: decoded.users_username,
-        });
-    });
 });
 
 app.listen(port, () => {

@@ -11,16 +11,12 @@ export class AuthService {
 
   private loginApiUrl = 'http://localhost:8000/login';
   private registerApiUrl = 'http://localhost:8000/register';
-  private verifyUrl = 'http://localhost:8000/verify';
 
   constructor(private http: HttpClient,
               private router: Router) { }
 
   login(users: { users_username: string, users_password: string }): Observable<string> {
-    const httpOptions = {
-      withCredentials: true
-    };
-    return this.http.post<{message:string}>(this.loginApiUrl, users, httpOptions).pipe(
+    return this.http.post<{message:string}>(this.loginApiUrl, users).pipe(
       map(response => {
         if (response.message === 'Login successful') {
           this.router.navigate(['booklist/'+users.users_username]);
@@ -49,17 +45,6 @@ export class AuthService {
         console.error('Error during registration:', error);
         return of('Register fail');
       })
-    );
-  }
-
-  verifyToken(): Observable<void> {
-    return this.http.get<{ message: string, username: string, id: number }>(this.verifyUrl, { withCredentials: true }).pipe(
-      map(response => {
-        if (response.message === 'Token is valid') {
-          this.router.navigate(['/booklist', response.username]);
-          return;
-        }
-      }),
     );
   }
 }
