@@ -1,17 +1,13 @@
-<h3>booklist work!</h3>
-<div *ngFor="let book of books$ | async">
-  <h3>{{ book.book_name_EN }}</h3>
-  <p><strong>Original Title:</strong> {{ book.book_name_origianl }}</p>
-  <p><strong>Publisher:</strong> {{ book.publisher }}</p>
-  <p><strong>Author:</strong> {{ book.author }}</p>
-  <p><strong>Status:</strong> {{ book.book_status }}</p>
-  <p><strong>Type:</strong> {{ book.book_type }}</p>
-  <p><strong>Score:</strong> {{ book.book_score }}</p>
-  <p><strong>Price:</strong> {{ book.book_price }}</p>
-  <p><strong>Pages:</strong> {{ book.book_pages }}</p>
-  <p><strong>References:</strong> {{ book.references_link }}</p>
-  <p><strong>Category:</strong> {{ book.book_category }}</p>
-  <p><strong>Language:</strong> {{ book.book_language }}</p>
-  <p><strong>Description:</strong> {{ book.book_descriptions }}</p>
-  <img *ngIf="book.book_image" [src]="book.book_image" alt="Book Image" />
+<div *ngFor="let category of categories" class="category-container">
+  <h2>{{ category }}</h2>
+  <div class="books-container">
+    <div *ngFor="let book of getBooksByCategory(category)" class="book-card">
+      <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
+      <div class="book-info">
+        <h3>{{ book.book_name_en }}</h3>
+        <p><em>{{ book.book_name_originl }}</em></p>
+        <p>{{ getStars(book.book_score) }}</p>
+      </div>
+    </div>
+  </div>
 </div>

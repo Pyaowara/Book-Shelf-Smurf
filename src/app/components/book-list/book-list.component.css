@@ -1,0 +1,38 @@
+.category-container {
+    margin-bottom: 20px;
+  }
+  
+  .books-container {
+    display: flex;
+    overflow-x: scroll;
+    padding: 10px 0;
+  }
+  
+  .book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+    width: 150px;
+  }
+  
+  .book-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .book-info {
+    text-align: center;
+  }
+  
+  .book-info h3 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  
+  .book-info p {
+    margin: 0;
+  }
+  

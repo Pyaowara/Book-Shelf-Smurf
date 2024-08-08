@@ -8,17 +8,40 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
-  imports: [CommonModule] // Import CommonModule here
+  imports: [CommonModule]
 })
 export class BookListComponent {
   books$: Observable<any[]>;
+  booksByCategory: { [key: string]: any[] } = {};
+  categories: string[] = [];
 
   constructor(private http: HttpClient) {
     this.books$ = this.http.get<any[]>('http://localhost:3000/books').pipe(
       catchError(error => {
         console.error('Error fetching books:', error);
-        return of([]); // Return an empty array in case of error
+        return of([]); 
       })
     );
+
+    this.books$.subscribe(books => {
+      books.forEach(book => {
+        const categories = book.book_category.split(',').map((category: string) => category.trim());
+        categories.forEach((category: string) => {
+          if (!this.booksByCategory[category]) {
+            this.booksByCategory[category] = [];
+          }
+          this.booksByCategory[category].push(book);
+        });
+      });
+      this.categories = Object.keys(this.booksByCategory);
+    });
+  }
+
+  getBooksByCategory(category: string): any[] {
+    return this.booksByCategory[category] || [];
+  }
+
+  getStars(score: number): string {
+    return '⭐'.repeat(score);
   }
 }

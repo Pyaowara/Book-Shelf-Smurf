@@ -10,7 +10,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'book',
+  database: 'bookv2',
   port: 3306 //ใครจะใช้เปลี่ยนเป็น port ที่รัน mysql ก่อน
 });
 
