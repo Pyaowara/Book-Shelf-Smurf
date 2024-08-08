@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 
+interface User {
+  user_email: string;
+  user_name: string;
+  user_pass: string;
+}
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -12,7 +18,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class RegisterComponent {
   registerMessage: string = '';
-  users = {
+  users : User= {
     user_email: '',
     user_name: '',
     user_pass: '',

@@ -3,6 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service'
 import { RouterModule }from '@angular/router';
 
+interface User {
+  user_name: string;
+  user_pass: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -11,9 +15,11 @@ import { RouterModule }from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
+
 export class LoginComponent{
   loginMessage: string = '';
-  users = {
+
+  users: User = {
     user_name: '',
     user_pass: ''
   };
