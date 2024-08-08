@@ -1,7 +1,7 @@
 <div *ngFor="let category of categories" class="category-container">
   <h2>{{ category }}</h2>
   <div class="books-container">
-    <div *ngFor="let book of getBooksByCategory(category)" class="book-card">
+    <div *ngFor="let book of getBooksByCategory(category)" class="book-card" [routerLink]="['/book', book.book_id]">
       <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
       <div class="book-info">
         <h3>{{ book.book_name_en }}</h3>

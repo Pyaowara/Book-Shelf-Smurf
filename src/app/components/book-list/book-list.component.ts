@@ -2,20 +2,21 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule  } from '@angular/router';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, RouterModule]
 })
 export class BookListComponent {
   books$: Observable<any[]>;
   booksByCategory: { [key: string]: any[] } = {};
   categories: string[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.books$ = this.http.get<any[]>('http://localhost:3000/books').pipe(
       catchError(error => {
         console.error('Error fetching books:', error);
