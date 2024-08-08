@@ -15,11 +15,11 @@ export class AuthService {
   constructor(private http: HttpClient,
               private router: Router) { }
 
-  login(users: { users_username: string, users_password: string }): Observable<string> {
+  login(users: { user_name: string, user_pass: string }): Observable<string> {
     return this.http.post<{message:string}>(this.loginApiUrl, users).pipe(
       map(response => {
         if (response.message === 'Login successful') {
-          this.router.navigate(['booklist/'+users.users_username]);
+          this.router.navigate(['booklist/'+users.user_name]);
           return 'Login successful';
         } else {
           return 'Invalid username or password';
@@ -31,7 +31,7 @@ export class AuthService {
     );
   }
 
-  register(users: { users_email: string, users_username: string, users_password: string}): Observable<string> {
+  register(users: { user_email: string, user_name: string, user_pass: string}): Observable<string> {
     return this.http.post(this.registerApiUrl, users, { responseType: 'text' }).pipe(
       map((response: string) => {
         if (response === 'User registered') {

@@ -13,9 +13,9 @@ import { AuthService } from '../../auth/auth.service';
 export class RegisterComponent {
   registerMessage: string = '';
   users = {
-    users_email: '',
-    users_username: '',
-    users_password: '',
+    user_email: '',
+    user_name: '',
+    user_pass: '',
   };
 
   constructor(private authService: AuthService){}
