@@ -17,14 +17,14 @@ app.use(express.json());
 app.use(cors())
 
 app.post('/register', async (req, res) => {
-    const { user_email, user_name, user_pass} = req.body;
+    const { user_email, user_name, user_pass, user_phone} = req.body;
 
-    if (!user_email || !user_name || !user_pass) {
+    if (!user_email || !user_name || !user_pass || !user_phone) {
         return res.status(400).send('All fields are required');
     }
     try {
         const conn = await pool.getConnection();
-        await conn.query('INSERT INTO user (user_email, user_name, user_pass) VALUES (?, ?, ?)', [user_email, user_name, user_pass]);
+        await conn.query('INSERT INTO user (user_email, user_name, user_pass, user_permission, user_phone) VALUES (?, ?, ?, ?, ?)', [user_email, user_name, user_pass, 1, user_phone]);
         res.status(201).send('User registered');
         conn.release();
     } catch (err) {

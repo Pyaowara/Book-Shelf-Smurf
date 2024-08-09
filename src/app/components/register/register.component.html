@@ -1,7 +1,9 @@
 <p>register works!</p>
+email : <input type="email"[(ngModel)]="users.user_email"><br>
 username : <input type="text" [(ngModel)]="users.user_name"><br>
 Password : <input type="password"[(ngModel)]="users.user_pass"><br>
-email : <input type="email"[(ngModel)]="users.user_email"><br>
-<button type="submit" (click)="register()">register</button><br>
-<br>
+Confirm Password : <input type="password"[(ngModel)]="confirm_pass"><br>
+telephone number : <input type="text"[(ngModel)]="users.user_phone"><br>
+<button type="submit" (click)="register()">Create Accound</button>
+<button type="submit" (click)="login()">login</button><br>
 {{registerMessage}}

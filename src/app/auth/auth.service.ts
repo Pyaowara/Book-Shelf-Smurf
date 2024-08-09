@@ -26,12 +26,13 @@ export class AuthService {
         }
       }),
       catchError((error) => {
+        console.error('Error during registration:', error);
         return of('Invalid username or password');
       })
     );
   }
 
-  register(users: { user_email: string, user_name: string, user_pass: string}): Observable<string> {
+  register(users: { user_email: string, user_name: string, user_pass: string, user_phone: string}): Observable<string> {
     return this.http.post(this.registerApiUrl, users, { responseType: 'text' }).pipe(
       map((response: string) => {
         if (response === 'User registered') {
