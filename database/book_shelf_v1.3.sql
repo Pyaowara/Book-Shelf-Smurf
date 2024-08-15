@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2024 at 12:23 PM
+-- Generation Time: Aug 15, 2024 at 04:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -345,8 +345,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_pass`, `user_email`, `user_phone`, `user_permission`, `user_image`, `user_descriptions`) VALUES
-(1001, 'sirachet', 'sirachet123', 'sirachet@gmail.com', '0889112207', '1', 'https://www.google.co.th/url?sa=i&url=https%3A%2F%2Ftwitter.com%2Fkadokawa_amarin%2Fstatus%2F1791305153984999746&psig=AOvVaw12FIsjXKhRuRaVlhn0CZpy&ust=1722952372503000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPjg-fL_3YcDFQAAAAAdAAAAABAc', '0'),
-(1002, 'admin1', 'admin123', 'admin1@gmail.com', '0119923456', '0', 'admin1.jpeg', '0');
+(1001, 'sirachet', 'sirachet123', 'sirachet@gmail.com', '0889112207', '1', 'https://www.google.co.th/url?sa=i&url=https%3A%2F%2Ftwitter.com%2Fkadokawa_amarin%2Fstatus%2F1791305153984999746&psig=AOvVaw12FIsjXKhRuRaVlhn0CZpy&ust=1722952372503000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPjg-fL_3YcDFQAAAAAdAAAAABAc', 'No Details'),
+(1002, 'admin1', 'admin123', 'admin1@gmail.com', '0119923456', '0', 'admin1.jpeg', 'No Details');
 
 --
 -- Indexes for dumped tables
