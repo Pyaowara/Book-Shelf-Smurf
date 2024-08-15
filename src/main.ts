@@ -6,13 +6,15 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, Routes } from '@angular/router';
 import { LoginComponent } from './app/components/login/login.component';
 import { RegisterComponent } from './app/components/register/register.component';
+import { SearchedBookComponent } from './app/components/searched-book/searched-book.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'booklist/:id', component: BookListComponent },
   { path: 'book/:id', component: BookDetailComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent }
+  { path: 'register', component: RegisterComponent },
+  { path: 'searched-book', component: SearchedBookComponent },
 ];
 
 bootstrapApplication(AppComponent, {
