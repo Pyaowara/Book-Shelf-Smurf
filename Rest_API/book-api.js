@@ -53,7 +53,7 @@ app.get('/books/:id', (req, res) => {
 
 app.get('/book_description', (req, res) => {
   const bookId = req.query.book_id;
-  const query = 'SELECT * FROM book_description WHERE book_id = ?'; // Use the correct column
+  const query = 'SELECT * FROM book_description WHERE book_description_id = ?'; // Use the correct column
 
   db.query(query, [bookId], (err, results) => {
     if (err) {
