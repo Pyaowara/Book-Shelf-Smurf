@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { UserModel } from '../models/user.model/user.model';
-import { UserService } from '../services/user_service/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,24 +14,12 @@ export class AuthService {
   private registerApiUrl = 'http://localhost:8000/register';
 
   constructor(private http: HttpClient,
-              private router: Router,
-              private UserService: UserService) { }
+              private router: Router,) { }
 
   public login(users: { user_name: string, user_pass: string }): Observable<string> {
-    return this.http.post<any>(this.loginApiUrl, users).pipe(
+    return this.http.post<{message:string}>(this.loginApiUrl, users).pipe(
       map(response => {
         if (response.message === 'Login successful') {
-          const loggedInUser = new UserModel(
-            response.userId,
-            response.userName,
-            response.userPass,
-            response.userEmail,
-            response.userPermission,
-            response.userPhone,
-            response.userImage,
-            response.userDescriptions
-          );
-          this.UserService.setUser(loggedInUser);
           this.router.navigate(['booklist/'+users.user_name]);
           return 'Login successful';
         } else {

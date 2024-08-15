@@ -56,14 +56,6 @@ app.post('/login', async (req, res) => {
         if (user.length > 0) {
             res.status(200).json({
                 message: 'Login successful',
-                userId: user[0].user_id,
-                userName: user[0].user_name,
-                userEmail: user[0].user_email,
-                userPhone: user[0].user_phone,
-                userPermission: user[0].user_permission,
-                userImage: user[0].user_image,
-                userDescriptions: user[0].user_descriptions,
-                userPass: user[0].user_pass
             });
         }
         else {
