@@ -1,0 +1,43 @@
+
+  
+  .books-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to a new row */
+    gap: 20px; /* Add space between items */
+    padding: 10px 0;
+  }
+  
+  .book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    cursor: pointer; /* Ensure this is applied */
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .book-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .book-info {
+    text-align: center;
+  }
+  
+  .book-info h3 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  
+  .book-info p {
+    margin: 0;
+  }
+  
+  .book-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  

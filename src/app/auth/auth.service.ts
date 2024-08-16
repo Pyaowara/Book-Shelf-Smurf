@@ -7,15 +7,16 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
 
   private loginApiUrl = 'http://localhost:8000/login';
   private registerApiUrl = 'http://localhost:8000/register';
 
   constructor(private http: HttpClient,
-              private router: Router) { }
+              private router: Router,) { }
 
-  login(users: { user_name: string, user_pass: string }): Observable<string> {
+  public login(users: { user_name: string, user_pass: string }): Observable<string> {
     return this.http.post<{message:string}>(this.loginApiUrl, users).pipe(
       map(response => {
         if (response.message === 'Login successful') {
@@ -32,7 +33,7 @@ export class AuthService {
     );
   }
 
-  register(users: { user_email: string, user_name: string, user_pass: string, user_phone: string}): Observable<string> {
+  public register(users: { user_email: string, user_name: string, user_pass: string, user_phone: string}): Observable<string> {
     return this.http.post(this.registerApiUrl, users, { responseType: 'text' }).pipe(
       map((response: string) => {
         if (response === 'User registered') {

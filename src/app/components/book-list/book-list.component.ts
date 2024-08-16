@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule  } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, FormsModule]
 })
 export class BookListComponent {
   books$: Observable<any[]>;
@@ -34,7 +35,10 @@ export class BookListComponent {
           this.booksByCategory[category].push(book);
         });
       });
-      this.categories = Object.keys(this.booksByCategory);
+
+      this.categories = Object.keys(this.booksByCategory)
+        .sort((a, b) => this.booksByCategory[b].length - this.booksByCategory[a].length)
+        .slice(0, 5); 
     });
   }
 

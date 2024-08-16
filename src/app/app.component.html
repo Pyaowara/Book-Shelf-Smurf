@@ -1,29 +1,11 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<style>
-  h1 {
-    text-align: center;
-    font-size: 3.125rem;
-    color: var(--gray-900);
-    font-weight: 500;
-    line-height: 100%;
-    letter-spacing: -0.125rem;
-    margin: 0;
-    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-  }
-</style>
-
-<main class="main">
-  <h1>Book Shelf 📚</h1>
-</main>
+<div *ngIf="shouldShowControls()">
+  <div class="search-container">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Search for a book..." class="search-input"/>
+    <button (click)="searchBooks()" class="search-button">Search</button>
+    <button (click)="goToBookList()" class="back-to-booklist-button">Home</button>
+    <button (click)="goToBookList()" class="back-to-booklist-button">User</button>
+    <button (click)="goToAllBooks()" class="back-to-booklist-button">Books</button>
+  </div>
+</div>
 
 <router-outlet></router-outlet>
