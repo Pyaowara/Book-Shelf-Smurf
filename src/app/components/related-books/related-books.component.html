@@ -1,0 +1,51 @@
+<div class="book-detail-container">
+    <h1>Book Details</h1>
+  
+    <div *ngIf="book$ | async as book; else loading" class="book-detail">
+      <div class="book-header">
+        <h2>{{ book.book_name_en }}</h2>
+        <h3>{{ book.book_name_th }}</h3>
+        <p><em>{{ book.book_name_originl }}</em></p>
+      </div>
+      
+      <div class="book-content">
+        <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
+        
+        <div class="book-info">
+          <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+          <p><strong>Author:</strong> {{ book.author_name }}</p>
+          <p><strong>Status:</strong> {{ book.book_status }}</p>
+          <p><strong>Score:</strong> {{ book.book_score }}</p>
+          <p><strong>Price:</strong> {{ book.book_price }}</p>
+          <p><strong>Pages:</strong> {{ book.book_pages }}</p>
+          <p><strong>References:</strong> {{ book.references_link }}</p>
+          <p><strong>Category:</strong> {{ book.book_category }}</p>
+          <p><strong>Language:</strong> {{ book.book_language }}</p>
+        </div>
+      </div>
+  
+      <div class="book-description">
+        <h3>Description</h3>
+        <p>{{ book.book_descriptions }}</p>
+      </div>
+  
+      <div *ngIf="seriesBooks$ | async as seriesBooks">
+        <h3>Books in the Same Series</h3>
+        <div class="books-container">
+          <div *ngFor="let seriesBook of seriesBooks" class="book-card" (click)="navigateToBook(seriesBook.book_id)">
+            <img *ngIf="seriesBook.book_image" [src]="seriesBook.book_image" alt="{{ seriesBook.book_name_en }}" class="book-image"/>
+            <div class="book-info">
+              <h3>{{ seriesBook.book_name_en }}</h3>
+              <p><em>{{ seriesBook.book_name_originl }}</em></p>
+              <p>{{ getStars(seriesBook.book_score) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <ng-template #loading>
+      <p class="loading">Loading...</p>
+    </ng-template>
+  </div>
+  

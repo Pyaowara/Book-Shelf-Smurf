@@ -35,7 +35,10 @@ export class BookListComponent {
           this.booksByCategory[category].push(book);
         });
       });
-      this.categories = Object.keys(this.booksByCategory);
+
+      this.categories = Object.keys(this.booksByCategory)
+        .sort((a, b) => this.booksByCategory[b].length - this.booksByCategory[a].length)
+        .slice(0, 5); 
     });
   }
 

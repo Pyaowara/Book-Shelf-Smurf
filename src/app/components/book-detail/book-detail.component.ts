@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css'],
-  imports: [CommonModule]  // Add this line
+  imports: [CommonModule] 
 })
 export class BookDetailComponent implements OnInit {
   book$: Observable<any> = of({});
@@ -23,13 +23,6 @@ export class BookDetailComponent implements OnInit {
       this.book$ = this.http.get<any>(`http://localhost:3000/books/${bookId}`).pipe(
         catchError(error => {
           console.error('Error fetching book:', error);
-          return of({});
-        })
-      );
-
-      this.description$ = this.http.get<any>(`http://localhost:3000/book_description?book_id=${bookId}`).pipe(
-        catchError(error => {
-          console.error('Error fetching description:', error);
           return of({});
         })
       );
