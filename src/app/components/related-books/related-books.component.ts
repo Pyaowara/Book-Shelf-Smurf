@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 export class RelatedBooks implements OnInit {
   book$: Observable<any> = of({});
   seriesBooks$: Observable<any[]> = of([]);
-  description$: Observable<any> = of({});
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {}
 
@@ -29,8 +28,8 @@ export class RelatedBooks implements OnInit {
       );
 
       this.book$.subscribe(book => {
-        if (book.series_id) {
-          this.seriesBooks$ = this.http.get<any[]>(`http://localhost:3000/books/series/${book.series_id}`).pipe(
+        if (book.serie_id) {
+          this.seriesBooks$ = this.http.get<any[]>(`http://localhost:3000/books/series/${book.serie_id}`).pipe(
             catchError(error => {
               console.error('Error fetching books by series:', error);
               return of([]);

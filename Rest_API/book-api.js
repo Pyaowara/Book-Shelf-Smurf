@@ -97,14 +97,69 @@ app.get('/books/series/:seriesId', (req, res) => {
     SELECT book_detail.*, author.author_name
     FROM book_detail
     LEFT JOIN author ON book_detail.author_id = author.author_id
-    WHERE book_detail.series_id = ?`;
+    WHERE book_detail.serie_id = ?`;
 
   db.query(query, [seriesId], (err, results) => {
     if (err) {
-      console.error('Error fetching books by series:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
+      console.error('Error fetching books by series:', err.message);
+      res.status(500).json({ error: 'Internal Server Error', details: err.message });
       return;
     }
     res.json(results);
+  });
+});
+
+app.get('/books/:id/comments', (req, res) => {
+  const bookId = req.params.id;
+  const query = `
+    SELECT comment.comment_id, comment.user_id, comment.book_id, comment.comment_detail, comment.reply_id, comment.up_vote, comment.down_vote, comment.time_stamp, user.user_name
+    FROM comment
+    LEFT JOIN user ON comment.user_id = user.user_id
+    WHERE comment.book_id = ?
+  `;
+
+  db.query(query, [bookId], (err, results) => {
+    if (err) {
+      console.error('Error fetching comments:', err.message);
+      res.status(500).json({ error: 'Internal Server Error', details: err.message });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.post('/comments/:commentId/upvote', (req, res) => {
+  const commentId = req.params.commentId;
+  const query = `
+    UPDATE comment
+    SET up_vote = up_vote + 1
+    WHERE comment_id = ?
+  `;
+
+  db.query(query, [commentId], (err) => {
+    if (err) {
+      console.error('Error upvoting comment:', err.message);
+      res.status(500).json({ error: 'Internal Server Error', details: err.message });
+      return;
+    }
+    res.status(200).json({ message: 'Upvote successful' });
+  });
+});
+
+app.post('/comments/:commentId/downvote', (req, res) => {
+  const commentId = req.params.commentId;
+  const query = `
+    UPDATE comment
+    SET down_vote = down_vote + 1
+    WHERE comment_id = ?
+  `;
+
+  db.query(query, [commentId], (err) => {
+    if (err) {
+      console.error('Error downvoting comment:', err.message);
+      res.status(500).json({ error: 'Internal Server Error', details: err.message });
+      return;
+    }
+    res.status(200).json({ message: 'Downvote successful' });
   });
 });

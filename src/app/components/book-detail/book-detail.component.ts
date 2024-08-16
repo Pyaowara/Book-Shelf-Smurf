@@ -9,11 +9,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css'],
-  imports: [CommonModule] 
+  imports: [CommonModule]
 })
 export class BookDetailComponent implements OnInit {
   book$: Observable<any> = of({});
-  description$: Observable<any> = of({});
+  comments$: Observable<any[]> = of([]);
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -24,6 +24,43 @@ export class BookDetailComponent implements OnInit {
         catchError(error => {
           console.error('Error fetching book:', error);
           return of({});
+        })
+      );
+
+      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
+        catchError(error => {
+          console.error('Error fetching comments:', error);
+          return of([]);
+        })
+      );
+    }
+  }
+
+  getStars(score: number): string {
+    return '⭐'.repeat(score);
+  }
+
+  upvote(commentId: number): void {
+    this.http.post(`http://localhost:3000/comments/${commentId}/upvote`, {}).subscribe({
+      next: () => this.refreshComments(),
+      error: (error) => console.error('Error upvoting comment:', error)
+    });
+  }
+
+  downvote(commentId: number): void {
+    this.http.post(`http://localhost:3000/comments/${commentId}/downvote`, {}).subscribe({
+      next: () => this.refreshComments(),
+      error: (error) => console.error('Error downvoting comment:', error)
+    });
+  }
+
+  refreshComments(): void {
+    const bookId = this.route.snapshot.paramMap.get('id');
+    if (bookId) {
+      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
+        catchError(error => {
+          console.error('Error refreshing comments:', error);
+          return of([]);
         })
       );
     }

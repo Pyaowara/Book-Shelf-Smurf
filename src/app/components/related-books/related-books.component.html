@@ -31,19 +31,17 @@
   
       <div *ngIf="seriesBooks$ | async as seriesBooks">
         <h3>Books in the Same Series</h3>
-        <div class="books-container">
-          <div *ngFor="let seriesBook of seriesBooks" class="book-card" (click)="navigateToBook(seriesBook.book_id)">
-            <img *ngIf="seriesBook.book_image" [src]="seriesBook.book_image" alt="{{ seriesBook.book_name_en }}" class="book-image"/>
-            <div class="book-info">
-              <h3>{{ seriesBook.book_name_en }}</h3>
-              <p><em>{{ seriesBook.book_name_originl }}</em></p>
+        <div class="related-books-container">
+          <div *ngFor="let seriesBook of seriesBooks" class="related-book-card" (click)="navigateToBook(seriesBook.book_id)">
+            <div class="related-book-info">
+              <p>{{ seriesBook.book_name_originl }}</p>
               <p>{{ getStars(seriesBook.book_score) }}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
+  
     <ng-template #loading>
       <p class="loading">Loading...</p>
     </ng-template>
