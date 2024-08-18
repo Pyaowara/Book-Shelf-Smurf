@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { OnInit } from '@angular/core';
 
 interface User {
   user_email: string;
@@ -19,7 +21,21 @@ interface User {
   styleUrl: './register.component.scss'
 })
 
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
+  constructor(private authService: AuthService,
+    private router: Router,
+    private cookieService:CookieService){}
+
+  async ngOnInit(){
+    let token = this.cookieService.get('userToken');
+    if(token.length > 0){
+      let res = await this.authService.validateToken(token)
+      if(res?.valid == true){
+        this.router.navigate(['booklist/'+res.name])
+      }
+    }
+  }
+
   registerMessage: string = '';
   users : User= {
     user_email: '',
@@ -29,8 +45,6 @@ export class RegisterComponent {
   };
   confirm_pass:string = '';
 
-  constructor(private authService: AuthService,
-              private router: Router){}
   register(){
     if(this.users.user_pass != this.confirm_pass){
       this.registerMessage = 'Password and confirm password do not match.';

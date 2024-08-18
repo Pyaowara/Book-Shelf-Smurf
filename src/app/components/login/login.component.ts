@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service'
 import { RouterModule }from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
-interface User {
+interface UserData {
   user_name: string;
   user_pass: string;
 }
@@ -16,15 +18,28 @@ interface User {
   styleUrl: './login.component.scss'
 })
 
-export class LoginComponent{
+export class LoginComponent implements OnInit{
   loginMessage: string = '';
 
-  users: User = {
+  users: UserData = {
     user_name: '',
     user_pass: ''
   };
 
-  constructor(private authService: AuthService) { }
+  async ngOnInit(){
+    let token = this.cookieService.get('userToken');
+    if(token.length > 0){
+      let res = await this.authService.validateToken(token)
+      if(res?.valid == true){
+        this.router.navigate(['booklist/'+res.name])
+      }
+    }
+  }
+
+  constructor(private authService: AuthService,
+              private cookieService: CookieService,
+              private router: Router
+  ) { }
   
   login() {
     this.authService.login(this.users).subscribe(

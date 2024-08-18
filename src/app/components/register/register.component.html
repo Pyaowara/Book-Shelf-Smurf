@@ -14,20 +14,25 @@
             <h1 class="mb-3" style="color:white;">Register</h1>
                 <div class="mb-3">
                     <label style="color:white" for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" [(ngModel)]="users.user_email" placeholder="Enter your Email">
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" [(ngModel)]="users.user_email" name="user_email" placeholder="Enter your Email">
+                </div>
+                <div class="mb-3">
+                    <label style="color:white" for="exampleInputPassword1" class="form-label">Phone number</label>
+                    <input type="text" class="form-control" id="confirm_pass" [(ngModel)]="users.user_phone" name="user_phone" placeholder="Confirm  your Password">
                 </div>
                 <div class="mb-3">
                     <label style="color:white" for="exampleInputEmail1" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" aria-describedby="emailHelp" [(ngModel)]="users.user_name" placeholder="Enter Username">
+                    <input type="text" class="form-control" id="username" aria-describedby="emailHelp" [(ngModel)]="users.user_name" name="user_name" placeholder="Enter Username">
                 </div>
                 <div class="mb-3">
                     <label style="color:white" for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" [(ngModel)]="users.user_pass" placeholder="Enter Password">
+                    <input type="password" class="form-control" id="exampleInputPassword1" [(ngModel)]="users.user_pass" name="user_pass" placeholder="Enter Password">
                 </div>
                 <div class="mb-3">
                     <label style="color:white" for="exampleInputPassword1" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirm_pass" [(ngModel)]="confirm_pass" placeholder="Confirm  your Password">
+                    <input type="password" class="form-control" id="confirm_pass" [(ngModel)]="confirm_pass" name="user_confirm_pass" placeholder="Confirm  your Password">
                 </div>
+                
                 <div class="block_container">
                     <div class="button-register">
                         <button type="submit" class="btn btn-primary" (click)="register()">Create Account</button>

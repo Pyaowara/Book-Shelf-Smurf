@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +14,18 @@ export class AuthService {
 
   private loginApiUrl = 'http://localhost:8000/login';
   private registerApiUrl = 'http://localhost:8000/register';
+  private validateTokenApiUrl = 'http://localhost:8000/validate-token';
 
   constructor(private http: HttpClient,
-              private router: Router,) { }
+              private router: Router,
+              private cookieService: CookieService) { }
 
   public login(users: { user_name: string, user_pass: string }): Observable<string> {
-    return this.http.post<{message:string}>(this.loginApiUrl, users).pipe(
+    return this.http.post<{message:string, userToken:string, name_user:string}>(this.loginApiUrl, users).pipe(
       map(response => {
         if (response.message === 'Login successful') {
-          this.router.navigate(['booklist/'+users.user_name]);
+          this.cookieService.set('userToken', response.userToken, 30, '/');
+          this.router.navigate(['booklist/'+ response.name_user]);
           return 'Login successful';
         } else {
           return 'Invalid username or password';
@@ -48,5 +53,16 @@ export class AuthService {
         return of('Register fail');
       })
     );
+  }
+
+  public async validateToken(token:string) {
+    try {
+      return await lastValueFrom(
+        this.http.post<{valid:boolean, name:string}>(this.validateTokenApiUrl, {token})
+      );
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 }
