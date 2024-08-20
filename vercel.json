@@ -1,19 +1,23 @@
 {
-    "version": 3,
+    "version": 2,
     "builds": [
       {
-        "src": "/api/**",
+        "src": "api/**/*.js",
         "use": "@vercel/node"
-      },
-      {
-        "src": "!",
-        "use": "@vercel/static"
       }
     ],
     "routes": [
       {
-        "src": "/(.*)",
-        "dest": "/index.html"
+        "src": "/api/(.*)",
+        "dest": "/api/$1.js"
       }
-    ]
+    ],
+    "env": {
+      "DB_HOST": "@db_host",
+      "DB_USER": "@db_user",
+      "DB_PASS": "@db_pass",
+      "DB_DATABASE": "@db_database",
+      "JWT_SECRET": "@jwt_secret"
+    }
   }
+  
