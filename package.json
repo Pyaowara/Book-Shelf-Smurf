@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"ng serve\" \"node Rest_API/book-api.js\" \"node Rest_API/user-api.js\"",
+    "start": "concurrently \"ng serve\" \"node api/book.js\" \"node api/user.js\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "cnct": "concurrently \"node Rest_API/book-api.js\" \"node Rest_API/user-api.js\"",
+    "cnct": "concurrently \"node api/book.js\" \"node api/user.js\"",
     "serve:ssr:Books-Spark": "node dist/books-spark/server/server.mjs"
   },
   "private": true,
