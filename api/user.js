@@ -16,6 +16,8 @@ const pool = mysql.createPool({
     port: 3306,
 });
 
+app.get('/user', (req, res) => res.send('Test route working!'));
+
 app.post('/register', async (req, res) => {
     const { user_email, user_name, user_pass, user_phone} = req.body;
     let conn;
@@ -40,6 +42,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+    console.log('Login route reached');
     const { user_name, user_pass } = req.body;
     
     let conn;
