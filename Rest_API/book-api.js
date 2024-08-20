@@ -1,22 +1,21 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
 const port = 3000;
 
+app.use(express.json());
 app.use(cors());
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'book',
-  port: 3306
-});
-
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to database');
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE,
+  port: 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 app.get('/books', (req, res) => {
@@ -30,14 +29,15 @@ app.get('/books', (req, res) => {
       GROUP BY serie_id
     )
   `;
-  
+
   db.query(query, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error('Error fetching books:', err.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
     res.json(results);
   });
 });
-
-
 
 app.get('/books/:id', (req, res) => {
   const bookId = req.params.id;
@@ -45,17 +45,16 @@ app.get('/books/:id', (req, res) => {
     SELECT book_detail.*, author.author_name
     FROM book_detail
     LEFT JOIN author ON book_detail.author_id = author.author_id
-    WHERE book_detail.book_id = ?`;
+    WHERE book_detail.book_id = ?
+  `;
 
   db.query(query, [bookId], (err, results) => {
     if (err) {
-      console.error('Error fetching book details:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-      return;
+      console.error('Error fetching book details:', err.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     if (results.length === 0) {
-      res.status(404).json({ error: 'Book not found' });
-      return;
+      return res.status(404).json({ error: 'Book not found' });
     }
     res.json(results[0]);
   });
@@ -64,31 +63,24 @@ app.get('/books/:id', (req, res) => {
 app.get('/searched', (req, res) => {
   const name = req.query.name || '';
   if (!name.trim()) {
-    res.status(400).json({ error: 'Search query cannot be empty' });
-    return;
+    return res.status(400).json({ error: 'Search query cannot be empty' });
   }
 
   const query = `
     SELECT * FROM book_detail
-    WHERE book_name_en LIKE ? OR book_name_originl LIKE ?`;
+    WHERE book_name_en LIKE ? OR book_name_originl LIKE ?
+  `;
 
   db.query(query, [`%${name}%`, `%${name}%`], (err, results) => {
     if (err) {
-      console.error('Error executing search:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-      return;
+      console.error('Error executing search:', err.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     if (results.length === 0) {
-      res.status(404).json({ message: 'No books found for the search query' });
-    } else {
-      res.json(results);
+      return res.status(404).json({ message: 'No books found for the search query' });
     }
+    res.json(results);
   });
-});
-
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
 });
 
 app.get('/books/series/:seriesId', (req, res) => {
@@ -97,13 +89,13 @@ app.get('/books/series/:seriesId', (req, res) => {
     SELECT book_detail.*, author.author_name
     FROM book_detail
     LEFT JOIN author ON book_detail.author_id = author.author_id
-    WHERE book_detail.serie_id = ?`;
+    WHERE book_detail.serie_id = ?
+  `;
 
   db.query(query, [seriesId], (err, results) => {
     if (err) {
       console.error('Error fetching books by series:', err.message);
-      res.status(500).json({ error: 'Internal Server Error', details: err.message });
-      return;
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     res.json(results);
   });
@@ -121,8 +113,7 @@ app.get('/books/:id/comments', (req, res) => {
   db.query(query, [bookId], (err, results) => {
     if (err) {
       console.error('Error fetching comments:', err.message);
-      res.status(500).json({ error: 'Internal Server Error', details: err.message });
-      return;
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     res.json(results);
   });
@@ -139,8 +130,7 @@ app.post('/comments/:commentId/upvote', (req, res) => {
   db.query(query, [commentId], (err) => {
     if (err) {
       console.error('Error upvoting comment:', err.message);
-      res.status(500).json({ error: 'Internal Server Error', details: err.message });
-      return;
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     res.status(200).json({ message: 'Upvote successful' });
   });
@@ -157,9 +147,12 @@ app.post('/comments/:commentId/downvote', (req, res) => {
   db.query(query, [commentId], (err) => {
     if (err) {
       console.error('Error downvoting comment:', err.message);
-      res.status(500).json({ error: 'Internal Server Error', details: err.message });
-      return;
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     res.status(200).json({ message: 'Downvote successful' });
   });
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

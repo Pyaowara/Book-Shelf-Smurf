@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"ng serve\" \"node .\\Rest_API/book-api.js\" \"node .\\Rest_API/user-api.js\"",
+    "start": "concurrently \"ng serve\" \"node Rest_API/book-api.js\" \"node Rest_API/user-api.js\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "cnct": "concurrently \"node .\\Rest_API/book-api.js\" \"node .\\Rest_API/user-api.js\"",
+    "cnct": "concurrently \"node Rest_API/book-api.js\" \"node Rest_API/user-api.js\"",
     "serve:ssr:Books-Spark": "node dist/books-spark/server/server.mjs"
   },
   "private": true,
@@ -31,6 +31,7 @@
     "mysql2": "^3.11.0",
     "ngx-cookie-service": "^18.0.0",
     "rxjs": "~7.8.0",
+    "telnet": "^0.0.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
