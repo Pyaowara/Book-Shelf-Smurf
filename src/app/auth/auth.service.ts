@@ -12,9 +12,9 @@ import { lastValueFrom } from 'rxjs';
 
 export class AuthService {
 
-  private loginApiUrl = 'books-shelves.vercel.app/api/user/login';
-  private registerApiUrl = 'books-shelves.vercel.app/api/user/register';
-  private validateTokenApiUrl = 'books-shelves.vercel.app/api/user/validate-token';
+  private loginApiUrl = '/api/user/login';
+  private registerApiUrl = '/api/user/register';
+  private validateTokenApiUrl = '/api/user/validate-token';
 
   constructor(private http: HttpClient,
               private router: Router,
