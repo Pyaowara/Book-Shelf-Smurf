@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Database connection for sync queries (mysql)
-const db = mysql.createConnection({
+const db = mysql2.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_ROOT,
   password: process.env.DB_PASS,
@@ -27,7 +27,6 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
   });
 
-// Database connection pool for async queries (mysql2)
 const pool = mysql2.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_ROOT,
@@ -38,7 +37,6 @@ const pool = mysql2.createPool({
 
 app.get("/t", (req, res) => res.send("Express on Vercel"));
 
-// Routes for Book-related endpoints
 app.get('/books', (req, res) => {
   const query = `
     SELECT * FROM book_detail 
@@ -177,7 +175,6 @@ app.post('/comments/:commentId/downvote', (req, res) => {
   });
 });
 
-// Routes for User-related endpoints
 app.post('/register', async (req, res) => {
   const { user_email, user_name, user_pass, user_phone } = req.body;
   let conn;
@@ -280,5 +277,4 @@ app.post('/validate-token', async (req, res) => {
   }
 });
 
-// Vercel Serverless Function Export
 module.exports = app;
