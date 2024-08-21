@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Database connection for sync queries (mysql)
-const db = mysql2.createConnection({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_ROOT,
   password: process.env.DB_PASS,
