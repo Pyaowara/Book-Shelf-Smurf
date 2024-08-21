@@ -7,11 +7,11 @@ const cors = require('cors');
 const port = 8000;
 
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_ROOT,
-    password: process.env.DB_PASS,
+    host: 'localhost',
+    user: 'root',
+    password: '',
     database: 'book',
-    port: 3306,
+    port: 3306
 });
 
 app.use(express.json());
