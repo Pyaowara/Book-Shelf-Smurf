@@ -20,14 +20,14 @@ export class BookDetailComponent implements OnInit {
   ngOnInit(): void {
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
-      this.book$ = this.http.get<any>(`http://localhost:3000/books/${bookId}`).pipe(
+      this.book$ = this.http.get<any>(`https://smurf-fr.vercel.app/books/${bookId}`).pipe(
         catchError(error => {
           console.error('Error fetching book:', error);
           return of({});
         })
       );
 
-      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
+      this.comments$ = this.http.get<any[]>(`https://smurf-fr.vercel.app/books/${bookId}/comments`).pipe(
         catchError(error => {
           console.error('Error fetching comments:', error);
           return of([]);
@@ -41,14 +41,14 @@ export class BookDetailComponent implements OnInit {
   }
 
   upvote(commentId: number): void {
-    this.http.post(`http://localhost:3000/comments/${commentId}/upvote`, {}).subscribe({
+    this.http.post(`https://smurf-fr.vercel.app/comments/${commentId}/upvote`, {}).subscribe({
       next: () => this.refreshComments(),
       error: (error) => console.error('Error upvoting comment:', error)
     });
   }
 
   downvote(commentId: number): void {
-    this.http.post(`http://localhost:3000/comments/${commentId}/downvote`, {}).subscribe({
+    this.http.post(`https://smurf-fr.vercel.app/comments/${commentId}/downvote`, {}).subscribe({
       next: () => this.refreshComments(),
       error: (error) => console.error('Error downvoting comment:', error)
     });
@@ -57,7 +57,7 @@ export class BookDetailComponent implements OnInit {
   refreshComments(): void {
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
-      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
+      this.comments$ = this.http.get<any[]>(`https://smurf-fr.vercel.app/books/${bookId}/comments`).pipe(
         catchError(error => {
           console.error('Error refreshing comments:', error);
           return of([]);
