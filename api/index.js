@@ -1,24 +1,41 @@
 const express = require('express');
 const mysql = require('mysql');
+const mysql2 = require('mysql2/promise');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const app = express();
-const port = 3000;
 
+// Middleware
 app.use(cors());
+app.use(express.json());
 
+// Database connection for sync queries (mysql)
 const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_ROOT,
-    password: process.env.DB_PASS,
-    database: 'book',
-    port: 3306,
+  host: process.env.DB_HOST,
+  user: process.env.DB_ROOT,
+  password: process.env.DB_PASS,
+  database: 'book',
+  port: 3306,
 });
 
 db.connect((err) => {
   if (err) throw err;
-  console.log('Connected to database');
+  console.log('Connected to MySQL database');
 });
 
+// Database connection pool for async queries (mysql2)
+const pool = mysql2.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_ROOT,
+  password: process.env.DB_PASS,
+  database: 'book',
+  port: 3306,
+});
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
+// Routes for Book-related endpoints
 app.get('/books', (req, res) => {
   const query = `
     SELECT * FROM book_detail 
@@ -36,8 +53,6 @@ app.get('/books', (req, res) => {
     res.json(results);
   });
 });
-
-
 
 app.get('/books/:id', (req, res) => {
   const bookId = req.params.id;
@@ -84,11 +99,6 @@ app.get('/searched', (req, res) => {
       res.json(results);
     }
   });
-});
-
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
 });
 
 app.get('/books/series/:seriesId', (req, res) => {
@@ -163,3 +173,109 @@ app.post('/comments/:commentId/downvote', (req, res) => {
     res.status(200).json({ message: 'Downvote successful' });
   });
 });
+
+// Routes for User-related endpoints
+app.post('/register', async (req, res) => {
+  const { user_email, user_name, user_pass, user_phone } = req.body;
+  let conn;
+
+  if (!user_email || !user_name || !user_pass || !user_phone) {
+    return res.status(400).send('All fields are required');
+  }
+  try {
+    conn = await pool.getConnection();
+    const passwordHash = await bcrypt.hash(user_pass, 8);
+    await conn.query('INSERT INTO user (user_email, user_name, user_pass, user_permission, user_phone) VALUES (?, ?, ?, ?, ?)', [user_email, user_name, passwordHash, 1, user_phone]);
+    res.status(201).send('User registered');
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send(err.message);
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
+app.post('/login', async (req, res) => {
+  const { user_name, user_pass } = req.body;
+  let conn;
+
+  if (!user_name || !user_pass) {
+    return res.status(400).json({
+      message: 'Username and password are required',
+    });
+  }
+  try {
+    conn = await pool.getConnection();
+    const [users] = await conn.query('SELECT * FROM user WHERE user_name = ? OR user_email = ?', [user_name, user_name]);
+    const userData = users[0];
+    const match = await bcrypt.compare(user_pass, userData.user_pass);
+
+    if (match) {
+      const token = jwt.sign(
+        {
+          user_id: userData.user_id,
+          user_name: userData.user_name,
+          user_permission: userData.user_permission,
+        },
+        'itkmitl',
+        { expiresIn: '30d' }
+      );
+      res.status(200).json({
+        message: 'Login successful',
+        userToken: token,
+        name_user: userData.user_name,
+      });
+    } else {
+      res.status(401).json({
+        message: 'Invalid username or password',
+      });
+    }
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send(err.message);
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
+app.post('/getUserProfile', async (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(400).json({
+      message: 'Token is required',
+    });
+  }
+  const query = 'SELECT * FROM user WHERE user_name = ?';
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
+    const user = jwt.verify(token, 'itkmitl');
+    const [result] = await conn.query(query, user.user_name);
+    res.status(200).json(result[0]);
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send(err.message);
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
+app.post('/validate-token', async (req, res) => {
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, 'itkmitl');
+    res.status(200).json({ valid: true, name: user.user_name });
+  } catch (error) {
+    res.status(200).json({ valid: false, name: '' });
+  }
+});
+
+// Vercel Serverless Function Export
+module.exports = app;

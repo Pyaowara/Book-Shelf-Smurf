@@ -1,22 +1,21 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const app = express();
 const mysql = require('mysql2/promise');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const app = express();
-
-app.use(express.json());
-app.use(cors());
+const port = 8000;
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
+    user: process.env.DB_ROOT,
     password: process.env.DB_PASS,
-    database: process.env.DB_DATABASE,
+    database: 'book',
     port: 3306,
 });
 
-app.get('/user', (req, res) => res.send('Test route working!'));
+app.use(express.json());
+app.use(cors())
 
 app.post('/register', async (req, res) => {
     const { user_email, user_name, user_pass, user_phone} = req.body;
@@ -42,7 +41,6 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    console.log('Login route reached');
     const { user_name, user_pass } = req.body;
     
     let conn;
@@ -123,4 +121,7 @@ app.post('/validate-token', async (req, res) => {
     }
 });
 
-module.exports = app;
+app.listen(port, () => {
+    console.log('HTTP server running at port ' + port);
+    console.log("Connect to user DB");
+});
