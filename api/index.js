@@ -36,7 +36,7 @@ const pool = mysql2.createPool({
   port: 3306,
 });
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
+app.get("/t", (req, res) => res.send("Express on Vercel"));
 
 // Routes for Book-related endpoints
 app.get('/books', (req, res) => {
