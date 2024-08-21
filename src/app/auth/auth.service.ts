@@ -12,9 +12,9 @@ import { lastValueFrom } from 'rxjs';
 
 export class AuthService {
 
-  private loginApiUrl = 'http://localhost:8000/login';
-  private registerApiUrl = 'http://localhost:8000/register';
-  private validateTokenApiUrl = 'http://localhost:8000/validate-token';
+  private loginApiUrl = 'https://smurf-fr.vercel.app/login';
+  private registerApiUrl = 'https://smurf-fr.vercel.app/register';
+  private validateTokenApiUrl = 'https://smurf-fr.vercel.app/validate-token';
 
   constructor(private http: HttpClient,
               private router: Router,
