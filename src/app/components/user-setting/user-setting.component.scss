@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2C2C2C;
+    color: #fff;
+    padding: 20px;
+}
+
+.profile-settings-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-menu {
+    width: 250px;
+    background-color: #2C2C2C;
+    padding: 20px;
+}
+
+.sidebar-menu .profile-info {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sidebar-menu .profile-info .profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.sidebar-menu .profile-info h3 {
+    font-size: 18px;
+    color: #fff;
+}
+
+.sidebar-menu .menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu .menu button {
+    padding: 10px;
+    text-align: left;
+    color: white;
+    background-color: #2C2C2C;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.sidebar-menu .menu button:hover {
+    background-color: #555;
+    color: #2f2f2f;
+}
+
+.main-content-area {
+    background-color: #555;
+    flex-grow: 1;
+    padding: 40px;
+}
+
+.main-content-area h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    flex: 1 1 40%;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-actions {
+    display: flex;
+    margin-top: 20px;
+}
+
+.update-button, .cancel-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.update-button {
+    background-color: #007bff;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.cancel-button {
+    background-color: #f3f3f3;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-settings-container {
+        flex-direction: column;
+        max-width: 90%;
+    }
+
+    .sidebar-menu {
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .main-content-area {
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .update-button, .cancel-button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-menu .profile-info h3 {
+        font-size: 16px;
+    }
+
+    .sidebar-menu .menu button {
+        font-size: 14px;
+    }
+
+    .main-content-area h2 {
+        font-size: 20px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .update-button, .cancel-button {
+        font-size: 14px;
+    }
+}

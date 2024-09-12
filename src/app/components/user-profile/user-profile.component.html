@@ -1,0 +1,18 @@
+<br><br><br><br>
+<div class="profile-container">
+    <div class="profile-header">
+        <img [src]="userData?.user_image" class="profile-image">
+        <h1 class="profile-name">{{userData?.user_name}}</h1>
+        <p class="profile-email">{{userData?.user_email}}</p>
+    </div>
+    <div class="profile-details">
+        <h2>About Me</h2>
+        <p class="profile-bio">{{userData?.user_descriptions}}</p>
+    </div>
+    <div class="profile-footer">
+        <div *ngIf="isOwnerAccount">
+            <button (click)="setting()" class="setting-button">Setting</button>
+            <button (click)="logout()" class="logout-button">Logout</button>
+        </div>
+    </div>
+</div>

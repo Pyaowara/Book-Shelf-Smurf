@@ -1,0 +1,24 @@
+<br><br><br><br>
+
+<div class="profile-settings-container">
+    <div class="sidebar-menu">
+        <div class="profile-info">
+            <img [src]="userData?.user_image" class="profile-picture">
+            <h3>{{userData?.user_name}}</h3>
+        </div>
+        <ul class="menu">
+            <li><button (click)="changeName()">Change Username</button></li>
+            <li><button (click)="changePassword()">Change Password</button></li>
+            <li><button (click)="changePhone()">Change Phone Number</button></li>
+            <li><button (click)="changeEmail()">Change Email</button></li>
+            <li><button (click)="back()">Back</button></li>
+        </ul>
+    </div>
+
+    <div class="main-content-area">
+        <app-rename *ngIf="isVisible === 'rename'"></app-rename>
+        <app-reemail *ngIf="isVisible === 'reemail'"></app-reemail>
+        <app-repassword *ngIf="isVisible === 'repassword'"></app-repassword>
+        <app-rephone *ngIf="isVisible === 'rephone'"></app-rephone>
+    </div>
+</div>

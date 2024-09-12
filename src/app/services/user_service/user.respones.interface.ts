@@ -1,5 +1,5 @@
-export interface UserProfilePesponse{
-    user_id: number,
+export interface UserProfileResponse{
+    user_id: string,
     user_name:string,
     user_pass:string,
     user_email:string,

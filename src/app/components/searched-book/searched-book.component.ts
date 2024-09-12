@@ -23,7 +23,7 @@ export class SearchedBookComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const query = params['query'] || '';
-      this.searchResults$ = this.http.get<any[]>(`https://smurf-fr.vercel.app/searched?name=${query}`);
+      this.searchResults$ = this.http.get<any[]>(`https://books-shelves.vercel.app/searched?name=${query}`);
     });
   }
 

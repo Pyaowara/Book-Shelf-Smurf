@@ -6,11 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Database connection for sync queries (mysql)
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_ROOT,
@@ -276,5 +274,164 @@ app.post('/validate-token', async (req, res) => {
     res.status(200).json({ valid: false, name: '' });
   }
 });
+
+app.get('/getUserProfile/:id', async(req, res) => {
+  const user_name = req.params.id;
+
+  let conn;
+
+  if (!user_name) {
+    return res.status(400).send('Username is required');
+  }
+
+  try {
+    conn = await pool.getConnection();
+
+    const [rows] = await conn.query('SELECT * FROM user WHERE user_name = ?', [user_name]);
+
+    if (rows.length === 0) {
+      return res.status(404).send('User not found');
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send(err.message);
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
+app.post('/change/:id', async (req, res) => {
+  const id = req.params.id;
+  let {user_id, data, password} = req.body;
+  let conn;
+
+  if (!data || !password || !user_id) {
+    return res.status(400).json({
+      message: 'Information are required',
+    });
+  }
+  try {
+    conn = await pool.getConnection();
+
+    let [users] = await conn.query('SELECT * FROM user WHERE user_id = ?', [user_id]);
+    if (users.length === 0) {
+      return res.status(404).json({
+        message: 'User not found',
+      });
+    }
+    let userData = users[0];
+    const match = await bcrypt.compare(password, userData.user_pass);
+
+    if (match) {
+      if (id === 'user_name' || id === 'user_email') {
+        let column = id === 'user_name' ? 'user_name' : 'user_email';
+        let [existingUsers] = await conn.query(`SELECT * FROM user WHERE ${column} = ?`, [data]);
+
+        if (existingUsers.length > 0) {
+          return res.status(409).json({
+            message: `${column === 'user_name' ? 'Username' : 'Email'} already exists`,
+          });
+        }
+      }
+
+      const queryChange = 'UPDATE user SET ?? = ? WHERE user_id = ?';
+      if(id == 'user_pass'){
+        data = await bcrypt.hash(data, 8);
+      }
+      await conn.query(queryChange, [id, data, user_id]);
+      [users] = await conn.query('SELECT * FROM user WHERE user_id = ?', [user_id]);
+      userData = users[0];
+
+      const token = jwt.sign(
+        {
+          user_id: userData.user_id,
+          user_name: userData.user_name,
+          user_permission: userData.user_permission,
+        },
+        'itkmitl',
+        { expiresIn: '30d' }
+      );
+
+      res.status(200).json({
+        message: 'User information updated successfully',
+        userToken: token,
+        name_user: userData.user_name,
+      });
+    } else {
+      res.status(401).json({
+        message: 'Invalid password',
+        userToken: '',
+        name_user: '',
+      });
+    }
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send(err.message);
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+app.post('/comments/add', (req, res) => {
+  const { book_id, comment_detail, user_id } = req.body;
+  const query = 'INSERT INTO comment (book_id, comment_detail, user_id) VALUES (?, ?, ?)';
+  
+  db.query(query, [book_id, comment_detail, user_id], (err, result) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    res.status(201).send({ message: 'Comment added successfully!' });
+  });
+});
+
+app.post('/getUserId', async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'itkmitl');
+    res.status(200).json({ userId: decoded.user_id });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid or expired token' });
+  }
+});
+
+app.delete('/comments/delete/:commentId', async (req, res) => {
+  const commentId = req.params.commentId;
+  const { userId } = req.body;
+
+  if (!commentId || !userId) {
+    return res.status(400).json({ message: 'Comment ID and User ID are required' });
+  }
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const [rows] = await conn.query('SELECT user_id FROM comment WHERE comment_id = ?', [commentId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+    if (rows[0].user_id !== userId) {
+      return res.status(403).json({ message: 'Unauthorized to delete this comment' });
+    }
+    await conn.query('DELETE FROM comment WHERE comment_id = ?', [commentId]);
+    res.status(200).json({ message: 'Comment deleted successfully' });
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
 
 module.exports = app;

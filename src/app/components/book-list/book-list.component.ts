@@ -18,7 +18,7 @@ export class BookListComponent {
   categories: string[] = [];
 
   constructor(private http: HttpClient, private router: Router) {
-    this.books$ = this.http.get<any[]>('https://smurf-fr.vercel.app/books').pipe(
+    this.books$ = this.http.get<any[]>('https://books-shelves.vercel.app/books').pipe(
       catchError(error => {
         console.error('Error fetching books:', error);
         return of([]); 
