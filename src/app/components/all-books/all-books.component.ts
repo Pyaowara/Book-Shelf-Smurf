@@ -17,7 +17,7 @@ export class AllBooksComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.allBooks$ = this.http.get<any[]>('https://books-shelves.vercel.app/books').pipe(
+    this.allBooks$ = this.http.get<any[]>('http://localhost:3000/books').pipe(
       catchError(error => {
         console.error('Error fetching books:', error);
         return of([]);
