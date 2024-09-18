@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from '../entity/book.entity';
 import { Author } from '../entity/author.entity';
 import { Comment } from '../entity/comment.entity';
+import { User } from '../entity/user.entity';
+
 
 @Injectable()
 export class BookService {
@@ -16,6 +18,9 @@ export class BookService {
 
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findAll(): Promise<Book[]> {
@@ -26,18 +31,28 @@ export class BookService {
   async findBookById(bookId: number): Promise<Book> {
     return this.bookRepository.createQueryBuilder('book')
       .leftJoinAndSelect('book.author', 'author')
+      .leftJoinAndSelect('book.serie', 'serie')
       .where('book.book_id = :bookId', { bookId })
       .getOne();
   }
 
-  // Search books by name
+
   async searchBooks(name: string): Promise<Book[]> {
-    return this.bookRepository.createQueryBuilder('book')
-      .where('book.book_name_en LIKE :name OR book.book_name_originl LIKE :name', { name: `%${name}%` })
-      .getMany();
+    try {
+      console.log('Searching for books with name:', name);
+      const queryBuilder = this.bookRepository.createQueryBuilder('book')
+        .where('book.book_name_en LIKE :name OR book.book_name_originl LIKE :name', { name: `%${name}%` });
+      const results = await queryBuilder.getMany();
+      if (results.length === 0) {
+        throw new NotFoundException('No books found for the search query');
+      }
+      return results;
+    } catch (err) {
+      console.error('Error executing search:', err.message, err.stack);
+      throw new InternalServerErrorException('Internal Server Error');
+    }
   }
 
-  // Get books by series ID
   async findBooksBySeriesId(seriesId: number): Promise<Book[]> {
     return this.bookRepository.createQueryBuilder('book')
       .leftJoinAndSelect('book.author', 'author')
@@ -45,7 +60,6 @@ export class BookService {
       .getMany();
   }
 
-  // Get comments by book ID
   async findCommentsByBookId(bookId: number): Promise<Comment[]> {
     return this.commentRepository.createQueryBuilder('comment')
       .leftJoinAndSelect('comment.user', 'user')
@@ -53,7 +67,6 @@ export class BookService {
       .getMany();
   }
 
-  // Upvote comment
   async upvoteComment(commentId: number): Promise<void> {
     await this.commentRepository.createQueryBuilder()
       .update(Comment)
@@ -62,12 +75,46 @@ export class BookService {
       .execute();
   }
 
-  // Downvote comment
   async downvoteComment(commentId: number): Promise<void> {
     await this.commentRepository.createQueryBuilder()
       .update(Comment)
       .set({ down_vote: () => 'down_vote + 1' })
       .where('comment_id = :commentId', { commentId })
       .execute();
+  }
+
+  async deleteComment(commentId: number, userId: number): Promise<void> {
+    const comment = await this.commentRepository.findOne({
+      where: { comment_id: commentId },
+      relations: ['user']
+    });
+    
+    if (!comment)
+      throw new NotFoundException('Comment not found');
+    if (comment.user.user_id !== Number(userId)){
+      throw new BadRequestException('Unauthorized to delete this comment');
+    }
+    await this.commentRepository.delete({ comment_id: commentId });
+  }
+
+  async addComment(bookId: number, commentDetail: string, userId: number): Promise<void> {
+    const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
+    const user = await this.userRepository.findOne({ where: { user_id: userId } });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const comment = this.commentRepository.create({
+      book,
+      comment_detail: commentDetail,
+      user,
+    });
+
+    await this.commentRepository.save(comment);
   }
 }

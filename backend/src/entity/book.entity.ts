@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Author } from './author.entity';
 import { Publisher } from './publisher.entity';
 import { Serie } from './serie.entity';
+import { Comment } from './comment.entity';
 
 @Entity({ name: 'book_detail' })
 export class Book {
@@ -45,14 +46,17 @@ export class Book {
   publisher_link?: string;
 
   @ManyToOne(() => Author, (author) => author.books)
-  @JoinColumn({ name: 'author_id' }) // Ensure this column exists in your table
+  @JoinColumn({ name: 'author_id' })
   author: Author;
 
   @ManyToOne(() => Publisher, (publisher) => publisher.books)
-  @JoinColumn({ name: 'publisher_id' }) // Ensure this column exists in your table
+  @JoinColumn({ name: 'publisher_id' })
   publisher: Publisher;
 
   @ManyToOne(() => Serie, (series) => series.books)
-  @JoinColumn({ name: 'serie_id' }) // Ensure this column exists in your table
+  @JoinColumn({ name: 'serie_id' })
   serie: Serie;
+
+  @OneToMany(() => Comment, (comment) => comment.book)
+  comments: Comment[];
 }

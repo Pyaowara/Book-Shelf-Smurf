@@ -26,7 +26,7 @@ export class BookDetailComponent implements OnInit {
   ngOnInit(): void {
     this.bookId = this.route.snapshot.paramMap.get('id');
     if (this.bookId) {
-      this.book$ = this.http.get<any>(`https://books-shelves.vercel.app/books/${this.bookId}`).pipe(
+      this.book$ = this.http.get<any>(`http://localhost:3000/books/${this.bookId}`).pipe(
         catchError(error => {
           console.error('Error fetching book:', error);
           return of({});
@@ -35,7 +35,7 @@ export class BookDetailComponent implements OnInit {
       this.authService.getUserId().subscribe(userId => {
         this.userId = userId;
       });
-      this.comments$ = this.http.get<any[]>(`https://books-shelves.vercel.app/books/${this.bookId}/comments`).pipe(
+      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${this.bookId}/comments`).pipe(
         catchError(error => {
           console.error('Error fetching comments:', error);
           return of([]);
@@ -66,28 +66,32 @@ export class BookDetailComponent implements OnInit {
       console.error('User ID is not available');
       return;
     }
-
-    this.http.delete(`https://books-shelves.vercel.app/comments/delete/${commentId}`, { body: { userId: this.userId } }).subscribe({
-      next: () => this.refreshComments(),
+  
+    this.commentService.deleteComment(commentId, this.userId).subscribe({
+      next: (response) => {
+        console.log('Comment deleted successfully:', response);
+        this.refreshComments();
+      },
       error: (err) => {
         console.error('Error deleting comment:', err);
       }
     });
   }
+  
 
   getStars(score: number): string {
     return '⭐'.repeat(score);
   }
 
   upvote(commentId: number): void {
-    this.http.post(`https://books-shelves.vercel.app/comments/${commentId}/upvote`, {}).subscribe({
+    this.http.post(`http://localhost:3000/books/comments/${commentId}/upvote`, {}).subscribe({
       next: () => this.refreshComments(),
       error: (error) => console.error('Error upvoting comment:', error)
     });
   }
 
   downvote(commentId: number): void {
-    this.http.post(`https://books-shelves.vercel.app/comments/${commentId}/downvote`, {}).subscribe({
+    this.http.post(`http://localhost:3000/books/comments/${commentId}/downvote`, {}).subscribe({
       next: () => this.refreshComments(),
       error: (error) => console.error('Error downvoting comment:', error)
     });
@@ -96,7 +100,7 @@ export class BookDetailComponent implements OnInit {
   refreshComments(): void {
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
-      this.comments$ = this.http.get<any[]>(`https://books-shelves.vercel.app/books/${bookId}/comments`).pipe(
+      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
         catchError(error => {
           console.error('Error refreshing comments:', error);
           return of([]);

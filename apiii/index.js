@@ -288,7 +288,6 @@ app.get('/getUserProfile/:id', async(req, res) => {
     conn = await pool.getConnection();
 
     const [rows] = await conn.query('SELECT * FROM user WHERE user_name = ?', [user_name]);
-
     if (rows.length === 0) {
       return res.status(404).send('User not found');
     }

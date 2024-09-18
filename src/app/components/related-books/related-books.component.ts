@@ -20,7 +20,7 @@ export class RelatedBooks implements OnInit {
   ngOnInit(): void {
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
-      this.book$ = this.http.get<any>(`https://books-shelves.vercel.app/books/${bookId}`).pipe(
+      this.book$ = this.http.get<any>(`http://localhost:3000/books/${bookId}`).pipe(
         catchError(error => {
           console.error('Error fetching book:', error);
           return of({});
@@ -28,8 +28,8 @@ export class RelatedBooks implements OnInit {
       );
 
       this.book$.subscribe(book => {
-        if (book.serie_id) {
-          this.seriesBooks$ = this.http.get<any[]>(`https://books-shelves.vercel.app/books/series/${book.serie_id}`).pipe(
+        if (book.serie.serie_id) {
+          this.seriesBooks$ = this.http.get<any[]>(`http://localhost:3000/books/series/${book.serie.serie_id}`).pipe(
             catchError(error => {
               console.error('Error fetching books by series:', error);
               return of([]);

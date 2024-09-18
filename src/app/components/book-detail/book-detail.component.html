@@ -41,9 +41,9 @@
       <div *ngIf="comments$ | async as comments; else noComments" class="comments-list">
         <div *ngFor="let comment of comments" class="comment-card">
           <div class="comment-header">
-            <img *ngIf="comment.user_image" [src]="comment.user_image" alt="{{ comment.user_name }}" class="user-image"/>
+            <img *ngIf="comment.user.user_image" [src]="comment.user.user_image" alt="{{ comment.user_name }}" class="user-image"/>
             <div class="user-info">
-              <p class="user-name">{{ comment.user_name }}</p>
+              <p class="user-name">{{ comment.user.user_name }}</p>
               <p class="timestamp">{{ comment.time_stamp | date:'short' }}</p>
             </div>
           </div>
@@ -53,7 +53,7 @@
           <div class="comment-footer">
             <button (click)="upvote(comment.comment_id)" class="vote-button">Upvote ({{ comment.up_vote }})</button>
             <button (click)="downvote(comment.comment_id)" class="vote-button">Downvote ({{ comment.down_vote }})</button>
-            <button *ngIf="comment.user_id === userId" (click)="deleteComment(comment.comment_id)" class="delete-button">Delete</button>
+            <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.comment_id)" class="delete-button">Delete</button>
           </div>
         </div>
       </div>

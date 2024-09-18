@@ -27,13 +27,17 @@ export class BookListComponent {
 
     this.books$.subscribe(books => {
       books.forEach(book => {
-        const categories = book.book_category.split(',').map((category: string) => category.trim());
-        categories.forEach((category: string) => {
-          if (!this.booksByCategory[category]) {
-            this.booksByCategory[category] = [];
-          }
-          this.booksByCategory[category].push(book);
-        });
+        if (Array.isArray(book.book_category)) {
+          book.book_category.forEach((category: string) => {
+            category = category.trim();
+            if (!this.booksByCategory[category]) {
+              this.booksByCategory[category] = [];
+            }
+            this.booksByCategory[category].push(book);
+          });
+        } else {
+          console.warn(`Expected array for book_category but got: ${typeof book.book_category}`);
+        }
       });
 
       this.categories = Object.keys(this.booksByCategory)

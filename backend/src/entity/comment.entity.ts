@@ -1,27 +1,32 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Book } from './book.entity';
 
-@Entity()
+@Entity('comment')
 export class Comment {
-  @PrimaryGeneratedColumn()
-  comment_id: number; // Primary Key, AUTO_INCREMENT
+  @PrimaryGeneratedColumn({ name: 'comment_id' })
+  comment_id: number;
 
-  @ManyToOne(() => User, (user) => user.comments)
-  user: User; // Foreign key to User
+  @ManyToOne(() => User, user => user.comments)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
-  @Column({ type: 'text' })
-  comment_detail: string; // Required, comment content
+  @ManyToOne(() => Book, book => book.comments)
+  @JoinColumn({ name: 'book_id' })
+  book: Book;
 
-  @Column({ type: 'int', nullable: true })
-  reply_id?: number; // Optional, ID of the comment being replied to
+  @Column({ type: 'text', name: 'comment_detail', charset: 'utf8mb4', collation: 'utf8mb4_general_ci' })
+  comment_detail: string;
 
-  @Column({ type: 'int', default: 0 })
-  up_vote: number; // Default to 0, upvotes
+  @Column({ type: 'int', nullable: true, name: 'reply_id' })
+  reply_id?: number;
 
-  @Column({ type: 'int', default: 0 })
-  down_vote: number; // Default to 0, downvotes
+  @Column({ type: 'int', default: 0, name: 'up_vote' })
+  up_vote: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  time_stamp: Date; // Timestamp of the comment
+  @Column({ type: 'int', default: 0, name: 'down_vote' })
+  down_vote: number;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'time_stamp' })
+  time_stamp: Date;
 }

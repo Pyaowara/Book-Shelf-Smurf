@@ -11,8 +11,8 @@
 
 .books-container {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping to new rows */
-  gap: 20px; /* Space between book cards */
+  flex-wrap: wrap;
+  gap: 20px;
   padding: 10px 0;
 }
 
@@ -21,7 +21,7 @@
   flex-direction: column;
   align-items: center;
   width: 150px;
-  cursor: pointer; /* Ensure this is applied */
+  cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   border: 1px solid #ddd;
   border-radius: 8px;

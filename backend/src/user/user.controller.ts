@@ -30,11 +30,17 @@ export class UserController {
 
   @Get('getUserProfile/:id')
   async getUserProfileById(@Param('id') user_name: string) {
+    console.log(user_name + " This one");
     return this.userService.getUserProfile(user_name);
   }
 
   @Post('validate-token')
   async validateToken(@Body('token') token: string) {
     return this.userService.validateToken(token);
+  }
+
+  @Post('getUserId')
+  async getUserId(@Body('token') token: string) {
+    return this.userService.getUserId(token);
   }
 }

@@ -54,7 +54,7 @@ export class AuthService {
     catchError((error: HttpErrorResponse) => {
       console.error('Error during registration:', error);
       let errorMessage = 'An unknown error occurred';
-    
+
       try {
         const errorObject = JSON.parse(error.error);
     

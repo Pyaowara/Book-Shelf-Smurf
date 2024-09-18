@@ -1,4 +1,4 @@
-import { Injectable , HttpException, HttpStatus, BadRequestException, ConflictException} from '@nestjs/common';
+import { Injectable , HttpException, HttpStatus, BadRequestException, ConflictException, UnauthorizedException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
@@ -43,23 +43,19 @@ export class UserService {
   
 
   async login(user_name: string, user_pass: string) {
-    // Find user by user_name or user_email
     const user = await this.userRepository.findOne({
       where: [{ user_name }, { user_email: user_name }],
     });
 
-    // Check if user exists
     if (!user) {
       throw new HttpException('Invalid username or password', HttpStatus.UNAUTHORIZED);
     }
 
-    // Compare passwords
     const match = await bcrypt.compare(user_pass, user.user_pass);
     if (!match) {
       throw new HttpException('Invalid username or password', HttpStatus.UNAUTHORIZED);
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       {
         user_id: user.user_id,
@@ -70,7 +66,6 @@ export class UserService {
       { expiresIn: '30d' }, // Token expiration (30 days)
     );
 
-    // Return response in the same format as Express
     return {
       message: 'Login successful',
       userToken: token,
@@ -79,11 +74,31 @@ export class UserService {
   }
 
   async getUserProfile(token: string) {
-    const decodedToken = jwt.verify(token, 'itkmitl') as any;
+    try {
+      const decodedToken = jwt.verify(token, 'itkmitl') as any;
+      console.log('Decoded token:', decodedToken);
+      if (!decodedToken.user_name) {
+        throw new UnauthorizedException('Invalid token');
+      }
+      console.log('Searching for user with username:', decodedToken.user_name);
+      const user = await this.userRepository.findOne({
+        where: { user_name: decodedToken.user_name },
+      });
+      console.log('User found:', user);
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+      return user;
 
-    return await this.userRepository.findOne({
-      where: { user_name: decodedToken.user_name },
-    });
+    } catch (error) {
+      console.error('Error in getUserProfile:', error.message, error.stack);
+
+      if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Token is malformed or invalid');
+      }
+
+      throw new UnauthorizedException('Failed to get user profile');
+    }
   }
 
   async updateUser(id: string, data: any, userId: number, password: string) {
@@ -138,11 +153,21 @@ export class UserService {
     try {
       const user = jwt.verify(token, 'itkmitl');
       
-      // If successful, return the user's name and valid status
       return { valid: true, name: user.user_name };
     } catch (error) {
-      // Return false if token is invalid
       return { valid: false, name: '' };
+    }
+  }
+  async getUserId(token: string) {
+    if (!token) {
+      throw new BadRequestException('Token is required');
+    }
+
+    try {
+      const decoded = jwt.verify(token, 'itkmitl') as any;
+      return { userId: decoded.user_id };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
     }
   }
 }
