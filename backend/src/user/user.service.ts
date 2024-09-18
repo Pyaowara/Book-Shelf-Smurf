@@ -1,4 +1,4 @@
-import { Injectable , HttpException, HttpStatus, BadRequestException, ConflictException, UnauthorizedException} from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
@@ -40,7 +40,6 @@ export class UserService {
     await this.userRepository.save(newUser);
     return 'User registered';
   }
-  
 
   async login(user_name: string, user_pass: string) {
     const user = await this.userRepository.findOne({
@@ -101,41 +100,42 @@ export class UserService {
     }
   }
 
+  async getUserProfileById(userName: string) {
+    const user = await this.userRepository.findOne({ where: { user_name: userName } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
+  }
+
   async updateUser(id: string, data: any, userId: number, password: string) {
-    const user = await this.userRepository.findOne({
-      where: { user_id: userId },
-    });
+    const user = await this.userRepository.findOne({ where: { user_id: userId } });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-
     const match = await bcrypt.compare(password, user.user_pass);
-
     if (!match) {
-      throw new Error('Invalid password');
+      throw new HttpException('Invalid password', HttpStatus.UNAUTHORIZED);
     }
-
     if (id === 'user_name' || id === 'user_email') {
       const column = id === 'user_name' ? 'user_name' : 'user_email';
-      const existingUser = await this.userRepository.findOne({
-        where: { [column]: data },
-      });
+      const existingUser = await this.userRepository.findOne({ where: { [column]: data } });
 
       if (existingUser) {
-        throw new Error(`${column === 'user_name' ? 'Username' : 'Email'} already exists`);
+        throw new HttpException(
+          `${column === 'user_name' ? 'Username' : 'Email'} already exists`,
+          HttpStatus.CONFLICT,
+        );
       }
     }
-
     if (id === 'user_pass') {
       data = await bcrypt.hash(data, 8);
     }
 
     await this.userRepository.update(userId, { [id]: data });
 
-    const updatedUser = await this.userRepository.findOne({
-      where: { user_id: userId },
-    });
+    const updatedUser = await this.userRepository.findOne({ where: { user_id: userId } });
 
     const token = jwt.sign(
       {
@@ -147,17 +147,23 @@ export class UserService {
       { expiresIn: '30d' },
     );
 
-    return { token, userName: updatedUser.user_name };
+    return {
+      message: 'User information updated successfully',
+      userToken: token,
+      name_user: updatedUser.user_name,
+    };
   }
+
   async validateToken(token: string) {
     try {
       const user = jwt.verify(token, 'itkmitl');
-      
+
       return { valid: true, name: user.user_name };
     } catch (error) {
       return { valid: false, name: '' };
     }
   }
+
   async getUserId(token: string) {
     if (!token) {
       throw new BadRequestException('Token is required');

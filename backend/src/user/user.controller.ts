@@ -31,7 +31,7 @@ export class UserController {
   @Get('getUserProfile/:id')
   async getUserProfileById(@Param('id') user_name: string) {
     console.log(user_name + " This one");
-    return this.userService.getUserProfile(user_name);
+    return this.userService.getUserProfileById(user_name);
   }
 
   @Post('validate-token')
