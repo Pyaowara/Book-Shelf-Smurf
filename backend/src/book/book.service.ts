@@ -117,4 +117,9 @@ export class BookService {
 
     await this.commentRepository.save(comment);
   }
+
+  async addBook(bookData: Partial<Book>){
+    const book = this.bookRepository.create(bookData);
+    await this.bookRepository.save(book);
+  }
 }

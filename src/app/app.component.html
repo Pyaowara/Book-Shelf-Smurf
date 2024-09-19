@@ -6,6 +6,7 @@
         <button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button>
         <button (click)="goToAllBooks()" id="history-button" class="history-button">History</button>
         <button (click)="goToAllBooks()" class="wishlist-button">Wishlist</button>
+        <button *ngIf="isManager || isPubliser" (click)="goToAddBooks()" class="book_add">Add Book</button>
       </div>
     </div>
     <div class="top-menu">

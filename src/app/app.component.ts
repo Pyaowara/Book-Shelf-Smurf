@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { BookListComponent } from './components/book-list/book-list.component';
@@ -18,16 +18,33 @@ import { UserProfileResponse } from './services/user_service/user.respones.inter
   styleUrls: ['./app.component.css'],
   imports: [RouterOutlet, BookListComponent, LoginComponent, RegisterComponent, BookDetailComponent, FormsModule, CommonModule, AllBooksComponent, RelatedBooks]
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
 
   constructor(private router: Router,
               private userService:UserService
   ) {}
 
   public userData:UserProfileResponse | null = null;
-
   isLeftMenuVisible:boolean = false;
   searchQuery: string = '';
+
+  isUser:boolean = false;
+  isManager:boolean = false;
+  isPubliser:boolean = false;
+
+  async ngOnInit(){
+      await this.loadDataUser();
+      if(this.userData?.user_permission == '0'){
+        this.isManager = true;
+      }
+      else if(this.userData?.user_permission == '1'){
+        this.isUser = true;
+      }
+      else if(this.userData?.user_permission == '2'){
+        this.isPubliser = true;
+      }
+  }
+
 
     goToBookList(): void {
       this.router.navigate(['booklist']);
@@ -35,6 +52,10 @@ export class AppComponent{
 
     goToAllBooks(): void {
       this.router.navigate(['/all-books']);
+    }
+
+    goToAddBooks(): void {
+      this.router.navigate(['add-book'])
     }
 
     searchBooks() {

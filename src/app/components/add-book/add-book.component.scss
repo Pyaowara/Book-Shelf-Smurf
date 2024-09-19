@@ -1,0 +1,160 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.profile-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #2C2C2C;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.headtext {
+    font-weight: bold;
+    color: white;
+}
+
+.image-label {
+    display: inline-block;
+    cursor: pointer;
+    /* เพิ่มเส้นขอบเพื่อให้เห็นขอบเขตของรูป */
+}
+
+.image-preview {
+    display: block;
+    width: 400px;
+    /* กำหนดความกว้างมาตรฐาน */
+    height: 300px;
+    /* กำหนดความสูงมาตรฐาน */
+
+    /* ครอบตัดภาพให้เต็มขนาดที่กำหนด */
+}
+
+.image-label:hover {
+    opacity: 0.5;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+}
+
+.dropdown-select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 10;
+}
+
+.dropdown-options.active {
+    display: block;
+}
+
+.dropdown-options label {
+    display: block;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+
+.dropdown-options label:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown-options input {
+    margin-right: 10px;
+}
+
+.dropdown-arrow {
+    font-size: 10px;
+    margin-left: 10px;
+}
+
+#file-input {
+    display: none;
+}
+
+#defalt_image {
+    background-color: #2C2C2C;
+}
+
+.custom-combobox-container {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-combobox {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.custom-combobox input {
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 150px;
+}
+
+.custom-combobox img {
+    margin-left: 5px;
+}
+
+.options-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid #ccc;
+    background-color: white;
+    z-index: 1000;
+    width: 100%;
+}
+
+.options-container label {
+    display: block;
+    padding: 5px;
+}
+
+.category {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-container {
+        width: 90%;
+        margin: 1rem auto;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {}

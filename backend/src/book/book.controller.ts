@@ -97,4 +97,10 @@ async addComment(
       }
     }
   }
+
+  @Post('/add/book')
+  async addBook(@Body() bookData: Partial<Book>): Promise<{ message: string }>{
+    await this.bookService.addBook(bookData);
+    return { message: 'Add Book successful' };
+  }
 }

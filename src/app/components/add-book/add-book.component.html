@@ -1,0 +1,63 @@
+<br><br><br><br>
+<div class="profile-container">
+    <div class="headtext">ADD BOOK</div>
+
+    <div class="input">
+        <!-- input book_name_th -->
+        <input type="text" [(ngModel)]="book_name_th" placeholder="Enter book name (Thai)"><br><br>
+
+        <!-- input book_name_en -->
+        <input type="text" [(ngModel)]="book_name_en" placeholder="Enter book name (English)"><br><br>
+
+        <!-- input book_name_original -->
+        <input type="text" [(ngModel)]="book_name_originl" placeholder="Enter original book name"><br><br>
+
+        <!-- input book_image -->
+        <label for="file-input" class="image-label">
+            <img *ngIf="base64Image" [src]="base64Image" alt="Image preview" class="image-preview" />
+            <img *ngIf="!base64Image"
+                src="https://t3.ftcdn.net/jpg/04/60/01/36/360_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg"
+                alt="Upload Image" class="image-preview" />
+            <input type="file" id="file-input" (change)="onFileChange($event)" accept="image/*" />
+        </label><br><br>
+
+        <!-- input book_category -->
+        <div class="headtext">book category</div>
+        <div class="category">
+            <div *ngFor="let category of categories" class="checkbox-item">
+                <input type="checkbox" [id]="category.id" [(ngModel)]="category.selected" />
+                <label [for]="category.id">{{ category.label }}</label>
+            </div>
+        </div><br>
+
+        <!-- input book_descriptions -->
+        <input type="text" [(ngModel)]="book_descriptions" placeholder="Enter book descriptions"><br><br>
+
+        <!-- input book_status -->
+        status<br>
+        <select id="book_status" [(ngModel)]="book_status" name="book_status">
+            <option value="Not Available">Not Available</option>
+            <option value="Now Available">Now Available</option>
+            <option value="Unknown">Unknown</option>
+        </select><br><br>
+
+
+        <!-- input book_price -->
+        price<br>
+        <input type="number" [(ngModel)]="book_price" placeholder="Enter book price"><br><br>
+
+        <!-- input book_pages -->
+        page<br>
+        <input type="number" [(ngModel)]="book_pages" placeholder="Enter number of pages"><br><br>
+
+        <!-- input release_date -->
+        release<br>
+        <input type="date" [(ngModel)]="release_date" placeholder="Select release date"><br><br>
+
+        <!-- submit -->
+        <button type="submit" (click)="submit()">submit</button>
+        {{message}}
+
+    </div>
+
+</div>

@@ -11,6 +11,7 @@ import { AllBooksComponent } from './app/components/all-books/all-books.componen
 import { RelatedBooks } from './app/components/related-books/related-books.component';
 import { UserProfileComponent } from './app/components/user-profile/user-profile.component';
 import { UserSettingComponent } from './app/components/user-setting/user-setting.component';
+import { AddBookComponent } from './app/components/add-book/add-book.component';
 import { authGuard } from './app/auth/guard/auth/auth.guard';
 import { initGuard } from './app/auth/guard/init/init.guard';
 
@@ -25,7 +26,8 @@ export const routes: Routes = [
   { path: 'searched-book', component: SearchedBookComponent, canActivate:  [authGuard] },
   { path: 'all-books', component: AllBooksComponent ,canActivate:  [authGuard]},
   { path: 'user-profile/:id', component:UserProfileComponent, canActivate: [authGuard]},
-  { path: 'user-setting', component:UserSettingComponent, canActivate: [authGuard] }
+  { path: 'user-setting', component:UserSettingComponent, canActivate: [authGuard] },
+  { path: 'add-book', component:AddBookComponent, canActivate: [authGuard]}
 ];
 
 bootstrapApplication(AppComponent, {
