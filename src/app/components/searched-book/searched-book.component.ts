@@ -1,4 +1,3 @@
-// searched-book.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -17,14 +16,16 @@ import { FormsModule } from '@angular/forms';
 export class SearchedBookComponent implements OnInit {
   searchResults$: Observable<any[]> = new Observable();
   searchQuery: string = '';
+  selectedCategory: string = '';
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const query = params['query'] || '';
-      console.log(query);
-      this.searchResults$ = this.http.get<any[]>(`http://localhost:3000/books/searched/f?name=${encodeURIComponent(query)}`);
+      const category = params['categories'] || '';
+      console.log(query, category);
+      this.searchResults$ = this.http.get<any[]>(`http://localhost:3000/books/searched/f?name=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`);
     });
   }
 

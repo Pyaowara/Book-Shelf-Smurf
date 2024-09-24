@@ -19,9 +19,12 @@ export class BookController {
   }
 
   @Get('searched/f')
-  async searchBooks(@Query('name') name: string) {
+  async searchBooks(
+    @Query('name') name: string,
+    @Query('category') category?: string
+  ) {
     try {
-      const books = await this.bookService.searchBooks(name);
+      const books = await this.bookService.searchBooks(name, category);
       return books;
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -32,7 +35,9 @@ export class BookController {
         throw new InternalServerErrorException('Internal Server Error');
       }
     }
-}
+  }
+
+
 
 @Post('/comments/add')
 async addComment(

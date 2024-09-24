@@ -36,16 +36,23 @@ export class BookService {
       .getOne();
   }
 
-
-  async searchBooks(name: string): Promise<Book[]> {
+  async searchBooks(name: string, category?: string): Promise<Book[]> {
     try {
-      console.log('Searching for books with name:', name);
-      const queryBuilder = this.bookRepository.createQueryBuilder('book')
-        .where('book.book_name_en LIKE :name OR book.book_name_originl LIKE :name', { name: `%${name}%` });
+      console.log('Searching for books with name:', name, 'and category:', category);
+      let queryBuilder = this.bookRepository.createQueryBuilder('book');
+    
+      if (category) {
+        queryBuilder.andWhere('FIND_IN_SET(:category, book.book_category) > 0', { category }); 
+    }
+      else{
+        queryBuilder.where('book.book_name_en LIKE :name OR book.book_name_originl LIKE :name', { name: `%${name}%` });
+    }
+      console.log("Generated SQL:", queryBuilder.getQueryAndParameters());
       const results = await queryBuilder.getMany();
       if (results.length === 0) {
         throw new NotFoundException('No books found for the search query');
       }
+  
       return results;
     } catch (err) {
       console.error('Error executing search:', err.message, err.stack);

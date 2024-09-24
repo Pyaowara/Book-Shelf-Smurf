@@ -140,3 +140,105 @@ button {
 .filter-button:hover {
   background-color: #3f3f3f;
 }
+.filter-modal {
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.category-select {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.category-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.category-checkbox input {
+  margin-right: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.apply-filter-button,
+.close-button {
+  background-color: #ff6600;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.apply-filter-button:hover,
+.close-button:hover {
+  background-color: #e65c00;
+}
+
+.close-button {
+  background-color: #515151;
+}
+
+.close-button:hover {
+  background-color: #3f3f3f;
+}
+
+.checkbox-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Four columns */
+  gap: 10px; /* Space between checkboxes */
+  max-height: 400px; /* Set a max height for the scrollable area */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.category-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.category-checkbox input {
+  margin-right: 10px; /* Space between checkbox and label */
+}
+
+@media (max-width: 600px) {
+  .checkbox-container {
+    grid-template-columns: repeat(2, 1fr); /* Two columns for smaller screens */
+  }
+}
+
+@media (max-width: 400px) {
+  .checkbox-container {
+    grid-template-columns: 1fr; /* Single column for very small screens */
+  }
+}

@@ -9,20 +9,40 @@
         <button *ngIf="isManager || isPubliser" (click)="goToAddBooks()" class="book_add">Add Book</button>
       </div>
     </div>
+    
     <div class="top-menu">
-      <button (click)="leftMenuToggleButton()" id="leftMenuToggleButton" class="menu-toggle-button">
-        ☰
-      </button>
+      <button (click)="leftMenuToggleButton()" id="leftMenuToggleButton" class="menu-toggle-button">☰</button>
       <div class="search-container">
         <button (click)="goToAllBooks()" class="back-button"></button>
         <input type="search" [(ngModel)]="searchQuery" placeholder="Search for a book..." id="search-input" class="search-input"/>
         <button (click)="searchBooks()" class="search-button">Search</button>
-        <button (click)="goToAllBooks()" class="filter-button">Filter</button>
+        <button (click)="toggleFilterModal()" class="filter-button">Filter</button>
       </div>
       <div class="nav-buttons">
         <button (click)="goToUserProfile()" class="user-profile-button">User</button>
       </div>
     </div>
+
+    <div *ngIf="isFilterModalVisible" class="filter-modal">
+      <div class="filter-modal-content">
+        <h2>Select Categories</h2>
+        <div class="category-select">
+          <label>Select Categories:</label>
+          <div class="checkbox-container">
+            <div *ngFor="let genre of genres" class="category-checkbox">
+              <input type="checkbox" [checked]="selectedGenres[genre]" (change)="onCategorySelect(genre)"> {{ genre }}
+            </div>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button (click)="applyFilters()" class="apply-filter-button">Apply Filter</button>
+          <button (click)="toggleFilterModal()" class="close-button">Close</button>
+        </div>
+      </div>
+    </div>
+    
+
   </div>
+  
   <router-outlet></router-outlet>
 </body>
