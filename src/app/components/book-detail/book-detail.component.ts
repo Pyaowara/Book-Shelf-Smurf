@@ -18,6 +18,8 @@ export class BookDetailComponent implements OnInit {
   book$: Observable<any> = of({});
   comments$: Observable<any[]> = of([]);
   newComment: string = '';
+  replyComment: string = '';
+  replyMode: { [key: number]: boolean } = {};
   userId: number | null = null;
   bookId: string | null = '';
 
@@ -41,23 +43,6 @@ export class BookDetailComponent implements OnInit {
           return of([]);
         })
       );
-    }
-  }
-  submitComment(): void {
-    if (this.newComment.trim() && this.bookId && this.userId !== null) {
-      this.commentService.addComment({
-        book_id: parseInt(this.bookId, 10),
-        comment_detail: this.newComment,
-        user_id: this.userId
-      }).subscribe({
-        next: () => {
-          this.newComment = '';
-          this.refreshComments();
-        },
-        error: (err) => {
-          console.error('Error submitting comment:', err);
-        }
-      });
     }
   }
   
@@ -102,10 +87,42 @@ export class BookDetailComponent implements OnInit {
     if (bookId) {
       this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
         catchError(error => {
-          console.error('Error refreshing comments:', error);
+          console.error('Error fetching comments:', error);
           return of([]);
         })
       );
+    }
+  }
+
+  submitComment(): void {
+    if (this.newComment.trim() && this.bookId && this.userId !== null) {
+      this.commentService.addComment({
+        book_id: parseInt(this.bookId, 10),
+        comment_detail: this.newComment,
+        user_id: this.userId
+      }).subscribe(() => {
+        this.newComment = '';
+        this.refreshComments();
+      });
+    }
+  }
+
+  toggleReply(commentId: number): void {
+    this.replyMode[commentId] = !this.replyMode[commentId];
+  }
+
+  submitReply(commentId: number): void {
+    if (this.replyComment.trim() && this.bookId && this.userId !== null) {
+      this.commentService.addReply({
+        book_id: parseInt(this.bookId, 10),
+        comment_detail: this.replyComment,
+        user_id: this.userId,
+        reply_id: commentId
+      }).subscribe(() => {
+        this.replyComment = '';
+        this.replyMode[commentId] = false;
+        this.refreshComments();
+      });
     }
   }
 }

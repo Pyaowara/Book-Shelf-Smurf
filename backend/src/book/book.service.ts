@@ -129,4 +129,32 @@ export class BookService {
     const book = this.bookRepository.create(bookData);
     await this.bookRepository.save(book);
   }
+
+  async addReply(bookId: number, commentDetail: string, userId: number, replyId: number): Promise<void> {
+    const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
+    const user = await this.userRepository.findOne({ where: { user_id: userId } });
+    const parentComment = await this.commentRepository.findOne({ where: { comment_id: replyId } });
+  
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+  
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    if (!parentComment) {
+      throw new NotFoundException('Parent comment not found');
+    }
+  
+    const replyComment = this.commentRepository.create({
+      book,
+      comment_detail: commentDetail,
+      user,
+      reply_id: replyId
+    });
+  
+    await this.commentRepository.save(replyComment);
+  }
+  
 }

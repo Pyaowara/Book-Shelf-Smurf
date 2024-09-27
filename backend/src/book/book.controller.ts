@@ -108,4 +108,24 @@ async addComment(
     await this.bookService.addBook(bookData);
     return { message: 'Add Book successful' };
   }
+
+  @Post('/comments/reply')
+  async addReply(
+    @Body('book_id') bookId: number,
+    @Body('comment_detail') commentDetail: string,
+    @Body('user_id') userId: number,
+    @Body('reply_id') replyId: number
+  ): Promise<{ message: string }> {
+    if (!bookId || !commentDetail || !userId || !replyId) {
+      throw new BadRequestException('All fields (book_id, comment_detail, user_id, reply_id) are required');
+    }
+
+    try {
+      await this.bookService.addReply(bookId, commentDetail, userId, replyId);
+      return { message: 'Reply added successfully!' };
+    } catch (error) {
+      throw new InternalServerErrorException('Error adding reply');
+    }
+  }
+
 }

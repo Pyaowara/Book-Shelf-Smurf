@@ -31,6 +31,7 @@
 
     <div class="comments-section">
       <h3>Comments</h3>
+      
       <div class="post-comment">
         <h4>Post a Comment</h4>
         <form (ngSubmit)="submitComment()">
@@ -38,6 +39,7 @@
           <button type="submit">Submit Comment</button>
         </form>
       </div>
+    
       <div *ngIf="comments$ | async as comments; else noComments" class="comments-list">
         <div *ngFor="let comment of comments" class="comment-card">
           <div class="comment-header">
@@ -54,14 +56,28 @@
             <button (click)="upvote(comment.comment_id)" class="vote-button">Upvote ({{ comment.up_vote }})</button>
             <button (click)="downvote(comment.comment_id)" class="vote-button">Downvote ({{ comment.down_vote }})</button>
             <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.comment_id)" class="delete-button">Delete</button>
+    
+            <button (click)="toggleReply(comment.comment_id)" class="reply-button">Reply</button>
+    
+            <div *ngIf="replyMode[comment.comment_id]" class="reply-section">
+              <textarea [(ngModel)]="replyComment" name="reply" rows="2" placeholder="Write your reply here..." required></textarea>
+              <button (click)="submitReply(comment.comment_id)" class="submit-reply-button">Submit Reply</button>
+            </div>
+    
+            <div *ngIf="comment.replies && comment.replies.length" class="replies-list">
+              <div *ngFor="let reply of comment.replies" class="reply-comment">
+                <p><strong>{{ reply.user.user_name }}:</strong> {{ reply.comment_detail }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-  
+      
       <ng-template #noComments>
         <p class="no-comments">No comments yet.</p>
       </ng-template>
     </div>
+    
   </div>
 
   <ng-template #loading>
