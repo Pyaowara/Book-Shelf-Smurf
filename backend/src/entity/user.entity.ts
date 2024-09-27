@@ -25,7 +25,7 @@ export class User {
   user_image?: string; // Optional, profile image
 
   @Column({ type: 'text', nullable: true })
-  user_descriptions?: string; // Optional, user description
+  user_description?: string; // Optional, user description
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[]; // Relation to comments made by the user

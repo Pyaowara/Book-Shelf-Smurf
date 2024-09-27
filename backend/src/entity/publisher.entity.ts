@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Book } from './book.entity';
+import { Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
 
-@Entity()
+@Entity({ name: 'publisher'})
 export class Publisher {
   @PrimaryGeneratedColumn()
   publisher_id: number; // Primary Key, AUTO_INCREMENT
@@ -9,6 +8,6 @@ export class Publisher {
   @Column({ type: 'text', nullable: true })
   publisher_name?: string; // Optional, name of the publisher
 
-  @OneToMany(() => Book, (Book) => Book.publisher)
-  books: Book[]; // Relation to the books published by this publisher
+  @Column({ type: 'text', nullable: true })
+  publisher_image?: string; // Relation to the books published by this publisher
 }

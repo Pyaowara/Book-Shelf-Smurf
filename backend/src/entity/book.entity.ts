@@ -39,21 +39,21 @@ export class Book {
   @Column({ type: 'text', nullable: true })
   book_image?: string;
 
+  @Column({ type: 'text', enum: ['Unknown','Thai','English','Korean','Chinese','Japanese']})
+  language?: string[];
+
   @Column({ type: 'date', nullable: true })
   release_date?: Date;
-
-  @Column({ type: 'text', nullable: true })
-  publisher_link?: string;
 
   @ManyToOne(() => Author, (author) => author.books)
   @JoinColumn({ name: 'author_id' })
   author: Author;
 
-  @ManyToOne(() => Publisher, (publisher) => publisher.books)
+  @ManyToOne(() => Publisher, (publisher) => publisher.publisher_id)
   @JoinColumn({ name: 'publisher_id' })
   publisher: Publisher;
 
-  @ManyToOne(() => Serie, (series) => series.books)
+  @ManyToOne(() => Serie, (series) => series.serie_id)
   @JoinColumn({ name: 'serie_id' })
   serie: Serie;
 

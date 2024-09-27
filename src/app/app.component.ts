@@ -66,6 +66,14 @@ export class AppComponent implements OnInit {
     this.router.navigate(['add-book']);
   }
 
+  goToAddSeries():void {
+    this.router.navigate(['add-serie'])
+  }
+
+  goToAddPublisher():void {
+    this.router.navigate(['add-publisher']);
+  }
+
   searchBooks() {
     const queryParams: any = { query: this.searchQuery };
     const selectedCategories = this.genres.filter(genre => this.selectedGenres[genre]);

@@ -9,10 +9,13 @@
     </div>
 
     <div class="book-content">
-      <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
+      <div>
+        <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
+        <br><button type="submit" (click)="editBook()">Edit Book</button>
+      </div>
 
       <div class="book-info">
-        <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+        <p><strong>Publisher:</strong> {{ book.publisher.publisher_name }}</p>
         <p><strong>Author:</strong> {{ book.author_name }}</p>
         <p><strong>Status:</strong> {{ book.book_status }}</p>
         <p><strong>Score:</strong> {{ book.book_score }}</p>
@@ -20,7 +23,7 @@
         <p><strong>Pages:</strong> {{ book.book_pages }}</p>
         <p><strong>References:</strong> {{ book.references_link }}</p>
         <p><strong>Category:</strong> {{ book.book_category }}</p>
-        <p><strong>Language:</strong> {{ book.book_language }}</p>
+        <p><strong>Language:</strong> {{ book.language }}</p>
       </div>
     </div>
 

@@ -2,16 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book-service/book.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-add-book',
+  selector: 'app-edit-book',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './add-book.component.html',
-  styleUrl: './add-book.component.scss'
+  templateUrl: './edit-book.component.html',
+  styleUrl: './edit-book.component.scss'
 })
-export class AddBookComponent implements OnInit{
-  constructor(private bookService: BookService) { }
+export class EditBookComponent implements OnInit {
+  constructor(private bookService: BookService,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router
+  ) { }
+  book: any;
+  bookId: string | null = '';
+  shop: any;
 
   base64Image: string | null = null;
   book_name_th: string = '';
@@ -25,14 +34,14 @@ export class AddBookComponent implements OnInit{
   release_date: string = '';
   selectedPublisherId: string = ''
   selectedSerie: string = '';
-  language:string = '';
+  language: string = '';
 
   message: string = '';
 
   numberOfLinks: number = 0;
   links: { book_id: string, shop_link: string, shop_detail: string, shop_image: string }[] = [];
-  publisher_all: {publisher_id:string, publisher_name:string, publisher_image:string}[] = [];
-  serie_all: {serie_id:string, serie_name_th:string, serie_name_en:string, serie_name_original:string, serie_status:string, serie_detail:string}[] = [];
+  publisher_all: { publisher_id: string, publisher_name: string, publisher_image: string }[] = [];
+  serie_all: { serie_id: string, serie_name_th: string, serie_name_en: string, serie_name_original: string, serie_status: string, serie_detail: string }[] = [];
 
   categories = [
     { id: 'fiction', label: 'Fiction', selected: false },
@@ -78,11 +87,42 @@ export class AddBookComponent implements OnInit{
     { id: 'adventure', label: 'Adventure', selected: false }
   ];
 
-  async ngOnInit(){
-      this.publisher_all = await this.bookService.getPublisher();
-      this.serie_all = await this.bookService.getSerie();
+  async ngOnInit() {
+    this.bookId = this.route.snapshot.paramMap.get('id');
+    this.publisher_all = await this.bookService.getPublisher();
+    this.serie_all = await this.bookService.getSerie();
+    this.book = await this.bookService.getBookById(this.bookId);
+    this.shop = await this.bookService.getShop(this.bookId);
+    this.links = this.shop;
+    this.numberOfLinks = this.shop.length;
+    this.loadData();
   }
 
+  loadData() {
+    this.book_name_th = this.book.book_name_th;
+    this.book_name_en = this.book.book_name_en;
+    this.book_name_originl = this.book.book_name_originl;
+    this.book_descriptions = this.book.book_descriptions;
+    this.book_status = this.book.book_status;
+    this.base64Image = this.book.book_image;
+    this.book_price = this.book.book_price;
+    this.book_pages = this.book.book_pages;
+    this.language = this.book.language;
+    this.selectedPublisherId = this.book.publisher.publisher_id;
+    this.selectedSerie = this.book.serie.serie_id;
+    this.release_date = this.book.release_date;
+
+    this.checkcategoey();
+  }
+
+  checkcategoey() {
+    for (const index in this.categories) {
+      const category = this.categories[index]
+      if (this.book.book_category.includes(category.label)) {
+        category.selected = true;
+      }
+    }
+  }
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -99,8 +139,8 @@ export class AddBookComponent implements OnInit{
   }
 
   onFileChangeShopLink(event: any, index: number) {
-    const file = event.target.files[0];
 
+    const file = event.target.files[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
         console.error('Invalid file type. Please upload an image file.');
@@ -128,23 +168,32 @@ export class AddBookComponent implements OnInit{
   }
 
   async submit() {
-    await this.getSelectedValues();
-    let res_addbook = await this.bookService.addBooks(this.book_name_th, this.book_name_en, this.book_name_originl, this.book_category, this.book_descriptions, this.book_status,
-      this.book_price, this.book_pages, this.base64Image!, this.release_date, Number(this.selectedPublisherId), Number(this.selectedSerie), this.language);
-    if (res_addbook) {
-      const bookId = res_addbook.book_id;
-      this.setBookIdShopLink(bookId);
-      let res_addshop = await this.bookService.addShops(this.links);
-      if (res_addshop) {
-        this.message = res_addshop.message;
+    try {
+      await this.getSelectedValues();
+      this.bookId = await this.route.snapshot.paramMap.get('id');
+      let res_update = await this.bookService.updateBooks(this.bookId, this.book_name_th, this.book_name_en, this.book_name_originl, this.book_category, this.book_descriptions, this.book_status,
+        this.book_price, this.book_pages, this.base64Image!, this.release_date, Number(this.selectedPublisherId), Number(this.selectedSerie), this.language);
+      if (res_update) {
+        const bookId = res_update.book_id;
+        this.setBookIdShopLink(bookId);
+        let res_addshop = await this.bookService.addShops(this.links);
+        if (res_addshop) {
+          this.message = res_addshop.message;
+        }
       }
+      this.message = 'Update book sucess';
+      this.router.navigate(['book/'+this.bookId]);
     }
+    catch{
+      this.message = 'Update book faill';
+    }
+
   }
 
   shop_book() {
     if (this.numberOfLinks > this.links.length) {
       for (let i = this.links.length; i < this.numberOfLinks; i++) {
-          this.links.push({ book_id: '', shop_link: '', shop_detail: '', shop_image: '' });
+        this.links.push({ book_id: '', shop_link: '', shop_detail: '', shop_image: '' });
       }
     } else {
       this.links = this.links.slice(0, this.numberOfLinks);

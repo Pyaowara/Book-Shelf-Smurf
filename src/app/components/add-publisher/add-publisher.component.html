@@ -1,0 +1,20 @@
+<br><br><br><br>
+<div class="container">
+    <p>ADD PUBLISHER</p><br>
+
+    <!-- input name publisher -->
+        <input type="text" [(ngModel)]="publisher_name" placeholder="Enter publisher name"><br><br>
+
+    <!-- input image publisher -->
+    <label for="file-input" class="image-label">
+        <img *ngIf="base64Image" [src]="base64Image" alt="Image preview" class="image-preview" />
+        <img *ngIf="!base64Image"
+            src="https://t3.ftcdn.net/jpg/04/60/01/36/360_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg"
+            alt="Upload Image" class="image-preview" />
+        <input type="file" id="file-input" (change)="onFileChange($event)" accept="image/*" />
+    </label><br><br>
+
+    <button type="submit" (click)="submit()">submit</button>
+    <br>{{message}}
+</div>
+

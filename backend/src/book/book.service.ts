@@ -5,6 +5,9 @@ import { Book } from '../entity/book.entity';
 import { Author } from '../entity/author.entity';
 import { Comment } from '../entity/comment.entity';
 import { User } from '../entity/user.entity';
+import { Shop } from 'src/entity/book_shop.entity';
+import { Publisher } from 'src/entity/publisher.entity';
+import { Serie } from 'src/entity/serie.entity';
 
 
 @Injectable()
@@ -21,6 +24,17 @@ export class BookService {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Shop)
+    private readonly shopRepository: Repository<Shop>,
+
+    @InjectRepository(Publisher)
+    private readonly publisherRepository: Repository<Publisher>,
+
+    @InjectRepository(Serie)
+    private readonly serieRepository: Repository<Serie>
+
+    
   ) {}
 
   async findAll(): Promise<Book[]> {
@@ -32,6 +46,7 @@ export class BookService {
     return this.bookRepository.createQueryBuilder('book')
       .leftJoinAndSelect('book.author', 'author')
       .leftJoinAndSelect('book.serie', 'serie')
+      .leftJoinAndSelect('book.publisher', 'publisher')
       .where('book.book_id = :bookId', { bookId })
       .getOne();
   }
@@ -127,8 +142,49 @@ export class BookService {
 
   async addBook(bookData: Partial<Book>){
     const book = this.bookRepository.create(bookData);
-    await this.bookRepository.save(book);
+    const saveBook = await this.bookRepository.save(book);
+    return saveBook.book_id;
   }
+
+  async addSerie(serieData: Partial<Serie>){
+    const serie = this.serieRepository.create(serieData);
+    const saveSerie = await this.serieRepository.save(serie);
+    return saveSerie.serie_id;
+  }
+
+  async addpublisher(publisherData: Partial<Publisher>){
+    const publisher = this.publisherRepository.create(publisherData);
+    const savePublisher = await this.publisherRepository.save(publisher);
+    return savePublisher.publisher_id;
+  }
+
+  async addShop(shops: Partial<Shop>[]){
+    const shopEntities = this.shopRepository.create(shops);
+    await this.shopRepository.save(shopEntities);
+  }
+
+  async findAllPublisher(): Promise<Publisher[]>{
+    return await this.publisherRepository.find();
+  }
+
+  async findAllSeries(): Promise<Serie[]>{
+    return await this.serieRepository.find();
+  }
+
+  async updateBook(bookId: number, bookData: Partial<Book>): Promise<number> {
+    const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
+    if (!book) {
+      throw new Error('Book not found');
+    }
+    Object.assign(book, bookData);
+    const updatedBook = await this.bookRepository.save(book);
+    return updatedBook.book_id;
+  }
+
+  async findShopByBookId(book_id: number): Promise<Shop[]> {
+    return await this.shopRepository.find({ where: { book_id } });
+  }
+
 
   async addReply(bookId: number, commentDetail: string, userId: number, replyId: number): Promise<void> {
     const book = await this.bookRepository.findOne({ where: { book_id: bookId } });

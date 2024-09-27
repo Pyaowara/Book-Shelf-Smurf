@@ -14,6 +14,9 @@ import { UserSettingComponent } from './app/components/user-setting/user-setting
 import { AddBookComponent } from './app/components/add-book/add-book.component';
 import { authGuard } from './app/auth/guard/auth/auth.guard';
 import { initGuard } from './app/auth/guard/init/init.guard';
+import { AddSerieComponent } from './app/components/add-serie/add-serie.component';
+import { AddPublisherComponent } from './app/components/add-publisher/add-publisher.component';
+import { EditBookComponent } from './app/components/edit-book/edit-book.component';
 
 
 export const routes: Routes = [
@@ -27,7 +30,10 @@ export const routes: Routes = [
   { path: 'all-books', component: AllBooksComponent ,canActivate:  [authGuard]},
   { path: 'user-profile/:id', component:UserProfileComponent, canActivate: [authGuard]},
   { path: 'user-setting', component:UserSettingComponent, canActivate: [authGuard] },
-  { path: 'add-book', component:AddBookComponent, canActivate: [authGuard]}
+  { path: 'add-book', component:AddBookComponent, canActivate: [authGuard]},//เดียวมา auth admin ที่หลัง
+  { path: 'add-serie', component:AddSerieComponent, canActivate: [authGuard]},//เดียวมา auth admin ที่หลัง
+  { path: 'add-publisher', component:AddPublisherComponent, canActivate: [authGuard]},//เดียวมา auth admin ที่หลัง
+  { path: 'edit-book/:id', component:EditBookComponent, canActivate: [authGuard]}//เดียวมา auth admin ที่หลัง
 ];
 
 bootstrapApplication(AppComponent, {

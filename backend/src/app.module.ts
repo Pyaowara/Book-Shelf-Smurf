@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       port: 3306,
-      database: 'bookchiphaiv2',
+      database: 'book_v2',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       //ห้ามเปลี่ยนเป็น True นะไอสัส
       //ห้ามเปลี่ยนเป็น True นะไอสัส

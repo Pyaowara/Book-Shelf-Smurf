@@ -34,7 +34,7 @@ export class UserService {
     const newUser = this.userRepository.create({
       ...userDetails,
       user_pass: passwordHash,
-      user_permission: '1',
+      user_permission: '3',
     });
 
     await this.userRepository.save(newUser);

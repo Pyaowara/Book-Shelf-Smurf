@@ -2,6 +2,9 @@ import { Controller, Get, Param, Query, Post, BadRequestException, NotFoundExcep
 import { BookService } from './book.service';
 import { Book } from '../entity/book.entity';
 import { Comment } from '../entity/comment.entity';
+import { Shop } from 'src/entity/book_shop.entity';
+import { Serie } from 'src/entity/serie.entity';
+import { Publisher } from 'src/entity/publisher.entity';
 
 
 @Controller('books')
@@ -39,23 +42,23 @@ export class BookController {
 
 
 
-@Post('/comments/add')
-async addComment(
-  @Body('book_id') bookId: number,
-  @Body('comment_detail') commentDetail: string,
-  @Body('user_id') userId: number
-): Promise<{ message: string }> {
-  if (!bookId || !commentDetail || !userId) {
-    throw new BadRequestException('All fields (book_id, comment_detail, user_id) are required');
-  }
+  @Post('/comments/add')
+  async addComment(
+    @Body('book_id') bookId: number,
+    @Body('comment_detail') commentDetail: string,
+    @Body('user_id') userId: number
+  ): Promise<{ message: string }> {
+    if (!bookId || !commentDetail || !userId) {
+      throw new BadRequestException('All fields (book_id, comment_detail, user_id) are required');
+    }
 
-  try {
-    await this.bookService.addComment(bookId, commentDetail, userId);
-    return { message: 'Comment added successfully!' };
-  } catch (error) {
-    throw new InternalServerErrorException('Error adding comment');
+    try {
+      await this.bookService.addComment(bookId, commentDetail, userId);
+      return { message: 'Comment added successfully!' };
+    } catch (error) {
+      throw new InternalServerErrorException('Error adding comment');
+    }
   }
-}
 
   @Get('series/:seriesId')
   async findBooksBySeriesId(@Param('seriesId') seriesId: string): Promise<Book[]> {
@@ -104,9 +107,51 @@ async addComment(
   }
 
   @Post('/add/book')
-  async addBook(@Body() bookData: Partial<Book>): Promise<{ message: string }>{
-    await this.bookService.addBook(bookData);
-    return { message: 'Add Book successful' };
+  async addBook(@Body() bookData: Partial<Book>): Promise<{ message: string, book_id: number }> {
+    const bookId = await this.bookService.addBook(bookData);
+    return { message: 'Add Book successful', book_id: bookId };
+  }
+
+  @Post('/add/serie')
+  async addSerie(@Body() serieData: Partial<Serie>): Promise<{ message: string, serie_id: number }> {
+    const serieId = await this.bookService.addSerie(serieData);
+    return { message: 'Add Serie successful', serie_id: serieId };
+  }
+
+  @Post('/add/shop')
+  async addShop(@Body() shops: Partial<Shop>[]) {
+    await this.bookService.addShop(shops);
+    return { message: 'Add Shop successful' };
+  }
+
+  @Post('/add/publisher')
+  async addPublisher(@Body() publisherData: Partial<Publisher>): Promise<{ message: string, publisher_id: number }> {
+    const publisherId = await this.bookService.addpublisher(publisherData);
+    return { message: 'Add Publisher successful', publisher_id: publisherId };
+  }
+
+  @Get('/get/publisher')
+  async findPublisher() {
+    return this.bookService.findAllPublisher();
+  }
+
+  @Get('/get/serie')
+  async findSerie() {
+    return this.bookService.findAllSeries();
+  }
+
+  @Post('/update/book/:bookId')
+  async updateBook(
+    @Param('bookId') bookId: number,
+    @Body() bookData: Partial<Book>
+  ): Promise<{ message: string; book_id: number }> {
+    const updatedBookId = await this.bookService.updateBook(bookId, bookData);
+    return { message: 'Update Book successful', book_id: updatedBookId };
+  }
+
+  @Get('/get/shop/:bookId')
+  async getShop(@Param('bookId') bookId: number){
+    return this.bookService.findShopByBookId(bookId);
   }
 
   @Post('/comments/reply')

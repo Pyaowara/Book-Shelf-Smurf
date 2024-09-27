@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -23,7 +23,7 @@ export class BookDetailComponent implements OnInit {
   userId: number | null = null;
   bookId: string | null = '';
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private commentService: CommentService, private authService: AuthService) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private commentService: CommentService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.bookId = this.route.snapshot.paramMap.get('id');
@@ -124,5 +124,10 @@ export class BookDetailComponent implements OnInit {
         this.refreshComments();
       });
     }
+  }
+
+  editBook(): void{
+    const bookId = this.route.snapshot.paramMap.get('id');
+    this.router.navigate(['/edit-book/'+bookId]);
   }
 }
