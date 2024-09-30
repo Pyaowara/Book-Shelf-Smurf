@@ -1,7 +1,7 @@
 <div class="book-detail-container">
   <h1>Book Details</h1>
 
-  <div *ngIf="book$ | async as book; else loading" class="book-detail">
+  <div *ngIf="book$ | async as book;" class="book-detail">
     <div class="book-header">
       <h2>{{ book.book_name_en }}</h2>
       <h3>{{ book.book_name_th }}</h3>
@@ -31,10 +31,9 @@
       <h3>Description</h3>
       <p>{{ book.book_descriptions }}</p>
     </div>
-
     <div class="comments-section">
       <h3>Comments</h3>
-      
+    
       <div class="post-comment">
         <h4>Post a Comment</h4>
         <form (ngSubmit)="submitComment()">
@@ -46,10 +45,10 @@
       <div *ngIf="comments$ | async as comments; else noComments" class="comments-list">
         <div *ngFor="let comment of comments" class="comment-card">
           <div class="comment-header">
-            <img *ngIf="comment.user.user_image" [src]="comment.user.user_image" alt="{{ comment.user_name }}" class="user-image"/>
+            <img *ngIf="comment.user.user_image" [src]="comment.user.user_image" alt="{{ comment.user_name }}" class="user-image" />
             <div class="user-info">
               <p class="user-name">{{ comment.user.user_name }}</p>
-              <p class="timestamp">{{ comment.time_stamp | date:'short' }}</p>
+              <p class="timestamp">{{ comment.time_stamp | date: 'short' }}</p>
             </div>
           </div>
           <div class="comment-body">
@@ -58,8 +57,7 @@
           <div class="comment-footer">
             <button (click)="upvote(comment.comment_id)" class="vote-button">Upvote ({{ comment.up_vote }})</button>
             <button (click)="downvote(comment.comment_id)" class="vote-button">Downvote ({{ comment.down_vote }})</button>
-            <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.comment_id)" class="delete-button">Delete</button>
-    
+            <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.comment_id)" class="vote-button">Delete</button>
             <button (click)="toggleReply(comment.comment_id)" class="reply-button">Reply</button>
     
             <div *ngIf="replyMode[comment.comment_id]" class="reply-section">
@@ -69,21 +67,29 @@
     
             <div *ngIf="comment.replies && comment.replies.length" class="replies-list">
               <div *ngFor="let reply of comment.replies" class="reply-comment">
-                <p><strong>{{ reply.user.user_name }}:</strong> {{ reply.comment_detail }}</p>
+                <div class="reply-header">
+                  <img *ngIf="reply.user.user_image" [src]="reply.user.user_image" alt="{{ reply.user.user_name }}" class="user-image" />
+                  <div class="user-info">
+                    <p class="user-name">{{ reply.user.user_name }}</p>
+                    <p class="timestamp">{{ reply.time_stamp | date: 'short' }}</p>
+                  </div>
+                </div>
+                <div class="reply-body">
+                  <p>{{ reply.comment_detail }}</p>
+                </div>
+                <div class="reply-footer">
+                  <button (click)="upvote(reply.comment_id)" class="vote-button">Upvote ({{ reply.up_vote }})</button>
+                  <button (click)="downvote(reply.comment_id)" class="vote-button">Downvote ({{ reply.down_vote }})</button>
+                  <button *ngIf="reply.user.user_id === userId" (click)="deleteComment(reply.comment_id)" class="vote-button">Delete</button>
+                </div>
               </div>
             </div>
+            
           </div>
         </div>
       </div>
-      
+    
       <ng-template #noComments>
         <p class="no-comments">No comments yet.</p>
       </ng-template>
-    </div>
-    
-  </div>
-
-  <ng-template #loading>
-    <p class="loading">Loading...</p>
-  </ng-template>
 </div>

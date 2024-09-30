@@ -86,8 +86,11 @@ export class BookService {
     return this.commentRepository.createQueryBuilder('comment')
       .leftJoinAndSelect('comment.user', 'user')
       .where('comment.book_id = :bookId', { bookId })
+      .orderBy('comment.time_stamp', 'ASC')
       .getMany();
   }
+  
+  
 
   async upvoteComment(commentId: number): Promise<void> {
     await this.commentRepository.createQueryBuilder()

@@ -9,5 +9,5 @@ export class Publisher {
   publisher_name?: string; // Optional, name of the publisher
 
   @Column({ type: 'text', nullable: true })
-  publisher_image?: string; // Relation to the books published by this publisher
+  publisher_image?: string;
 }

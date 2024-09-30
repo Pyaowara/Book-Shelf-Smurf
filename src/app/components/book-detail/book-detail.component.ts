@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of } from 'rxjs';
+import { Observable, catchError, of, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CommentService } from '../../services/comment-service/comment.service';
 import { AuthService } from '../../auth/auth.service';
@@ -37,61 +37,72 @@ export class BookDetailComponent implements OnInit {
       this.authService.getUserId().subscribe(userId => {
         this.userId = userId;
       });
-      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${this.bookId}/comments`).pipe(
-        catchError(error => {
-          console.error('Error fetching comments:', error);
-          return of([]);
-        })
-      );
+      this.fetchComments();
     }
   }
+
+  fetchComments(): void {
+    this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${this.bookId}/comments`).pipe(
+      map(comments => this.organizeComments(comments)),
+      catchError(error => {
+        console.error('Error fetching comments:', error);
+        return of([]);
+      })
+    );
+  }
   
+organizeComments(comments: any[]): any[] {
+    const commentMap: { [key: number]: any } = {};
+    const rootComments: any[] = [];
+
+    comments.forEach(comment => {
+      comment.replies = [];
+      commentMap[comment.comment_id] = comment;
+
+      if (comment.reply_id) {
+        if (commentMap[comment.reply_id]) {
+          commentMap[comment.reply_id].replies.push(comment);
+        }
+      } else {
+        rootComments.push(comment);
+      }
+    });
+
+    return rootComments;
+  }
+
+  getStars(score: number): string {
+    return '⭐'.repeat(score);
+  }
   deleteComment(commentId: number): void {
     if (this.userId === null) {
       console.error('User ID is not available');
       return;
     }
-  
+
     this.commentService.deleteComment(commentId, this.userId).subscribe({
       next: (response) => {
         console.log('Comment deleted successfully:', response);
-        this.refreshComments();
+        this.fetchComments();
       },
       error: (err) => {
         console.error('Error deleting comment:', err);
       }
     });
   }
-  
-
-  getStars(score: number): string {
-    return '⭐'.repeat(score);
-  }
 
   upvote(commentId: number): void {
     this.http.post(`http://localhost:3000/books/comments/${commentId}/upvote`, {}).subscribe({
-      next: () => this.refreshComments(),
+      next: () => this.fetchComments(),
       error: (error) => console.error('Error upvoting comment:', error)
     });
   }
 
   downvote(commentId: number): void {
     this.http.post(`http://localhost:3000/books/comments/${commentId}/downvote`, {}).subscribe({
-      next: () => this.refreshComments(),
+      next: () => this.fetchComments(),
       error: (error) => console.error('Error downvoting comment:', error)
     });
-  }
-
-  refreshComments(): void {
-    const bookId = this.route.snapshot.paramMap.get('id');
-    if (bookId) {
-      this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${bookId}/comments`).pipe(
-        catchError(error => {
-          console.error('Error fetching comments:', error);
-          return of([]);
-        })
-      );
-    }
   }
 
   submitComment(): void {
@@ -102,7 +113,7 @@ export class BookDetailComponent implements OnInit {
         user_id: this.userId
       }).subscribe(() => {
         this.newComment = '';
-        this.refreshComments();
+        this.fetchComments();
       });
     }
   }
@@ -121,13 +132,13 @@ export class BookDetailComponent implements OnInit {
       }).subscribe(() => {
         this.replyComment = '';
         this.replyMode[commentId] = false;
-        this.refreshComments();
+        this.fetchComments();
       });
     }
   }
 
-  editBook(): void{
+  editBook(): void {
     const bookId = this.route.snapshot.paramMap.get('id');
-    this.router.navigate(['/edit-book/'+bookId]);
+    this.router.navigate(['/edit-book/' + bookId]);
   }
 }

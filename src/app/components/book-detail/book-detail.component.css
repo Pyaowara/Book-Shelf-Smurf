@@ -106,7 +106,6 @@ button[type="submit"]:hover {
   background-color: #ff8d41;
   transform: scale(1.05);
 }
-
 .comments-list {
   display: flex;
   flex-direction: column;
@@ -121,44 +120,37 @@ button[type="submit"]:hover {
   background-color: #fff;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.comment-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+.reply-section {
+  margin-top: 10px;
 }
 
-.user-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
+.replies-container {
+  margin-top: 15px;
+  padding-left: 30px; /* Indent replies */
+  position: relative;
 }
 
-.user-info {
-  flex: 1;
+.reply-line {
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #ccc;
 }
 
-.user-name {
-  font-weight: bold;
-  margin: 0;
+.reply-comment {
+  margin-top: 10px;
 }
 
-.timestamp {
-  color: #666;
-  margin: 0;
-  font-size: 0.9em;
-}
-
-.comment-body {
-  margin-bottom: 10px;
-}
-
-.comment-footer {
-  display: flex;
-  gap: 10px;
+.reply-content {
+  padding-left: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .vote-button {
@@ -186,4 +178,60 @@ button[type="submit"]:hover {
   text-align: center;
   font-size: 1.2em;
   color: #999;
+}
+
+.comment-card, .reply-comment {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header, .reply-header {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  margin-left: 10px;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.timestamp {
+  font-size: 0.8em;
+  color: #999;
+}
+
+.comment-body, .reply-body {
+  margin-top: 10px;
+}
+
+.comment-footer, .reply-footer {
+  margin-top: 10px;
+}
+
+.reply-section, .replies-list {
+  margin-top: 10px;
+  padding-left: 20px;
+  border-left: 2px solid #ddd;
+}
+
+.reply-button {
+  background-color: #ff6600;
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.reply-button:hover {
+  background-color: #ff8d41;
 }
