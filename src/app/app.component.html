@@ -6,10 +6,10 @@
         <button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button>
         <button (click)="goToAllBooks()" id="history-button" class="history-button">History</button>
         <button (click)="goToAllBooks()" class="wishlist-button">Wishlist</button>
-        <button  (click)="goToAddBooks()" class="book_add">Add Book</button>
-        <button  (click)="goToAddSeries()" class="serie_add">Add Serie</button>
-        <button  (click)="goToAddPublisher()" class="publisher_add">Add publisher</button>
-        <button *ngIf="isManager || isPubliser" (click)="goToAddBooks()" class="book_add">Add Book</button>
+        <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddBooks()" class="book_add">Add Book</button>
+        <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddSeries()" class="serie_add">Add Serie</button>
+        <button *ngIf="userData?.user_permission === 'Manager'"(click)="goToAddPublisher()" class="publisher_add">Add publisher</button>
+        <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddAuthor()" class="author-add">Add Author</button>
       </div>
     </div>
     

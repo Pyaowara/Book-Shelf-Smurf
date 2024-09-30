@@ -11,7 +11,7 @@
     <div class="book-content">
       <div>
         <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
-        <br><button type="submit" (click)="editBook()">Edit Book</button>
+        <br><button type="submit" *ngIf="userData?.user_permission === 'Manager' || userData?.publisher_id == book.publisher.publisher_id" (click)="editBook()">Edit Book</button>
       </div>
 
       <div class="book-info">

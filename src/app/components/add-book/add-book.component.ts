@@ -25,12 +25,14 @@ export class AddBookComponent implements OnInit{
   release_date: string = '';
   selectedPublisherId: string = ''
   selectedSerie: string = '';
+  selectedAuthor: string = '';
   language:string = '';
 
   message: string = '';
 
   numberOfLinks: number = 0;
   links: { book_id: string, shop_link: string, shop_detail: string, shop_image: string }[] = [];
+  author_all: {author_id:string, author_name:string, author_description:string, author_image:string}[] = [];
   publisher_all: {publisher_id:string, publisher_name:string, publisher_image:string}[] = [];
   serie_all: {serie_id:string, serie_name_th:string, serie_name_en:string, serie_name_original:string, serie_status:string, serie_detail:string}[] = [];
 
@@ -81,6 +83,7 @@ export class AddBookComponent implements OnInit{
   async ngOnInit(){
       this.publisher_all = await this.bookService.getPublisher();
       this.serie_all = await this.bookService.getSerie();
+      this.author_all = await this.bookService.getAuthor();
   }
 
 
@@ -130,7 +133,7 @@ export class AddBookComponent implements OnInit{
   async submit() {
     await this.getSelectedValues();
     let res_addbook = await this.bookService.addBooks(this.book_name_th, this.book_name_en, this.book_name_originl, this.book_category, this.book_descriptions, this.book_status,
-      this.book_price, this.book_pages, this.base64Image!, this.release_date, Number(this.selectedPublisherId), Number(this.selectedSerie), this.language);
+      this.book_price, this.book_pages, this.base64Image!, this.release_date, Number(this.selectedPublisherId), Number(this.selectedSerie), this.language, Number(this.selectedAuthor));
     if (res_addbook) {
       const bookId = res_addbook.book_id;
       this.setBookIdShopLink(bookId);

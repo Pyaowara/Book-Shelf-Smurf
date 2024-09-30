@@ -190,6 +190,17 @@ export class BookService {
     return await this.shopRepository.find({ where: { book_id } });
   }
 
+  async addAuthor(authorData: Partial<Author>){
+    const author = this.authorRepository.create(authorData);
+    const saveAuthor = await this.authorRepository.save(author);
+    return saveAuthor.author_id;
+  }
+
+  async findAllAuthor(): Promise<Author[]>{
+    return await this.authorRepository.find();
+  }
+
+
 
   async addReply(bookId: number, commentDetail: string, userId: number, replyId: number): Promise<void> {
     const book = await this.bookRepository.findOne({ where: { book_id: bookId } });

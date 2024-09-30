@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { CommentService } from '../../services/comment-service/comment.service';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user_service/user.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -23,10 +24,12 @@ export class BookDetailComponent implements OnInit {
   userId: number | null = null;
   bookId: string | null = '';
   newScore: number = 1;
+  isPublisher:number = 0;
+  userData:any;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private commentService: CommentService, private authService: AuthService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private commentService: CommentService, private authService: AuthService, private router: Router, private userService:UserService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(){
     this.bookId = this.route.snapshot.paramMap.get('id');
     if (this.bookId) {
       this.book$ = this.http.get<any>(`http://localhost:3000/books/${this.bookId}`).pipe(
@@ -40,6 +43,11 @@ export class BookDetailComponent implements OnInit {
       });
       this.fetchComments();
     }
+    await this.loadDataUser();
+  }
+
+  async loadDataUser(){
+    this.userData = await this.userService.getData();
   }
 
   fetchComments(): void {

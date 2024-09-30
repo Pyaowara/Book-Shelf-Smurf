@@ -5,6 +5,8 @@ import { Comment } from '../entity/comment.entity';
 import { Shop } from 'src/entity/book_shop.entity';
 import { Serie } from 'src/entity/serie.entity';
 import { Publisher } from 'src/entity/publisher.entity';
+import { Author } from 'src/entity/author.entity';
+
 
 
 @Controller('books')
@@ -158,6 +160,17 @@ export class BookController {
   @Get('/get/shop/:bookId')
   async getShop(@Param('bookId') bookId: number){
     return this.bookService.findShopByBookId(bookId);
+  }
+
+  @Post('/add/author')
+  async addAuthor(@Body() authorData: Partial<Author>): Promise<{ message: string, author_id: number }> {
+    const authorId = await this.bookService.addAuthor(authorData);
+    return { message: 'Add Author successful', author_id: authorId };
+  }
+
+  @Get('/get/author')
+  async findAuthor() {
+    return this.bookService.findAllAuthor();
   }
 
   @Post('/comments/reply')

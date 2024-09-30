@@ -27,6 +27,9 @@ export class User {
   @Column({ type: 'text', nullable: true })
   user_description?: string; // Optional, user description
 
+  @Column({ type: 'int', nullable: true })
+  publisher_id: number;
+
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[]; // Relation to comments made by the user
 }

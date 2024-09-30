@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book-service/book.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../services/user_service/user.service';
 
 @Component({
   selector: 'app-edit-book',
@@ -16,12 +17,14 @@ export class EditBookComponent implements OnInit {
   constructor(private bookService: BookService,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) { }
+  
+  userData:any;
   book: any;
   bookId: string | null = '';
   shop: any;
-
   base64Image: string | null = null;
   book_name_th: string = '';
   book_name_en: string = '';
@@ -34,14 +37,14 @@ export class EditBookComponent implements OnInit {
   release_date: string = '';
   selectedPublisherId: string = ''
   selectedSerie: string = '';
+  selectedAuthor: string = '';
   language: string = '';
-
   message: string = '';
-
   numberOfLinks: number = 0;
   links: { book_id: string, shop_link: string, shop_detail: string, shop_image: string }[] = [];
   publisher_all: { publisher_id: string, publisher_name: string, publisher_image: string }[] = [];
   serie_all: { serie_id: string, serie_name_th: string, serie_name_en: string, serie_name_original: string, serie_status: string, serie_detail: string }[] = [];
+  author_all: {author_id:string, author_name:string, author_description:string, author_image:string}[] = [];
 
   categories = [
     { id: 'fiction', label: 'Fiction', selected: false },
@@ -90,11 +93,19 @@ export class EditBookComponent implements OnInit {
   async ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('id');
     this.publisher_all = await this.bookService.getPublisher();
+    this.author_all = await this.bookService.getAuthor();
     this.serie_all = await this.bookService.getSerie();
     this.book = await this.bookService.getBookById(this.bookId);
     this.shop = await this.bookService.getShop(this.bookId);
     this.links = this.shop;
     this.numberOfLinks = this.shop.length;
+    this.userData = await this.userService.getData();
+    if(this.userData.user_permission == 'Publisher'){
+      if(this.book.publisher.publisher_id != this.userData.publisher_id){
+        await this.router.navigate(['booklist']);
+        alert("You don't have access rights!!");
+      }
+    }
     this.loadData();
   }
 
@@ -111,7 +122,7 @@ export class EditBookComponent implements OnInit {
     this.selectedPublisherId = this.book.publisher.publisher_id;
     this.selectedSerie = this.book.serie.serie_id;
     this.release_date = this.book.release_date;
-
+    this.selectedAuthor = this.book.author.author_id;
     this.checkcategoey();
   }
 
@@ -172,7 +183,7 @@ export class EditBookComponent implements OnInit {
       await this.getSelectedValues();
       this.bookId = await this.route.snapshot.paramMap.get('id');
       let res_update = await this.bookService.updateBooks(this.bookId, this.book_name_th, this.book_name_en, this.book_name_originl, this.book_category, this.book_descriptions, this.book_status,
-        this.book_price, this.book_pages, this.base64Image!, this.release_date, Number(this.selectedPublisherId), Number(this.selectedSerie), this.language);
+        this.book_price, this.book_pages, this.base64Image!, this.release_date, Number(this.selectedPublisherId), Number(this.selectedSerie), this.language, Number(this.selectedAuthor));
       if (res_update) {
         const bookId = res_update.book_id;
         this.setBookIdShopLink(bookId);

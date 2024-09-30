@@ -24,9 +24,6 @@ export class AppComponent implements OnInit {
   public userData: UserProfileResponse | null = null;
   isLeftMenuVisible: boolean = false;
   searchQuery: string = '';
-  isUser: boolean = false;
-  isManager: boolean = false;
-  isPubliser: boolean = false;
   isFilterModalVisible: boolean = false;
 
   genres: string[] = [
@@ -45,13 +42,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadDataUser();
-    if (this.userData?.user_permission == '0') {
-      this.isManager = true;
-    } else if (this.userData?.user_permission == '1') {
-      this.isUser = true;
-    } else if (this.userData?.user_permission == '2') {
-      this.isPubliser = true;
-    }
   }
 
   goToBookList(): void {
@@ -72,6 +62,10 @@ export class AppComponent implements OnInit {
 
   goToAddPublisher():void {
     this.router.navigate(['add-publisher']);
+  }
+  
+  goToAddAuthor():void {
+    this.router.navigate(['add-author']);
   }
 
   searchBooks() {

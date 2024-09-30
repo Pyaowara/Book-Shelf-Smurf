@@ -29,7 +29,8 @@ export class BookService {
     release_date: string,
     publisher:number,
     serie:number,
-    language:string
+    language:string,
+    author:number
     
   ) {
     try {
@@ -46,7 +47,8 @@ export class BookService {
         release_date,
         publisher,
         serie,
-        language
+        language,
+        author
       };
       const result = await lastValueFrom(
         this.http.post<{ message: string, book_id: number }>(this.apiUrl + '/add/book', body)
@@ -73,7 +75,8 @@ export class BookService {
     release_date: string,
     publisher:number,
     serie:number,
-    language:string
+    language:string,
+    author:number
     
   ) {
     try {
@@ -90,7 +93,8 @@ export class BookService {
         release_date,
         publisher,
         serie,
-        language
+        language,
+        author
       };
       const result = await lastValueFrom(
         this.http.post<{ message: string, book_id: number }>(this.apiUrl + '/update/book/'+book_id, body)
@@ -154,6 +158,29 @@ export class BookService {
       return result;
     }catch (error) {
       console.error('Error fetching publishers:', error);
+      throw error;
+    }
+  }
+
+  async addAuthor(author_name:string, author_image:string, author_description:string){
+    try {
+      const body = {author_name, author_image, author_description};
+      const result = await lastValueFrom(
+        this.http.post<{ message: string,  author_id: number,}>(this.apiUrl + '/add/author', body)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error adding author:', err);
+      return {message:'Failed to add author!!!'};
+    }
+  }
+
+  async getAuthor(){
+    try {
+      const result = await lastValueFrom(this.http.get<any>(this.apiUrl+'/get/author'))
+      return result;
+    }catch (error) {
+      console.error('Error fetching author:', error);
       throw error;
     }
   }

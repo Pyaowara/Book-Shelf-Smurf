@@ -67,6 +67,15 @@
         <div class="headtext">release</div>
         <input type="date" [(ngModel)]="release_date" placeholder="Select release date"><br><br>
 
+        <!-- input author -->
+        <div class="headtext">author</div>
+        <select id="author" [(ngModel)]="selectedAuthor" name="author">
+            <option value="" disabled selected>Select a author</option>
+            <option *ngFor="let aut of author_all" [value]="aut.author_id">
+                {{ aut.author_name }}
+            </option>
+        </select><br><br>
+
         <!-- input publisher -->
         <div class="headtext">publisher</div>
         <select id="publisher" [(ngModel)]="selectedPublisherId" name="publisher">
