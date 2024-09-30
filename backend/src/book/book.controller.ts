@@ -46,19 +46,25 @@ export class BookController {
   async addComment(
     @Body('book_id') bookId: number,
     @Body('comment_detail') commentDetail: string,
-    @Body('user_id') userId: number
+    @Body('user_id') userId: number,
+    @Body('score') score: number
   ): Promise<{ message: string }> {
-    if (!bookId || !commentDetail || !userId) {
-      throw new BadRequestException('All fields (book_id, comment_detail, user_id) are required');
+    if (!bookId || !commentDetail || !userId || !score) {
+      throw new BadRequestException('All fields (book_id, comment_detail, user_id, score) are required');
+    }
+
+    if (score < 1 || score > 5) {
+      throw new BadRequestException('Score must be between 1 and 5');
     }
 
     try {
-      await this.bookService.addComment(bookId, commentDetail, userId);
+      await this.bookService.addComment(bookId, commentDetail, userId, score);
       return { message: 'Comment added successfully!' };
     } catch (error) {
       throw new InternalServerErrorException('Error adding comment');
     }
-  }
+}
+
 
   @Get('series/:seriesId')
   async findBooksBySeriesId(@Param('seriesId') seriesId: string): Promise<Book[]> {

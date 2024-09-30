@@ -122,26 +122,28 @@ export class BookService {
     await this.commentRepository.delete({ comment_id: commentId });
   }
 
-  async addComment(bookId: number, commentDetail: string, userId: number): Promise<void> {
+  async addComment(bookId: number, commentDetail: string, userId: number, score: number): Promise<void> {
     const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
     const user = await this.userRepository.findOne({ where: { user_id: userId } });
-
+  
     if (!book) {
       throw new NotFoundException('Book not found');
     }
-
+  
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
+  
     const comment = this.commentRepository.create({
       book,
       comment_detail: commentDetail,
       user,
+      score,
     });
-
+  
     await this.commentRepository.save(comment);
   }
+  
 
   async addBook(bookData: Partial<Book>){
     const book = this.bookRepository.create(bookData);

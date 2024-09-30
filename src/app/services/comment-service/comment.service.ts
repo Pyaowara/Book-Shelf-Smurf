@@ -11,7 +11,7 @@ export class CommentService {
 
   constructor(private http: HttpClient) {}
 
-  addComment(comment: { book_id: number; comment_detail: string; user_id: number }): Observable<any> {
+  addComment(comment: { book_id: number; comment_detail: string; user_id: number, score: number }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/add`, comment);
   }
 

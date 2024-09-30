@@ -27,6 +27,9 @@ export class Comment {
   @Column({ type: 'int', default: 0, name: 'down_vote' })
   down_vote: number;
 
+  @Column({ type: 'int', default: 0, name: 'score' })
+  score: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'time_stamp' })
   time_stamp: Date;
 }

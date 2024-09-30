@@ -22,6 +22,7 @@ export class BookDetailComponent implements OnInit {
   replyMode: { [key: number]: boolean } = {};
   userId: number | null = null;
   bookId: string | null = '';
+  newScore: number = 1;
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private commentService: CommentService, private authService: AuthService, private router: Router) {}
 
@@ -110,9 +111,11 @@ organizeComments(comments: any[]): any[] {
       this.commentService.addComment({
         book_id: parseInt(this.bookId, 10),
         comment_detail: this.newComment,
-        user_id: this.userId
+        user_id: this.userId,
+        score: this.newScore
       }).subscribe(() => {
         this.newComment = '';
+        this.newScore = 1;
         this.fetchComments();
       });
     }

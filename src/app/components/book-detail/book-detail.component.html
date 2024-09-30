@@ -38,9 +38,16 @@
         <h4>Post a Comment</h4>
         <form (ngSubmit)="submitComment()">
           <textarea [(ngModel)]="newComment" name="comment" rows="4" placeholder="Write your comment here..." required></textarea>
+          <div class="score-input">
+            <label for="score">Score (1-5):</label>
+            <select [(ngModel)]="newScore" name="score" required>
+              <option *ngFor="let i of [1, 2, 3, 4, 5]" [value]="i">{{ i }}</option>
+            </select>
+          </div>
           <button type="submit">Submit Comment</button>
         </form>
       </div>
+      
     
       <div *ngIf="comments$ | async as comments; else noComments" class="comments-list">
         <div *ngFor="let comment of comments" class="comment-card">
