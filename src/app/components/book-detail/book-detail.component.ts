@@ -80,10 +80,10 @@ organizeComments(comments: any[]): any[] {
       console.error('User ID is not available');
       return;
     }
-
     this.commentService.deleteComment(commentId, this.userId).subscribe({
       next: (response) => {
         console.log('Comment deleted successfully:', response);
+        this.updateBookScore();
         this.fetchComments();
       },
       error: (err) => {
@@ -115,11 +115,28 @@ organizeComments(comments: any[]): any[] {
         score: this.newScore
       }).subscribe(() => {
         this.newComment = '';
-        this.newScore = 1;
         this.fetchComments();
+        this.updateBookScore();
       });
     }
   }
+  
+  updateBookScore(): void {
+    if (this.bookId) {
+      this.http.patch(`http://localhost:3000/books/${this.bookId}/update-score`, {}).subscribe({
+        next: () => {
+          this.book$ = this.http.get<any>(`http://localhost:3000/books/${this.bookId}`).pipe(
+            catchError(error => {
+              console.error('Error fetching book:', error);
+              return of({});
+            })
+          );
+        },
+        error: (error) => console.error('Error updating book score:', error)
+      });
+    }
+  }
+  
 
   toggleReply(commentId: number): void {
     this.replyMode[commentId] = !this.replyMode[commentId];

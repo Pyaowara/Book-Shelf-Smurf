@@ -75,15 +75,12 @@ export class UserService {
   async getUserProfile(token: string) {
     try {
       const decodedToken = jwt.verify(token, 'itkmitl') as any;
-      console.log('Decoded token:', decodedToken);
       if (!decodedToken.user_name) {
         throw new UnauthorizedException('Invalid token');
       }
-      console.log('Searching for user with username:', decodedToken.user_name);
       const user = await this.userRepository.findOne({
         where: { user_name: decodedToken.user_name },
       });
-      console.log('User found:', user);
       if (!user) {
         throw new UnauthorizedException('User not found');
       }

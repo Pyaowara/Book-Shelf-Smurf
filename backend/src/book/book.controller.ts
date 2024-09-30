@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Post, BadRequestException, NotFoundException, InternalServerErrorException, Delete, Body } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, BadRequestException, NotFoundException, InternalServerErrorException, Delete, Body, Patch } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Book } from '../entity/book.entity';
 import { Comment } from '../entity/comment.entity';
@@ -176,6 +176,16 @@ export class BookController {
       return { message: 'Reply added successfully!' };
     } catch (error) {
       throw new InternalServerErrorException('Error adding reply');
+    }
+  }
+
+  @Patch('/:id/update-score')
+  async updateBookScore(@Param('id') bookId: number): Promise<{ message: string }> {
+    try {
+      await this.bookService.updateBookScore(bookId);
+      return { message: 'Book score updated successfully!' };
+    } catch (error) {
+      throw new InternalServerErrorException('Error updating book score');
     }
   }
 

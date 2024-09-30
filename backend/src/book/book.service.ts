@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { Book } from '../entity/book.entity';
 import { Author } from '../entity/author.entity';
 import { Comment } from '../entity/comment.entity';
@@ -216,6 +216,20 @@ export class BookService {
     });
   
     await this.commentRepository.save(replyComment);
+  }
+
+  async updateBookScore(bookId: number): Promise<void> {
+    const comments = await this.commentRepository.find({
+      where: { book: { book_id: bookId }, score: Between(1, 5) },
+    });
+    if (comments.length === 0) {
+      await this.bookRepository.update(bookId, { book_score: 0 });
+      return;
+    }
+  
+    const averageScore = comments.reduce((sum, comment) => sum + comment.score, 0) / comments.length;
+  
+    await this.bookRepository.update(bookId, { book_score: averageScore });
   }
   
 }
