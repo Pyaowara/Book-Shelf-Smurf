@@ -1,14 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
-@Entity({ name: 'voting'})
+@Entity({ name: 'voting' })
 export class Voting {
-    @PrimaryGeneratedColumn({ type : 'int'})
+    @PrimaryColumn({ type: 'int' })
     comment_id: number;
 
-    @Column({ type : 'int'})
+    @PrimaryColumn({ type: 'int' })
     user_id: number;
 
-    @Column({ type : 'text'})
+    @Column({ type: 'text' })
     vote_type: string;
-
 }

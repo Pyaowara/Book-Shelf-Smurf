@@ -61,8 +61,15 @@
             <p>{{ comment.comment_detail }}</p>
           </div>
           <div class="comment-footer">
-            <button (click)="upvote(comment.comment_id)" class="vote-button">Upvote ({{ comment.up_vote }})</button>
-            <button (click)="downvote(comment.comment_id)" class="vote-button">Downvote ({{ comment.down_vote }})</button>
+            <button 
+                    (click)="upvote(comment.comment_id)"
+                    [ngClass]="{'voted': hasUserVoted(comment.comment_id, userId, 'Upvote')}" 
+                    class="vote-button">
+                    Upvote ({{ comment.up_vote }})
+                </button>
+                  <button (click)="downvote(comment.comment_id)" 
+                    [ngClass]="{'voted': hasUserVoted(comment.comment_id, userId, 'Downvote')}" 
+                    class="vote-button">Downvote ({{ comment.down_vote }})</button>
             <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.comment_id)" class="vote-button">Delete</button>
             <button (click)="toggleReply(comment.comment_id)" class="reply-button">Reply</button>
     
@@ -84,8 +91,15 @@
                   <p>{{ reply.comment_detail }}</p>
                 </div>
                 <div class="reply-footer">
-                  <button (click)="upvote(reply.comment_id)" class="vote-button">Upvote ({{ reply.up_vote }})</button>
-                  <button (click)="downvote(reply.comment_id)" class="vote-button">Downvote ({{ reply.down_vote }})</button>
+                  <button 
+                    (click)="upvote(reply.comment_id)"
+                    [ngClass]="{'voted': hasUserVoted(reply.comment_id, userId, 'Upvote')}" 
+                    class="vote-button">
+                    Upvote ({{ reply.up_vote }})
+                </button>
+                  <button (click)="downvote(reply.comment_id)" 
+                    [ngClass]="{'voted': hasUserVoted(reply.comment_id, userId, 'Downvote')}" 
+                    class="vote-button">Downvote ({{ reply.down_vote }})</button>
                   <button *ngIf="reply.user.user_id === userId" (click)="deleteComment(reply.comment_id)" class="vote-button">Delete</button>
                 </div>                
               </div>

@@ -1,4 +1,6 @@
 import { Controller, Get, Param, Query, Post, BadRequestException, NotFoundException, InternalServerErrorException, Delete, Body, Patch } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository} from 'typeorm';
 import { BookService } from './book.service';
 import { Book } from '../entity/book.entity';
 import { Comment } from '../entity/comment.entity';
@@ -6,12 +8,14 @@ import { Shop } from 'src/entity/book_shop.entity';
 import { Serie } from 'src/entity/serie.entity';
 import { Publisher } from 'src/entity/publisher.entity';
 import { Author } from 'src/entity/author.entity';
+import { Voting } from 'src/entity/voting.entity';
 
 
 
 @Controller('books')
 export class BookController {
-  constructor(private readonly bookService: BookService) {}
+  constructor(private readonly bookService: BookService, @InjectRepository(Voting)
+  private readonly votingRepository: Repository<Voting>) {}
 
   @Get()
   async findAll() {
@@ -223,4 +227,19 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
     }
   }
 
+  @Get('/comments/:commentId/vote-status/:userId')
+  async getVoteStatus(
+      @Param('commentId') commentId: number,
+      @Param('userId') userId: number
+  ): Promise<{ vote_type: string | null }> {
+      const vote = await this.votingRepository.findOne({
+          where: { comment_id: commentId, user_id: userId }
+      });
+      return { vote_type: vote ? vote.vote_type : null };
+  }
+
+  @Get('/voting-status/:userId')
+  async getVotingStatus(@Param('userId') userId: number) {
+    return this.bookService.findVotesByUser(userId);
+}
 }

@@ -162,6 +162,10 @@ button[type="submit"]:hover {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
 }
+.vote-button.voted {
+  background-color: blue;
+  color: white;
+}
 
 .vote-button:hover {
   background-color: #ff8d41;

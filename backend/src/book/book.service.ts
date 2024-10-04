@@ -100,7 +100,9 @@ export class BookService {
     const existingVote = await this.votingRepository.findOne({
       where: { comment_id: commentId, user_id: userId },
     });
-  
+    
+    console.log(`Checking vote for comment ${commentId} by user ${userId}:`, existingVote);
+    
     if (existingVote) {
       if (existingVote.vote_type === 'Upvote') {
         await this.votingRepository.delete({ comment_id: commentId, user_id: userId });
@@ -120,6 +122,7 @@ export class BookService {
       await this.commentRepository.increment({ comment_id: commentId }, 'up_vote', 1);
     }
   }
+  
   
   async downvoteComment(commentId: number, userId: number): Promise<void> {
     const existingVote = await this.votingRepository.findOne({
@@ -300,6 +303,14 @@ export class BookService {
     await this.commentRepository.update(commentId, {
       up_vote: upvotesCount,
       down_vote: downvotesCount,
+    });
+  }
+
+  async findVotesByUser(userId: number): Promise<Voting[]> {
+    return this.votingRepository.find({
+      where: {
+      user_id: userId
+      },
     });
   }
   
