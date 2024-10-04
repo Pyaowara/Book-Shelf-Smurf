@@ -79,16 +79,31 @@ export class BookController {
   }
 
   @Post('/comments/:commentId/upvote')
-  async upvoteComment(@Param('commentId') commentId: string): Promise<{ message: string }> {
-    await this.bookService.upvoteComment(Number(commentId));
+async upvoteComment(
+  @Param('commentId') commentId: string,
+  @Body('userId') userId: number
+): Promise<{ message: string }> {
+  try {
+    await this.bookService.upvoteComment(Number(commentId), userId);
     return { message: 'Upvote successful' };
+  } catch (error) {
+    return { message: error.message };
   }
+}
 
-  @Post('/comments/:commentId/downvote')
-  async downvoteComment(@Param('commentId') commentId: string): Promise<{ message: string }> {
-    await this.bookService.downvoteComment(Number(commentId));
+@Post('/comments/:commentId/downvote')
+async downvoteComment(
+  @Param('commentId') commentId: string,
+  @Body('userId') userId: number
+): Promise<{ message: string }> {
+  try {
+    await this.bookService.downvoteComment(Number(commentId), userId);
     return { message: 'Downvote successful' };
+  } catch (error) {
+    return { message: error.message };
   }
+}
+
 
   @Delete('comments/delete/:commentId')
   async deleteComment(
@@ -113,6 +128,12 @@ export class BookController {
       }
     }
   }
+
+  @Patch('/comments/:commentId/update-votes')
+async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
+  await this.bookService.updateCommentVotes(Number(commentId));
+}
+
 
   @Post('/add/book')
   async addBook(@Body() bookData: Partial<Book>): Promise<{ message: string, book_id: number }> {

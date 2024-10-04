@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of, map } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { CommentService } from '../../services/comment-service/comment.service';
 import { AuthService } from '../../auth/auth.service';
@@ -24,12 +25,18 @@ export class BookDetailComponent implements OnInit {
   userId: number | null = null;
   bookId: string | null = '';
   newScore: number = 1;
-  isPublisher:number = 0;
-  userData:any;
+  userData: any;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private commentService: CommentService, private authService: AuthService, private router: Router, private userService:UserService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private commentService: CommentService,
+    private authService: AuthService,
+    private router: Router,
+    private userService: UserService
+  ) {}
 
-  async ngOnInit(){
+  async ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('id');
     if (this.bookId) {
       this.book$ = this.http.get<any>(`http://localhost:3000/books/${this.bookId}`).pipe(
@@ -46,7 +53,7 @@ export class BookDetailComponent implements OnInit {
     await this.loadDataUser();
   }
 
-  async loadDataUser(){
+  async loadDataUser() {
     this.userData = await this.userService.getData();
   }
 
@@ -59,8 +66,8 @@ export class BookDetailComponent implements OnInit {
       })
     );
   }
-  
-organizeComments(comments: any[]): any[] {
+
+  organizeComments(comments: any[]): any[] {
     const commentMap: { [key: number]: any } = {};
     const rootComments: any[] = [];
 
@@ -83,6 +90,7 @@ organizeComments(comments: any[]): any[] {
   getStars(score: number): string {
     return '⭐'.repeat(score);
   }
+
   deleteComment(commentId: number): void {
     if (this.userId === null) {
       console.error('User ID is not available');
@@ -101,15 +109,25 @@ organizeComments(comments: any[]): any[] {
   }
 
   upvote(commentId: number): void {
-    this.http.post(`http://localhost:3000/books/comments/${commentId}/upvote`, {}).subscribe({
-      next: () => this.fetchComments(),
+    if (this.userId === null) return;
+
+    this.http.post(`http://localhost:3000/books/comments/${commentId}/upvote`, { userId: this.userId }).subscribe({
+      next: () => {
+        this.fetchComments();
+        this.updateCommentVotes(commentId);
+      },
       error: (error) => console.error('Error upvoting comment:', error)
     });
   }
 
   downvote(commentId: number): void {
-    this.http.post(`http://localhost:3000/books/comments/${commentId}/downvote`, {}).subscribe({
-      next: () => this.fetchComments(),
+    if (this.userId === null) return;
+
+    this.http.post(`http://localhost:3000/books/comments/${commentId}/downvote`, { userId: this.userId }).subscribe({
+      next: () => {
+        this.fetchComments();
+        this.updateCommentVotes(commentId);
+      },
       error: (error) => console.error('Error downvoting comment:', error)
     });
   }
@@ -128,7 +146,7 @@ organizeComments(comments: any[]): any[] {
       });
     }
   }
-  
+
   updateBookScore(): void {
     if (this.bookId) {
       this.http.patch(`http://localhost:3000/books/${this.bookId}/update-score`, {}).subscribe({
@@ -144,7 +162,15 @@ organizeComments(comments: any[]): any[] {
       });
     }
   }
-  
+
+  updateCommentVotes(commentId: number): void {
+    this.http.patch(`http://localhost:3000/books/comments/${commentId}/update-votes`, {}).subscribe({
+      next: () => {
+        this.fetchComments();
+      },
+      error: (error) => console.error('Error updating comment votes:', error)
+    });
+  }
 
   toggleReply(commentId: number): void {
     this.replyMode[commentId] = !this.replyMode[commentId];

@@ -87,10 +87,9 @@
                   <button (click)="upvote(reply.comment_id)" class="vote-button">Upvote ({{ reply.up_vote }})</button>
                   <button (click)="downvote(reply.comment_id)" class="vote-button">Downvote ({{ reply.down_vote }})</button>
                   <button *ngIf="reply.user.user_id === userId" (click)="deleteComment(reply.comment_id)" class="vote-button">Delete</button>
-                </div>
+                </div>                
               </div>
             </div>
-            
           </div>
         </div>
       </div>

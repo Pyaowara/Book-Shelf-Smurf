@@ -8,6 +8,7 @@ import { User } from '../entity/user.entity';
 import { Shop } from 'src/entity/book_shop.entity';
 import { Publisher } from 'src/entity/publisher.entity';
 import { Serie } from 'src/entity/serie.entity';
+import { Voting } from 'src/entity/voting.entity';
 
 
 @Injectable()
@@ -32,7 +33,10 @@ export class BookService {
     private readonly publisherRepository: Repository<Publisher>,
 
     @InjectRepository(Serie)
-    private readonly serieRepository: Repository<Serie>
+    private readonly serieRepository: Repository<Serie>,
+
+    @InjectRepository(Voting)
+    private readonly votingRepository: Repository<Voting>
 
     
   ) {}
@@ -92,21 +96,57 @@ export class BookService {
   
   
 
-  async upvoteComment(commentId: number): Promise<void> {
-    await this.commentRepository.createQueryBuilder()
-      .update(Comment)
-      .set({ up_vote: () => 'up_vote + 1' })
-      .where('comment_id = :commentId', { commentId })
-      .execute();
+  async upvoteComment(commentId: number, userId: number): Promise<void> {
+    const existingVote = await this.votingRepository.findOne({
+      where: { comment_id: commentId, user_id: userId },
+    });
+  
+    if (existingVote) {
+      if (existingVote.vote_type === 'Upvote') {
+        await this.votingRepository.delete({ comment_id: commentId, user_id: userId });
+        await this.commentRepository.decrement({ comment_id: commentId }, 'up_vote', 1);
+      } else {
+        existingVote.vote_type = 'Upvote';
+        await this.votingRepository.save(existingVote);
+        await this.commentRepository.increment({ comment_id: commentId }, 'up_vote', 1);
+        await this.commentRepository.decrement({ comment_id: commentId }, 'down_vote', 1);
+      }
+    } else {
+      await this.votingRepository.save({
+        comment_id: commentId,
+        user_id: userId,
+        vote_type: 'Upvote',
+      });
+      await this.commentRepository.increment({ comment_id: commentId }, 'up_vote', 1);
+    }
   }
-
-  async downvoteComment(commentId: number): Promise<void> {
-    await this.commentRepository.createQueryBuilder()
-      .update(Comment)
-      .set({ down_vote: () => 'down_vote + 1' })
-      .where('comment_id = :commentId', { commentId })
-      .execute();
+  
+  async downvoteComment(commentId: number, userId: number): Promise<void> {
+    const existingVote = await this.votingRepository.findOne({
+      where: { comment_id: commentId, user_id: userId },
+    });
+  
+    if (existingVote) {
+      if (existingVote.vote_type === 'Downvote') {
+        await this.votingRepository.delete({ comment_id: commentId, user_id: userId });
+        await this.commentRepository.decrement({ comment_id: commentId }, 'down_vote', 1);
+      } else {
+        existingVote.vote_type = 'Downvote';
+        await this.votingRepository.save(existingVote);
+        await this.commentRepository.increment({ comment_id: commentId }, 'down_vote', 1);
+        await this.commentRepository.decrement({ comment_id: commentId }, 'up_vote', 1);
+      }
+    } else {
+      await this.votingRepository.save({
+        comment_id: commentId,
+        user_id: userId,
+        vote_type: 'Downvote',
+      });
+      await this.commentRepository.increment({ comment_id: commentId }, 'down_vote', 1);
+    }
   }
+  
+  
 
   async deleteComment(commentId: number, userId: number): Promise<void> {
     const comment = await this.commentRepository.findOne({
@@ -241,6 +281,26 @@ export class BookService {
     const averageScore = comments.reduce((sum, comment) => sum + comment.score, 0) / comments.length;
   
     await this.bookRepository.update(bookId, { book_score: averageScore });
+  }
+
+  async hasUserVoted(commentId: number, userId: number): Promise<boolean> {
+    const existingVote = await this.votingRepository.findOne({ where: { comment_id: commentId, user_id: userId } });
+    return !!existingVote;
+  }
+
+  async updateCommentVotes(commentId: number): Promise<void> {
+    const upvotesCount = await this.votingRepository.count({
+      where: { comment_id: commentId, vote_type: 'Upvote' },
+    });
+  
+    const downvotesCount = await this.votingRepository.count({
+      where: { comment_id: commentId, vote_type: 'Downvote' },
+    });
+  
+    await this.commentRepository.update(commentId, {
+      up_vote: upvotesCount,
+      down_vote: downvotesCount,
+    });
   }
   
 }

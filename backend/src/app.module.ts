@@ -21,7 +21,6 @@ import { UserModule } from './user/user.module';
       //ห้ามเปลี่ยนเป็น True นะไอสัส
     }),
     BookModule,
-    UserModule,
-  ],
+    UserModule,]
 })
 export class AppModule {}
