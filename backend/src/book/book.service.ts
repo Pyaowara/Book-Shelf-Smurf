@@ -307,6 +307,7 @@ export class BookService {
   }
 
   async findVotesByUser(userId: number): Promise<Voting[]> {
+    console.log("Im doing it");
     return this.votingRepository.find({
       where: {
       user_id: userId

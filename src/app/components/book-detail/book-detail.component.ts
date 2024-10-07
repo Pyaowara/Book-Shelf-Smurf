@@ -49,10 +49,10 @@ export class BookDetailComponent implements OnInit {
       this.authService.getUserId().subscribe(userId => {
         this.userId = userId;
       });
-      this.fetchComments();
-      this.fetchVotingData();
     }
     await this.loadDataUser();
+    this.fetchVotingData();
+    this.fetchComments();
   }
 
   async loadDataUser() {
@@ -64,7 +64,6 @@ export class BookDetailComponent implements OnInit {
       this.http.get<any[]>(`http://localhost:3000/books/voting-status/${this.userId}`).pipe(
         tap(votes => {
           this.votingData = votes;
-          console.log('Fetched voting data:', this.votingData);
         }),
         catchError(error => {
           console.error('Error fetching voting data:', error);
@@ -85,13 +84,10 @@ export class BookDetailComponent implements OnInit {
             return of([]);
         }),
         tap(comments => {
-            console.log('Fetched comments:', comments);
             comments.forEach(comment => {
                 this.http.get<{ vote_type: string | null }>(`http://localhost:3000/books/comments/${comment.comment_id}/vote-status/${this.userId}`).subscribe(voteStatus => {
-                    console.log('Vote status for comment ID', comment.comment_id, ':', voteStatus);
                     comment.userVote = voteStatus.vote_type;
                     const hasVoted = this.hasUserVoted(comment.comment_id, this.userId, 'Upvote');
-                    console.log('User has voted on comment ID', comment.comment_id, ':', hasVoted);
                 });
             });
         })
