@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async register(userDetails: Partial<User>) {
     const { user_email, user_name, user_pass, user_phone } = userDetails;
@@ -74,18 +74,20 @@ export class UserService {
 
   async getUserProfile(token: string) {
     try {
-      const decodedToken = jwt.verify(token, 'itkmitl') as any;
-      if (!decodedToken.user_name) {
-        throw new UnauthorizedException('Invalid token');
+      if (token != '') {
+        const decodedToken = jwt.verify(token, 'itkmitl') as any;
+        if (!decodedToken.user_name) {
+          throw new UnauthorizedException('Invalid token');
+        }
+        const user = await this.userRepository.findOne({
+          where: { user_name: decodedToken.user_name },
+        });
+        if (!user) {
+          throw new UnauthorizedException('User not found');
+        }
+        return user;
       }
-      const user = await this.userRepository.findOne({
-        where: { user_name: decodedToken.user_name },
-      });
-      if (!user) {
-        throw new UnauthorizedException('User not found');
-      }
-      return user;
-
+      return;
     } catch (error) {
       console.error('Error in getUserProfile:', error.message, error.stack);
 

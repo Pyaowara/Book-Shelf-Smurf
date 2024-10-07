@@ -1,0 +1,20 @@
+<br><br><br><br>
+<div class="book-list-container">
+    <header>🕮 Explore Your History Book</header>
+    <button type="submit" (click)="dropHistory()">Clear viewing history</button>
+    <br><br>
+    <div class="books-container">
+        <div *ngFor="let book of history$ | async" class="book-card" [routerLink]="['/book', book.book_id]" (click)="saveHistory(book.book_id)">
+            <div class="time">
+                <p>Last seen: {{ book.time_stamp}}</p>
+            </div>
+            <img *ngIf="book.book.book_image" [src]="book.book.book_image" alt="{{ book.book.book_name_en }}"
+                class="book-image" />
+            <div class="book-info">
+                <h3>{{ book.book.book_name_en }}</h3>
+                <p><em>{{ book.book.book_name_originl }}</em></p>
+                <p>{{ getStars(book.book.book_score) }}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,11 +10,13 @@ import { Shop } from 'src/entity/book_shop.entity';
 import { Publisher } from 'src/entity/publisher.entity';
 import { Serie } from 'src/entity/serie.entity';
 import { Voting } from 'src/entity/voting.entity';
+import { History } from 'src/entity/history.entity';
+import { Favorite } from 'src/entity/favorite.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Book, Author, Comment, User, Shop, Publisher, Serie, Voting]),
+    TypeOrmModule.forFeature([Book, Author, Comment, User, Shop, Publisher, Serie, Voting, History, Favorite]),
   ],
   providers: [BookService],
   controllers: [BookController],

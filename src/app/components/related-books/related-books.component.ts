@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { UserProfileResponse } from '../../services/user_service/user.respones.interface';
+import { UserService } from '../../services/user_service/user.service';
+import { BookService } from '../../services/book-service/book.service';
 
 @Component({
   selector: 'app-book-related',
@@ -14,10 +17,15 @@ import { CommonModule } from '@angular/common';
 export class RelatedBooks implements OnInit {
   book$: Observable<any> = of({});
   seriesBooks$: Observable<any[]> = of([]);
+  userData:UserProfileResponse | null = null;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {}
+  constructor(private route: ActivatedRoute,
+              private http: HttpClient, 
+              private router: Router,
+              private userService: UserService,
+              private bookService: BookService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(){
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
       this.book$ = this.http.get<any>(`http://localhost:3000/books/${bookId}`).pipe(
@@ -38,6 +46,15 @@ export class RelatedBooks implements OnInit {
         }
       });
     }
+    await this.loadData();
+  }
+
+  async loadData(){
+    this.userData = await this.userService.getData();
+  }
+
+  saveHistory(book_id:number){
+    this.bookService.addHistory(this.userData!.user_id, book_id)
   }
 
   getStars(score: number): string {
@@ -46,5 +63,6 @@ export class RelatedBooks implements OnInit {
 
   navigateToBook(bookId: number): void {
     this.router.navigate(['/book', bookId]);
+    this.saveHistory(bookId);
   }
 }

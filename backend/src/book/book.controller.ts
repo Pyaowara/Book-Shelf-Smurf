@@ -9,6 +9,8 @@ import { Serie } from 'src/entity/serie.entity';
 import { Publisher } from 'src/entity/publisher.entity';
 import { Author } from 'src/entity/author.entity';
 import { Voting } from 'src/entity/voting.entity';
+import { History } from 'src/entity/history.entity';
+import { Favorite } from 'src/entity/favorite.entity';
 
 
 
@@ -196,6 +198,48 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
   @Get('/get/author')
   async findAuthor() {
     return this.bookService.findAllAuthor();
+  }
+
+  @Post('/add/history')
+  async addHistory(@Body() historyData: Partial<History>): Promise<{ message: string, history_id: number }> {
+    const historyId = await this.bookService.addHistory(historyData);
+    return { message: 'Add History successful', history_id: historyId };
+  }
+
+  @Post('/add/favorite')
+  async addFavorite(@Body() favoriteData: Partial<Favorite>): Promise<{ message: string, favorite_id: number }> {
+    const favoriteId = await this.bookService.addfavorite(favoriteData);
+    return { message: 'Add Favorite successful', favorite_id: favoriteId };
+  }
+
+  @Get('/get/history/:userId')
+  async getHistoryById(
+    @Param('userId') userId: number,
+  ): Promise<History[]> {
+    return this.bookService.getHistoryById(userId);
+  }
+
+  @Get('/get/favorite/:userId')
+  async getFavoriteById(
+    @Param('userId') userId: number,
+  ): Promise<Favorite[]> {
+    return this.bookService.getFavoriteById(userId);
+  }
+
+  @Post('/drop/favorite')
+  async droupFavorite(
+    @Body() favoriteData: Partial<Favorite>
+  ): Promise<{ message: string}> {
+    await this.bookService.dropFavorite(favoriteData);
+    return { message: 'drop successful' };
+  }
+
+  @Get('/drop/history/:userId')
+  async droupHistory(
+    @Param('userId') userId: number,
+  ): Promise<{ message: string}> {
+    await this.bookService.dropHistory(userId);
+    return { message: 'drop successful'};
   }
 
   @Post('/comments/reply')

@@ -68,6 +68,14 @@ export class AppComponent implements OnInit {
     this.router.navigate(['add-author']);
   }
 
+  goToFavorite():void{
+    this.router.navigate(['favorite/book']);
+  }
+
+  goToAllHistory():void{
+    this.router.navigate(['history/book']);
+  }
+
   searchBooks() {
     const queryParams: any = { query: this.searchQuery };
     const selectedCategories = this.genres.filter(genre => this.selectedGenres[genre]);

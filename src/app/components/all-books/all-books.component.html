@@ -1,6 +1,6 @@
 <div class="book-list-container">
     <div class="books-container">
-      <div *ngFor="let book of allBooks$ | async" class="book-card" [routerLink]="['/book', book.book_id]">
+      <div *ngFor="let book of allBooks$ | async" class="book-card" [routerLink]="['/book', book.book_id]" (click)="saveHistory(book.book_id)">
         <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
         <div class="book-info">
           <h3>{{ book.book_name_en }}</h3>

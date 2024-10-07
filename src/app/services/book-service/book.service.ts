@@ -162,6 +162,69 @@ export class BookService {
     }
   }
 
+  async addHistory(user_id:string, book_id:number){
+    try {
+      const body = {user_id, book_id};
+      const result = await lastValueFrom(
+        this.http.post<{ message: string,  history_id: number }>(this.apiUrl + '/add/history', body)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error adding history:', err);
+      return {message:'Failed to add history!!!'};
+    }
+  }
+
+  async addFavorite(user_id:string, book_id:number){
+    try {
+      const body = {user_id, book_id};
+      const result = await lastValueFrom(
+        this.http.post<{ message: string,  favorite: number }>(this.apiUrl + '/add/favorite', body)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error adding favorite:', err);
+      return {message:'Failed to add favorite!!!'};
+    }
+  }
+
+  async dropFavorite(user_id:string, book_id:number){
+    try {
+      const body = {user_id, book_id};
+      const result = await lastValueFrom(
+        this.http.post<{ message: string,  favorite: number }>(this.apiUrl + '/drop/favorite', body)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error drop favorite:', err);
+      return {message:'Failed to drop favorite!!!'};
+    }
+  }
+
+  async dropHistory(user_id:number){
+    try {
+      const result = await lastValueFrom(
+        this.http.get<{ message: string,  favorite: number }>(this.apiUrl + '/drop/history/'+user_id)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error drop history:', err);
+      return {message:'Failed to drop history!!!'};
+    }
+  }
+
+  async getFavorite(user_id:number){
+    try {
+      const result = await lastValueFrom(
+        this.http.get<{ message: string,  favorite: number }>(this.apiUrl + '/get/favorite/'+user_id)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error get favorite:', err);
+      return {message:'Failed to get favorite!!!'};
+    }
+  }
+
   async addAuthor(author_name:string, author_image:string, author_description:string){
     try {
       const body = {author_name, author_image, author_description};

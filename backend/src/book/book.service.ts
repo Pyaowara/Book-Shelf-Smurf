@@ -9,6 +9,8 @@ import { Shop } from 'src/entity/book_shop.entity';
 import { Publisher } from 'src/entity/publisher.entity';
 import { Serie } from 'src/entity/serie.entity';
 import { Voting } from 'src/entity/voting.entity';
+import { History } from 'src/entity/history.entity';
+import { Favorite } from 'src/entity/favorite.entity';
 
 
 @Injectable()
@@ -36,7 +38,13 @@ export class BookService {
     private readonly serieRepository: Repository<Serie>,
 
     @InjectRepository(Voting)
-    private readonly votingRepository: Repository<Voting>
+    private readonly votingRepository: Repository<Voting>,
+
+    @InjectRepository(History)
+    private readonly historyRepository: Repository<History>,
+
+    @InjectRepository(Favorite)
+    private readonly farvoriteRepository: Repository<Favorite>
 
     
   ) {}
@@ -149,6 +157,72 @@ export class BookService {
     }
   }
   
+  async addHistory(historyData: Partial<History>){
+    const existingHistory = await this.historyRepository.findOne({
+      where: {
+          user_id: historyData.user_id,
+          book_id: historyData.book_id,
+      },
+    });
+    if (existingHistory) {
+      existingHistory.time_stamp = new Date();
+      await this.historyRepository.save(existingHistory);
+      return;
+    }
+    const history = this.historyRepository.create(historyData);
+    const savehistory = await this.historyRepository.save(history);
+    return savehistory.history_id;
+  }
+
+  async getHistoryById(user_id: number): Promise<History[]> {
+    return this.historyRepository.find({
+      where: { user_id: user_id },
+      relations: ['user', 'book'],
+    });
+  }
+
+  async addfavorite(favoriteData: Partial<Favorite>){
+    const existingFavorite = await this.farvoriteRepository.findOne({
+      where: {
+          user_id: favoriteData.user_id,
+          book_id: favoriteData.book_id,
+      },
+    });
+    if (existingFavorite) {
+      existingFavorite.time_stamp = new Date();
+      await this.farvoriteRepository.save(existingFavorite);
+      return;
+    }
+    const favorite = this.farvoriteRepository.create(favoriteData);
+    const savefavorite = await this.farvoriteRepository.save(favorite);
+    return savefavorite.favorite_id;
+  }
+
+  async dropHistory(user_id:number){
+    const result = await this.historyRepository.delete({
+      user_id: user_id,
+    });
+    if (result.affected === 0) {
+      throw new NotFoundException('History not found');
+    }
+  }
+
+  async dropFavorite(favoriteData: Partial<Favorite>){
+    const result = await this.farvoriteRepository.delete({
+      user_id: favoriteData.user_id,
+      book_id: favoriteData.book_id,
+    });
+    if (result.affected === 0) {
+      throw new NotFoundException('Favorite not found');
+    }
+  }
+
+  async getFavoriteById(user_id: number): Promise<Favorite[]> {
+    return this.farvoriteRepository.find({
+      where: { user_id: user_id },
+      relations: ['user', 'book'],
+    });
+  }
   
 
   async deleteComment(commentId: number, userId: number): Promise<void> {

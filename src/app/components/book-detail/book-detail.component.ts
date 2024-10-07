@@ -8,6 +8,7 @@ import { CommentService } from '../../services/comment-service/comment.service';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user_service/user.service';
+import { BookService } from '../../services/book-service/book.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -27,6 +28,9 @@ export class BookDetailComponent implements OnInit {
   newScore: number = 1;
   userData: any;
   votingData: any[] = [];
+  isFavorite: boolean = false;
+  allfavorite: any;
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +38,8 @@ export class BookDetailComponent implements OnInit {
     private commentService: CommentService,
     private authService: AuthService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private bookService: BookService
   ) {}
 
   async ngOnInit() {
@@ -51,6 +56,7 @@ export class BookDetailComponent implements OnInit {
       });
     }
     await this.loadDataUser();
+    await this.loadFavorite();
     this.fetchVotingData();
     this.fetchComments();
   }
@@ -58,6 +64,17 @@ export class BookDetailComponent implements OnInit {
   async loadDataUser() {
     this.userData = await this.userService.getData();
   }
+
+  async loadFavorite() {
+    this.allfavorite = await this.bookService.getFavorite(this.userData.user_id);
+    this.isFavorite = this.checkFavorite(Number(this.bookId));
+ 
+  }
+
+  checkFavorite(book_id: number) {
+    return this.allfavorite.some((favorite: any) => favorite.book.book_id === book_id);
+  }
+  
 
   fetchVotingData(): void {
     if (this.userId) {
@@ -221,5 +238,15 @@ export class BookDetailComponent implements OnInit {
   editBook(): void {
     const bookId = this.route.snapshot.paramMap.get('id');
     this.router.navigate(['/edit-book/' + bookId]);
+  }
+
+  addFavorite(book_id: number) {
+    this.bookService.addFavorite(this.userData!.user_id, book_id);
+    this.isFavorite = !this.isFavorite;
+  }
+
+  dropFavorite(book_id: number) {
+    this.bookService.dropFavorite(this.userData!.user_id, book_id);
+    this.isFavorite = !this.isFavorite;
   }
 }

@@ -20,6 +20,8 @@ import { EditBookComponent } from './app/components/edit-book/edit-book.componen
 import { publisherGuard } from './app/auth/guard/publisher/publisher.guard';
 import { AddAuthorComponent } from './app/components/add-author/add-author/add-author.component';
 import { managerGuard } from './app/auth/guard/manager/manager.guard';
+import { FavoriteComponent } from './app/components/favorite/favorite.component';
+import { HistoryComponent } from './app/components/history/history.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,7 +38,10 @@ export const routes: Routes = [
   { path: 'add-serie', component:AddSerieComponent, canActivate: [authGuard, publisherGuard]},
   { path: 'add-publisher', component:AddPublisherComponent, canActivate: [authGuard, managerGuard]},
   { path: 'edit-book/:id', component:EditBookComponent, canActivate: [authGuard, publisherGuard]},
-  { path: 'add-author', component:AddAuthorComponent, canActivate: [authGuard, publisherGuard]}
+  { path: 'add-author', component:AddAuthorComponent, canActivate: [authGuard, publisherGuard]},
+  { path: 'add-author', component:AddAuthorComponent, canActivate: [authGuard, publisherGuard]},
+  { path: 'favorite/book', component:FavoriteComponent, canActivate: [authGuard]},
+  { path: 'history/book', component:HistoryComponent, canActivate: [authGuard]}
 ];
 
 bootstrapApplication(AppComponent, {
