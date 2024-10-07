@@ -83,18 +83,9 @@ export class BookDetailComponent implements OnInit {
             console.error('Error fetching comments:', error);
             return of([]);
         }),
-        tap(comments => {
-            comments.forEach(comment => {
-                this.http.get<{ vote_type: string | null }>(`http://localhost:3000/books/comments/${comment.comment_id}/vote-status/${this.userId}`).subscribe(voteStatus => {
-                    comment.userVote = voteStatus.vote_type;
-                    const hasVoted = this.hasUserVoted(comment.comment_id, this.userId, 'Upvote');
-                });
-            });
-        })
     );
     this.fetchVotingData();
 }
-
 
   organizeComments(comments: any[]): any[] {
     const commentMap: { [key: number]: any } = {};
@@ -198,7 +189,6 @@ export class BookDetailComponent implements OnInit {
     }
     return this.votingData.some(vote => vote.comment_id === commentId && vote.user_id === userId && vote.vote_type === voteType);
 }
-
 
   updateCommentVotes(commentId: number): void {
     this.http.patch(`http://localhost:3000/books/comments/${commentId}/update-votes`, {}).subscribe({

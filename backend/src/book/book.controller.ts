@@ -227,17 +227,6 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
     }
   }
 
-  @Get('/comments/:commentId/vote-status/:userId')
-  async getVoteStatus(
-      @Param('commentId') commentId: number,
-      @Param('userId') userId: number
-  ): Promise<{ vote_type: string | null }> {
-      const vote = await this.votingRepository.findOne({
-          where: { comment_id: commentId, user_id: userId }
-      });
-      return { vote_type: vote ? vote.vote_type : null };
-  }
-
   @Get('/voting-status/:userId')
   async getVotingStatus(@Param('userId') userId: number) {
     return this.bookService.findVotesByUser(userId);
