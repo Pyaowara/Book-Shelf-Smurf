@@ -331,8 +331,6 @@ export class BookService {
     return await this.authorRepository.find();
   }
 
-
-
   async addReply(bookId: number, commentDetail: string, userId: number, replyId: number): Promise<void> {
     const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
     const user = await this.userRepository.findOne({ where: { user_id: userId } });
@@ -418,5 +416,10 @@ export class BookService {
       throw new InternalServerErrorException('Error adding forum post');
     }
   }
-  
+
+  async getAllForum(): Promise<Forum[]> {
+    return await this.forumRepository.createQueryBuilder('forum')
+      .leftJoinAndSelect('forum.user', 'user')
+      .getMany();
+  }
 }

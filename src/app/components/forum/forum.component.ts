@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -29,6 +29,7 @@ export class ForumComponent implements OnInit {
     this.authService.getUserId().subscribe(userId => {
       this.userId = userId;
     });
+    this.fetchForums();
   }
 
   postForum(): void {
@@ -49,4 +50,17 @@ export class ForumComponent implements OnInit {
       ).subscribe();
     }
   }
+
+  fetchForums(): void {
+    this.forums$ = this.http.get<any[]>(`http://localhost:3000/books/forums/load-forums`).pipe(
+        tap(forums => {
+            console.log('Fetched forums:', forums);
+        }),
+        catchError(error => {
+            console.error('Error fetching comments:', error);
+            return of([]);
+        }),
+    );
+}
+
 }

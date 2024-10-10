@@ -5,3 +5,21 @@
       <button type="submit">Post</button>
     </form>
   </div>
+  <div *ngIf="forums$ | async as forums; else noComments" class="comments-list">
+    <div *ngFor="let forum of forums" class="comment-card">
+      <div class="comment-header">
+        <img *ngIf="forum.user.user_image" [src]="forum.user.user_image" alt="User image" class="user-image" />
+        <div class="user-info">
+          <p class="user-name">{{ forum.user.user_name }}</p>
+          <p class="timestamp">{{ forum.create_time_stamp | date: 'short' }}</p>
+        </div>
+      </div>
+      <div class="comment-body">
+        <p>{{ forum.forum_title }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noComments>
+    <p class="no-comments">No Forum yet..</p>
+  </ng-template>

@@ -11,6 +11,7 @@ import { Author } from 'src/entity/author.entity';
 import { Voting } from 'src/entity/voting.entity';
 import { History } from 'src/entity/history.entity';
 import { Favorite } from 'src/entity/favorite.entity';
+import { Forum } from 'src/entity/forum.entity';
 
 
 
@@ -281,6 +282,12 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
   async getVotingStatus(@Param('userId') userId: number) {
     return this.bookService.findVotesByUser(userId);
   }
+
+  @Get('/forums/load-forums')
+  async getForums(): Promise<Forum[]> {
+    return this.bookService.getAllForum();
+  }
+
   @Post('/forum-post')
   async addForum(
     @Body('user_id') userId: number,
