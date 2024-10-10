@@ -76,6 +76,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['history/book']);
   }
 
+  goToForums():void{
+    this.router.navigate(['history/book']);
+  }
+
   searchBooks() {
     const queryParams: any = { query: this.searchQuery };
     const selectedCategories = this.genres.filter(genre => this.selectedGenres[genre]);

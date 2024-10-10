@@ -22,6 +22,8 @@ import { AddAuthorComponent } from './app/components/add-author/add-author/add-a
 import { managerGuard } from './app/auth/guard/manager/manager.guard';
 import { FavoriteComponent } from './app/components/favorite/favorite.component';
 import { HistoryComponent } from './app/components/history/history.component';
+import { ForumComponent } from './app/components/forum/forum.component';
+import { ForumDetailComponent } from './app/components/forum-detail/forum-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -41,7 +43,9 @@ export const routes: Routes = [
   { path: 'add-author', component:AddAuthorComponent, canActivate: [authGuard, publisherGuard]},
   { path: 'add-author', component:AddAuthorComponent, canActivate: [authGuard, publisherGuard]},
   { path: 'favorite/book', component:FavoriteComponent, canActivate: [authGuard]},
-  { path: 'history/book', component:HistoryComponent, canActivate: [authGuard]}
+  { path: 'history/book', component:HistoryComponent, canActivate: [authGuard]},
+  { path: 'forums', component:ForumComponent, canActivate: [authGuard]},
+  { path: 'forums/:id', component:ForumDetailComponent, canActivate: [authGuard]},
 ];
 
 bootstrapApplication(AppComponent, {
