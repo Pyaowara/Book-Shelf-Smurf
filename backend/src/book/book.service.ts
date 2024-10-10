@@ -11,6 +11,7 @@ import { Serie } from 'src/entity/serie.entity';
 import { Voting } from 'src/entity/voting.entity';
 import { History } from 'src/entity/history.entity';
 import { Favorite } from 'src/entity/favorite.entity';
+import { Forum } from 'src/entity/forum.entity';
 
 
 @Injectable()
@@ -44,7 +45,10 @@ export class BookService {
     private readonly historyRepository: Repository<History>,
 
     @InjectRepository(Favorite)
-    private readonly farvoriteRepository: Repository<Favorite>
+    private readonly farvoriteRepository: Repository<Favorite>,
+
+    @InjectRepository(Forum)
+    private readonly forumRepository: Repository<Forum>
 
     
   ) {}
@@ -398,4 +402,21 @@ export class BookService {
     });
   }
 
+  async addForum(userId: number, forumTitle: string): Promise<void> {
+    try {
+      const user = await this.userRepository.findOne({ where: { user_id: userId } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      const forum = this.forumRepository.create({
+        user,
+        forum_title: forumTitle,
+      });
+      await this.forumRepository.save(forum);
+    } catch (error) {
+      console.error('Error saving forum post:', error);
+      throw new InternalServerErrorException('Error adding forum post');
+    }
+  }
+  
 }

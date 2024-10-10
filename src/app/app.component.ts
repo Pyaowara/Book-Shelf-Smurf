@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   goToForums():void{
-    this.router.navigate(['history/book']);
+    this.router.navigate(['forums']);
   }
 
   searchBooks() {

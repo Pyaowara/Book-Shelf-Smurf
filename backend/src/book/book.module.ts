@@ -12,11 +12,12 @@ import { Serie } from 'src/entity/serie.entity';
 import { Voting } from 'src/entity/voting.entity';
 import { History } from 'src/entity/history.entity';
 import { Favorite } from 'src/entity/favorite.entity';
+import { Forum } from 'src/entity/forum.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Book, Author, Comment, User, Shop, Publisher, Serie, Voting, History, Favorite]),
+    TypeOrmModule.forFeature([Book, Author, Comment, User, Shop, Publisher, Serie, Voting, History, Favorite, Forum]),
   ],
   providers: [BookService],
   controllers: [BookController],

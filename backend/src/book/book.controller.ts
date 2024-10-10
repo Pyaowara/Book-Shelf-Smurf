@@ -280,5 +280,23 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
   @Get('/voting-status/:userId')
   async getVotingStatus(@Param('userId') userId: number) {
     return this.bookService.findVotesByUser(userId);
-}
+  }
+  @Post('/forum-post')
+  async addForum(
+    @Body('user_id') userId: number,
+    @Body('forum_content') forumContent: string
+  ): Promise<{ message: string }> {
+    console.log(userId);
+    console.log(forumContent);
+    if (!userId || !forumContent) {
+      throw new BadRequestException('User ID and forum content are required');
+    }
+    try {
+      await this.bookService.addForum(userId, forumContent);
+        return { message: 'Forum post added successfully!' };
+    } catch (error) {
+      throw new InternalServerErrorException('Error adding forum post');
+    }
+  }
+
 }
