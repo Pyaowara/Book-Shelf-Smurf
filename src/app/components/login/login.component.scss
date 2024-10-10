@@ -8,26 +8,22 @@ body {
 .container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
-}
+        
 
-.left-container {
-    flex: 1;
-    background-image: url('https://i.imgur.com/A0AbSRj.jpg');
-    background-size: cover;
-    background-position: center;
-    min-width: 300px;
-    height: 100%;
 }
 
 .right-container {
-    flex: 1;
+    border-radius: 55px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #2C2C2C;
-    padding: 2rem;
+    padding: 10vh;
     min-width: 300px;
+
 }
 
 .login-form {
