@@ -2,6 +2,8 @@ import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service'
 import { RouterModule }from '@angular/router';
+import { lastValueFrom } from 'rxjs';
+
 
 interface UserData {
   user_name: string;
@@ -27,12 +29,17 @@ export class LoginComponent{
   constructor(private authService: AuthService
   ) { }
   
-  login() {
-    this.authService.login(this.users).subscribe(
-      (message: string) => {
-        this.loginMessage = message;
+  async login() {
+    try {
+      const message: string = await lastValueFrom(this.authService.login(this.users));
+      this.loginMessage = message;
+      if(this.loginMessage == "Login successful"){
+        window.location.reload();
       }
-    );
+    } catch (error) {
+      console.error('Error during login:', error);
+      this.loginMessage = 'Login failed. Please try again.';
+    }
   }
 }
 

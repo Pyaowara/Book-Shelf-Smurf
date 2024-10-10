@@ -76,13 +76,15 @@
         </select><br><br>
 
         <!-- input publisher -->
-        <div class="headtext">publisher</div>
-        <select id="publisher" [(ngModel)]="selectedPublisherId" name="publisher">
-            <option value="" disabled selected>Select a publisher</option>
-            <option *ngFor="let pub of publisher_all" [value]="pub.publisher_id">
-                {{ pub.publisher_name }}
-            </option>
-        </select><br><br>
+        <div *ngIf="userData?.publisher_id === null">
+            <div class="headtext">publisher</div>
+            <select id="publisher" [(ngModel)]="selectedPublisherId" name="publisher">
+                <option value="" disabled selected>Select a publisher</option>
+                <option *ngFor="let pub of publisher_all" [value]="pub.publisher_id">
+                    {{ pub.publisher_name }}
+                </option>
+            </select><br><br>
+        </div>
 
         <!-- input serie -->
         <div class="headtext">serie</div>

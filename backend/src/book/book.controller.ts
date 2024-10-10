@@ -48,8 +48,6 @@ export class BookController {
     }
   }
 
-
-
   @Post('/comments/add')
   async addComment(
     @Body('book_id') bookId: number,
@@ -239,6 +237,14 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
     @Param('userId') userId: number,
   ): Promise<{ message: string}> {
     await this.bookService.dropHistory(userId);
+    return { message: 'drop successful'};
+  }
+
+  @Get('/drop/book/:bookId')
+  async dropBook(
+    @Param('bookId') bookId: number,
+  ): Promise<{ message: string}> {
+    await this.bookService.dropBook(bookId);
     return { message: 'drop successful'};
   }
 

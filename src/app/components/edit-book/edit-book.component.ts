@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../services/user_service/user.service';
 
+
 @Component({
   selector: 'app-edit-book',
   standalone: true,
@@ -107,6 +108,9 @@ export class EditBookComponent implements OnInit {
       }
     }
     this.loadData();
+    if(this.userData?.publisher_id != null){
+      this.selectedPublisherId = this.userData?.publisher_id;
+    }
   }
 
   loadData() {

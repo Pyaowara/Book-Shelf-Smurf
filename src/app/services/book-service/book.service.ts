@@ -213,6 +213,18 @@ export class BookService {
     }
   }
 
+  async dropBook(book_id:number){
+    try {
+      const result = await lastValueFrom(
+        this.http.get<{ message: string }>(this.apiUrl + '/drop/book/'+book_id)
+      );
+      return result;
+    } catch (err) {
+      console.error('Error drop book:', err);
+      return {message:'Failed to drop book!!!'};
+    }
+  }
+
   async getFavorite(user_id:number){
     try {
       const result = await lastValueFrom(

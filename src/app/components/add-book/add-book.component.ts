@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book-service/book.service';
+import { UserService } from '../../services/user_service/user.service';
 
 @Component({
   selector: 'app-add-book',
@@ -11,7 +12,9 @@ import { BookService } from '../../services/book-service/book.service';
   styleUrl: './add-book.component.scss'
 })
 export class AddBookComponent implements OnInit{
-  constructor(private bookService: BookService) { }
+  constructor(private bookService: BookService,
+              private userService: UserService
+  ) { }
 
   base64Image: string | null = null;
   book_name_th: string = '';
@@ -80,10 +83,16 @@ export class AddBookComponent implements OnInit{
     { id: 'adventure', label: 'Adventure', selected: false }
   ];
 
+  userData:any;
+
   async ngOnInit(){
       this.publisher_all = await this.bookService.getPublisher();
       this.serie_all = await this.bookService.getSerie();
       this.author_all = await this.bookService.getAuthor();
+      this.userData = await this.userService.getData();
+      if(this.userData?.publisher_id != null){
+        this.selectedPublisherId = this.userData?.publisher_id;
+      }
   }
 
 
@@ -139,7 +148,7 @@ export class AddBookComponent implements OnInit{
       this.setBookIdShopLink(bookId);
       let res_addshop = await this.bookService.addShops(this.links);
       if (res_addshop) {
-        this.message = res_addshop.message;
+        this.message = res_addbook.message;
       }
     }
   }

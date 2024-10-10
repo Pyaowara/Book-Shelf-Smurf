@@ -1,16 +1,16 @@
 <body>
   <div *ngIf="shouldShowControls()">
     <div *ngIf="isLeftMenuVisible">
-      <div id="left-menu" class="left-menu">
-        <button (click)="goToBookList()" id="home-button" class="home-button">Home</button>
-        <button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button>
-        <button (click)="goToAllHistory()" id="history-button" class="history-button">History</button>
-        <button (click)="goToFavorite()" class="wishlist-button">Wishlist</button>
-        <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddBooks()" class="book_add">Add Book</button>
-        <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddSeries()" class="serie_add">Add Serie</button>
-        <button *ngIf="userData?.user_permission === 'Manager'"(click)="goToAddPublisher()" class="publisher_add">Add publisher</button>
-        <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddAuthor()" class="author-add">Add Author</button>
-      </div>
+        <div id="left-menu" class="left-menu">
+          <button (click)="goToBookList()" id="home-button" class="home-button">Home</button>
+          <button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button>
+          <button (click)="goToAllHistory()" id="history-button" class="history-button">History</button>
+          <button (click)="goToFavorite()" class="wishlist-button">Wishlist</button>
+          <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddBooks()" class="book_add">Add Book</button>
+          <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddSeries()" class="serie_add">Add Serie</button>
+          <button *ngIf="userData?.user_permission === 'Manager'"(click)="goToAddPublisher()" class="publisher_add">Add publisher</button>
+          <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddAuthor()" class="author-add">Add Author</button>
+        </div>
     </div>
     
     <div class="top-menu">

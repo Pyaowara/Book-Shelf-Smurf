@@ -207,6 +207,16 @@ export class BookService {
     }
   }
 
+  async dropBook(book_id:number){
+    const [result_1, result_2] = await Promise.all([
+      this.bookRepository.delete({ book_id }),
+      this.shopRepository.delete({ book_id }),
+    ]);
+    if (result_1.affected === 0) {
+      throw new NotFoundException('Book not found');
+    }
+  }
+
   async dropFavorite(favoriteData: Partial<Favorite>){
     const result = await this.farvoriteRepository.delete({
       user_id: favoriteData.user_id,

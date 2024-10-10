@@ -249,4 +249,9 @@ export class BookDetailComponent implements OnInit {
     this.bookService.dropFavorite(this.userData!.user_id, book_id);
     this.isFavorite = !this.isFavorite;
   }
+
+  async dropBook(){
+    this.bookService.dropBook(Number(this.bookId));
+    await this.router.navigate(['booklist']);
+  }
 }
