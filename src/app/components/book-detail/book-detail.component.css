@@ -2,7 +2,14 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
+}
+
+.user-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
 }
 
 .book-detail {
@@ -184,12 +191,12 @@ button[type="reset"]:hover {
   transition: background-color 0.3s, transform 0.3s;
 }
 .vote-button.voted {
-  background-color: blue;
+  background-color: rgb(201, 172, 43);
   color: white;
 }
 
 .vote-button:hover {
-  background-color: #ff8d41;
+  background-color: rgb(186, 154, 10);
   transform: scale(1.05);
 }
 
