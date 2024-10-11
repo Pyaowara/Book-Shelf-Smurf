@@ -1,7 +1,17 @@
-<p>reemail works!</p>
-new email<br>
-<input type="email" [(ngModel)]="newEmail"><br>
-confrime password<br>
-<input type="password" [(ngModel)]="confrimePass"><br>
-<button (click)="update()">Update</button><br>
-{{message}}
+<div class="head">
+    <h3>Change Email</h3>
+</div>
+<div class="text-box">
+    <input type="email" [(ngModel)]="newEmail" placeholder="Enter your new email"><br>
+    <input type="password" [(ngModel)]="confrimePass" placeholder="Enter confrime password"><br>
+</div>
+<button (click)="update()" class="button">Update</button>
+<div *ngIf="noti_succes" class="alert">
+    <span class="closebtn" (click)="noti_succes = false;">&times;</span>
+    Update successful.
+</div>
+
+<div *ngIf="noti_fail" class="alert" style="background-color: #F66358;">
+    <span class="closebtn" (click)="noti_fail = false;">&times;</span>
+    {{message}}
+</div>

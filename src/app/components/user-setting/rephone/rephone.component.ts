@@ -14,10 +14,12 @@ import { Router } from '@angular/router';
   styleUrl: './rephone.component.scss'
 })
 export class RephoneComponent implements OnInit{
-  public newPhone:string = '';
-  public confrimePass:string = '';
-  public userData:UserProfileResponse|null = null;
-  public message:string|undefined = '';
+  newPhone:string = '';
+  confrimePass:string = '';
+  userData:UserProfileResponse|null = null;
+  message:string|undefined = '';
+  noti_succes:boolean = false;
+  noti_fail:boolean = false;
 
   constructor(private userService: UserService,
               private cookieService: CookieService,

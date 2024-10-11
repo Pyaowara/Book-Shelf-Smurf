@@ -14,11 +14,13 @@ import { Router } from '@angular/router';
   styleUrl: './repassword.component.scss'
 })
 export class RepasswordComponent implements OnInit{
-  public newPassword:string = '';
-  public confrimePass:string = '';
-  public userData:UserProfileResponse|null = null;
-  public message:string|undefined = '';
-  public confrimeNewPassword:string = '';
+  newPassword:string = '';
+  confrimePass:string = '';
+  userData:UserProfileResponse|null = null;
+  message:string|undefined = '';
+  confrimeNewPassword:string = '';
+  noti_succes:boolean = false;
+  noti_fail:boolean = false;
 
   constructor(private userService: UserService,
               private cookieService: CookieService,
@@ -29,24 +31,39 @@ export class RepasswordComponent implements OnInit{
       await this.loadData();
   }
 
+  notifySucces(){
+    this.noti_succes = true;
+    this.noti_fail = false;
+  }
+
+  notifyfail(){
+    this.noti_fail = true;
+    this.noti_succes = false;
+  }
+
   async update(){
     if(this.newPassword == this.confrimeNewPassword){
       try{
         let res = await this.userService.changePassword(this.userData!.user_id, this.newPassword, this.confrimePass);
         await this.cookieService.set('userToken', res!.userToken, 30, '/');
         this.message =  await res?.message;
+        this.notifySucces();
       }
       catch(err:any){
         console.log('Error:', err);
-        this.message = err.message;
+        this.message = await err.message;
+        this.notifyfail();
       }
     }
     else{
       this.message = 'Invalid confrime new password';
+      this.notifyfail();
     }
     
     
   }
+
+  
 
   async loadData(){
     this.userData = await this.userService.getData();

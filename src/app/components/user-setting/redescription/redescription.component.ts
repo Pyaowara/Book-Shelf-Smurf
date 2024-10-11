@@ -14,10 +14,12 @@ import { Router } from '@angular/router';
   styleUrl: './redescription.component.scss'
 })
 export class RedescriptionComponent implements OnInit{
-  public newimg:string = '';
-  public confrimePass:string = '';
-  public userData:UserProfileResponse|null = null;
-  public message:string|undefined = '';
+  newimg:string = '';
+  confrimePass:string = '';
+  userData:UserProfileResponse|null = null;
+  message:string|undefined = '';
+  noti_succes:boolean = false;
+  noti_fail:boolean = false;
 
   constructor(private userService: UserService,
               private cookieService: CookieService,
@@ -28,14 +30,26 @@ export class RedescriptionComponent implements OnInit{
       await this.loadData();
   }
 
+  notifySucces(){
+    this.noti_succes = true;
+    this.noti_fail = false;
+  }
+
+  notifyfail(){
+    this.noti_fail = true;
+    this.noti_succes = false;
+  }
+
   async update(){
     try{
       let res = await this.userService.changeDescription(this.userData!.user_id, this.newimg, this.confrimePass);
       await this.cookieService.set('userToken', res!.userToken, 30, '/');
       this.message =  await res?.message;
+      this.notifySucces();
     }
     catch(err:any){
-      this.message = err.message;
+      this.message = await err.message;
+      this.notifyfail();
     }
   }
 
