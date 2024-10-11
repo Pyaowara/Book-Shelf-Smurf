@@ -11,9 +11,6 @@ import { Serie } from 'src/entity/serie.entity';
 import { Voting } from 'src/entity/voting.entity';
 import { History } from 'src/entity/history.entity';
 import { Favorite } from 'src/entity/favorite.entity';
-import { Forum } from 'src/entity/forum.entity';
-import { ForumComment } from 'src/entity/forum_comment.entity';
-
 
 @Injectable()
 export class BookService {
@@ -47,14 +44,6 @@ export class BookService {
 
     @InjectRepository(Favorite)
     private readonly farvoriteRepository: Repository<Favorite>,
-
-    @InjectRepository(Forum)
-    private readonly forumRepository: Repository<Forum>,
-
-    @InjectRepository(Forum)
-    private readonly forumcommentRepository: Repository<ForumComment>
-
-    
   ) {}
 
   async findAll(): Promise<Book[]> {
@@ -104,66 +93,6 @@ export class BookService {
       .leftJoinAndSelect('book.author', 'author')
       .where('book.serie_id = :seriesId', { seriesId })
       .getMany();
-  }
-
-  async findCommentsByBookId(bookId: number): Promise<Comment[]> {
-    return this.commentRepository.createQueryBuilder('comment')
-      .leftJoinAndSelect('comment.user', 'user')
-      .where('comment.book_id = :bookId', { bookId })
-      .orderBy('comment.time_stamp', 'ASC')
-      .getMany();
-  }
-  
-  
-
-  async upvoteComment(commentId: number, userId: number): Promise<void> {
-    const existingVote = await this.votingRepository.findOne({
-      where: { comment_id: commentId, user_id: userId },
-    });
-    if (existingVote) {
-      if (existingVote.vote_type === 'Upvote') {
-        await this.votingRepository.delete({ comment_id: commentId, user_id: userId });
-        await this.commentRepository.decrement({ comment_id: commentId }, 'up_vote', 1);
-      } else {
-        existingVote.vote_type = 'Upvote';
-        await this.votingRepository.save(existingVote);
-        await this.commentRepository.increment({ comment_id: commentId }, 'up_vote', 1);
-        await this.commentRepository.decrement({ comment_id: commentId }, 'down_vote', 1);
-      }
-    } else {
-      await this.votingRepository.save({
-        comment_id: commentId,
-        user_id: userId,
-        vote_type: 'Upvote',
-      });
-      await this.commentRepository.increment({ comment_id: commentId }, 'up_vote', 1);
-    }
-  }
-  
-  
-  async downvoteComment(commentId: number, userId: number): Promise<void> {
-    const existingVote = await this.votingRepository.findOne({
-      where: { comment_id: commentId, user_id: userId },
-    });
-  
-    if (existingVote) {
-      if (existingVote.vote_type === 'Downvote') {
-        await this.votingRepository.delete({ comment_id: commentId, user_id: userId });
-        await this.commentRepository.decrement({ comment_id: commentId }, 'down_vote', 1);
-      } else {
-        existingVote.vote_type = 'Downvote';
-        await this.votingRepository.save(existingVote);
-        await this.commentRepository.increment({ comment_id: commentId }, 'down_vote', 1);
-        await this.commentRepository.decrement({ comment_id: commentId }, 'up_vote', 1);
-      }
-    } else {
-      await this.votingRepository.save({
-        comment_id: commentId,
-        user_id: userId,
-        vote_type: 'Downvote',
-      });
-      await this.commentRepository.increment({ comment_id: commentId }, 'down_vote', 1);
-    }
   }
   
   async addHistory(historyData: Partial<History>){
@@ -243,44 +172,6 @@ export class BookService {
     });
   }
   
-
-  async deleteComment(commentId: number, userId: number): Promise<void> {
-    const comment = await this.commentRepository.findOne({
-      where: { comment_id: commentId },
-      relations: ['user']
-    });
-    
-    if (!comment)
-      throw new NotFoundException('Comment not found');
-    if (comment.user.user_id !== Number(userId)){
-      throw new BadRequestException('Unauthorized to delete this comment');
-    }
-    await this.commentRepository.delete({ comment_id: commentId });
-  }
-
-  async addComment(bookId: number, commentDetail: string, userId: number, score: number): Promise<void> {
-    const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
-    const user = await this.userRepository.findOne({ where: { user_id: userId } });
-  
-    if (!book) {
-      throw new NotFoundException('Book not found');
-    }
-  
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-  
-    const comment = this.commentRepository.create({
-      book,
-      comment_detail: commentDetail,
-      user,
-      score,
-    });
-  
-    await this.commentRepository.save(comment);
-  }
-  
-
   async addBook(bookData: Partial<Book>){
     const book = this.bookRepository.create(bookData);
     const saveBook = await this.bookRepository.save(book);
@@ -336,33 +227,6 @@ export class BookService {
     return await this.authorRepository.find();
   }
 
-  async addReply(bookId: number, commentDetail: string, userId: number, replyId: number): Promise<void> {
-    const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
-    const user = await this.userRepository.findOne({ where: { user_id: userId } });
-    const parentComment = await this.commentRepository.findOne({ where: { comment_id: replyId } });
-  
-    if (!book) {
-      throw new NotFoundException('Book not found');
-    }
-  
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-  
-    if (!parentComment) {
-      throw new NotFoundException('Parent comment not found');
-    }
-  
-    const replyComment = this.commentRepository.create({
-      book,
-      comment_detail: commentDetail,
-      user,
-      reply_id: replyId
-    });
-  
-    await this.commentRepository.save(replyComment);
-  }
-
   async updateBookScore(bookId: number): Promise<void> {
     const comments = await this.commentRepository.find({
       where: { book: { book_id: bookId }, score: Between(1, 5) },
@@ -380,21 +244,6 @@ export class BookService {
   async hasUserVoted(commentId: number, userId: number): Promise<boolean> {
     const existingVote = await this.votingRepository.findOne({ where: { comment_id: commentId, user_id: userId } });
     return !!existingVote;
-  }
-
-  async updateCommentVotes(commentId: number): Promise<void> {
-    const upvotesCount = await this.votingRepository.count({
-      where: { comment_id: commentId, vote_type: 'Upvote' },
-    });
-  
-    const downvotesCount = await this.votingRepository.count({
-      where: { comment_id: commentId, vote_type: 'Downvote' },
-    });
-  
-    await this.commentRepository.update(commentId, {
-      up_vote: upvotesCount,
-      down_vote: downvotesCount,
-    });
   }
 
   async findVotesByUser(userId: number): Promise<Voting[]> {

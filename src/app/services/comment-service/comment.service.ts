@@ -7,7 +7,7 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = 'http://localhost:3000/books/comments';
+  private apiUrl = 'http://localhost:3000/comments/comments';
 
   constructor(private http: HttpClient) {}
 

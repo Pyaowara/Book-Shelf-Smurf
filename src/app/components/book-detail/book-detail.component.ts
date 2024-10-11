@@ -94,7 +94,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   fetchComments(): void {
-    this.comments$ = this.http.get<any[]>(`http://localhost:3000/books/${this.bookId}/comments`).pipe(
+    this.comments$ = this.http.get<any[]>(`http://localhost:3000/comments/${this.bookId}/comments`).pipe(
         map(comments => this.organizeComments(comments)),
         catchError(error => {
             console.error('Error fetching comments:', error);
@@ -148,7 +148,7 @@ export class BookDetailComponent implements OnInit {
   upvote(commentId: number): void {
     if (this.userId === null) return;
 
-    this.http.post(`http://localhost:3000/books/comments/${commentId}/upvote`, { userId: this.userId }).subscribe({
+    this.http.post(`http://localhost:3000/comments/comments/${commentId}/upvote`, { userId: this.userId }).subscribe({
       next: () => {
         this.fetchComments();
         this.updateCommentVotes(commentId);
@@ -160,7 +160,7 @@ export class BookDetailComponent implements OnInit {
   downvote(commentId: number): void {
     if (this.userId === null) return;
 
-    this.http.post(`http://localhost:3000/books/comments/${commentId}/downvote`, { userId: this.userId }).subscribe({
+    this.http.post(`http://localhost:3000/comments/comments/${commentId}/downvote`, { userId: this.userId }).subscribe({
       next: () => {
         this.fetchComments();
         this.updateCommentVotes(commentId);
@@ -208,7 +208,7 @@ export class BookDetailComponent implements OnInit {
 }
 
   updateCommentVotes(commentId: number): void {
-    this.http.patch(`http://localhost:3000/books/comments/${commentId}/update-votes`, {}).subscribe({
+    this.http.patch(`http://localhost:3000/comments/comments/${commentId}/update-votes`, {}).subscribe({
       next: () => {
         this.fetchComments();
       },
