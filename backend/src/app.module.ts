@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BookModule } from './book/book.module';
 import { UserModule } from './user/user.module';
+import { ForumCommentModule } from './forum-comment/forum-comment.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserModule } from './user/user.module';
       //ห้ามเปลี่ยนเป็น True นะไอสัส
     }),
     BookModule,
-    UserModule,]
+    UserModule,
+    ForumCommentModule,],
 })
 export class AppModule {}

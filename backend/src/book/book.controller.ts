@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Post, BadRequestException, NotFoundException, InternalServerErrorException, Delete, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, BadRequestException, NotFoundException, InternalServerErrorException, Delete, Body, Patch, ParseIntPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository} from 'typeorm';
 import { BookService } from './book.service';
@@ -329,5 +329,4 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
       }
     }
   }
-
 }

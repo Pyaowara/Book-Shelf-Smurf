@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Comment } from './comment.entity';
 import { Forum } from './forum.entity';
+import { ForumComment } from './forum_comment.entity';
 
 @Entity()
 export class User {
@@ -36,4 +37,8 @@ export class User {
 
   @OneToMany(() => Forum, (forum) => forum.user)
   forums: Forum[]; // Relation to comments made by the user
+
+  @OneToMany(() => ForumComment, (comment) => comment.user)
+  forumComments: ForumComment[];
+
 }
