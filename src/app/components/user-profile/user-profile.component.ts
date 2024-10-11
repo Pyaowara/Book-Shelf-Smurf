@@ -34,6 +34,7 @@ export class UserProfileComponent implements OnInit{
         this.userData = await this.userService.getDataByParam(userName);
         await this.checkPermissionSetting(userName);
       }
+      console.log(this.userData?.user_description);
     });
   }
 

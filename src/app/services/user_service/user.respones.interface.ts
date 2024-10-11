@@ -6,5 +6,5 @@ export interface UserProfileResponse{
     user_phone:string,
     user_permission:string,
     user_image:string,
-    user_descriptions:string
+    user_description:string
 }
