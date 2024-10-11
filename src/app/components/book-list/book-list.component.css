@@ -2,8 +2,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  font-family: Arial, sans-serif;
 }
-
 
 .category-container {
   margin-bottom: 30px;
@@ -63,4 +63,14 @@ p{
 .book-info p {
   margin: 0;
   font-size: 0.9em;
+}
+
+.list-Dev{
+  border-radius: 55px;
+  border: 2px solid red;
+  padding: 10px;
+  background-color: white;
+  text-align: center;
+  
+  position: relative;
 }

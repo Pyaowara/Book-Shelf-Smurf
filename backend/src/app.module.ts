@@ -14,6 +14,7 @@ import { CommentsModule } from './comments/comments.module';
       port: 3306,
       database: 'book_v2',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
+
       //ห้ามเปลี่ยนเป็น True นะไอสัส
       //ห้ามเปลี่ยนเป็น True นะไอสัส
       //ห้ามเปลี่ยนเป็น True นะไอสัส
@@ -25,6 +26,7 @@ import { CommentsModule } from './comments/comments.module';
     BookModule,
     UserModule,
     ForumCommentModule,
-    CommentsModule,],
+    CommentsModule,
+  ],
 })
 export class AppModule {}

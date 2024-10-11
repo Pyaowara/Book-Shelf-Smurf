@@ -24,6 +24,7 @@ import { FavoriteComponent } from './app/components/favorite/favorite.component'
 import { HistoryComponent } from './app/components/history/history.component';
 import { ForumComponent } from './app/components/forum/forum.component';
 import { ForumDetailComponent } from './app/components/forum-detail/forum-detail.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -51,6 +52,6 @@ export const routes: Routes = [
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(withFetch()),
-    provideRouter(routes)
+    provideRouter(routes), provideAnimationsAsync()
   ],
 });
