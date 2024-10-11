@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ForumComment } from '../entity/forum_comment.entity';
 import { Forum } from '../entity/forum.entity';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class ForumCommentService {
@@ -14,6 +15,9 @@ export class ForumCommentService {
     @InjectRepository(Forum)
     private readonly forumRepository: Repository<Forum>,
 
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
   ) {}
 
   async findTitle(forumId: number): Promise<{ title: string }> {
@@ -22,7 +26,7 @@ export class ForumCommentService {
     if (!forum) {
         throw new NotFoundException('Forum not found');
     }
-    return { title: forum.forum_title }; // Return an object
+    return { title: forum.forum_title };
 }
 
 async deleteComment(commentId: number, userId: number): Promise<void> {
@@ -85,5 +89,43 @@ async deleteComment(commentId: number, userId: number): Promise<void> {
       .where('forum_comment.forum_id = :forumId', { forumId })
       .orderBy('forum_comment.time_stamp', 'ASC')
       .getMany();
+  }
+
+  async addForum(userId: number, forumTitle: string): Promise<void> {
+    try {
+      const user = await this.userRepository.findOne({ where: { user_id: userId } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      const forum = this.forumRepository.create({
+        user,
+        forum_title: forumTitle,
+      });
+      await this.forumRepository.save(forum);
+    } catch (error) {
+      console.error('Error saving forum post:', error);
+      throw new InternalServerErrorException('Error adding forum post');
+    }
+  }
+
+  async getAllForum(): Promise<Forum[]> {
+    return await this.forumRepository.createQueryBuilder('forum')
+      .leftJoinAndSelect('forum.user', 'user')
+      .orderBy('forum.create_time_stamp', 'DESC')
+      .getMany();
+  }
+
+  async deleteForum(forumId: number, userId: number): Promise<void> {
+    const comment = await this.forumRepository.findOne({
+      where: { forum_id: forumId },
+      relations: ['user']
+    });
+    
+    if (!comment)
+      throw new NotFoundException('Comment not found');
+    if (comment.user.user_id !== Number(userId)){
+      throw new BadRequestException('Unauthorized to delete this comment');
+    }
+    await this.forumRepository.delete({ forum_id: forumId });
   }
 }

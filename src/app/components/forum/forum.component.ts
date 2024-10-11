@@ -41,7 +41,7 @@ export class ForumComponent implements OnInit {
         forum_content: this.newForum
       };
 
-      this.http.post('http://localhost:3000/books/forum-post', forumPostData).pipe(
+      this.http.post('http://localhost:3000/forum-comments/forum-post', forumPostData).pipe(
         tap(() => {
           this.newForum = '';
           this.fetchForums();
@@ -55,7 +55,7 @@ export class ForumComponent implements OnInit {
   }
 
   fetchForums(): void {
-    this.forums$ = this.http.get<any[]>(`http://localhost:3000/books/forums/load-forums`).pipe(
+    this.forums$ = this.http.get<any[]>(`http://localhost:3000/forum-comments/forums/load-forums`).pipe(
         tap(forums => {
             console.log('Fetched forums:', forums);
         }),

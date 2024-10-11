@@ -1,6 +1,7 @@
 import { Get, Body, Controller, Post, NotFoundException, BadRequestException, InternalServerErrorException, Param, Delete, Query } from '@nestjs/common';
 import { ForumCommentService } from './forum-comment.service';
 import { ForumComment } from '../entity/forum_comment.entity';
+import { Forum } from 'src/entity/forum.entity';
 
 @Controller('forum-comments')
 export class ForumCommentController {
@@ -8,7 +9,7 @@ export class ForumCommentController {
 
   @Get('/:id')
 async findTitle(@Param('id') id: string): Promise<{ title: string }> {
-    return this.forumCommentService.findTitle(Number(id)); // Ensure return type matches
+    return this.forumCommentService.findTitle(Number(id));
 }
 
   @Get('/findcomment/:id')
@@ -62,6 +63,49 @@ async findTitle(@Param('id') id: string): Promise<{ title: string }> {
     }
     try {
       await this.forumCommentService.deleteComment(commentId, userId);
+      return { message: 'Comment deleted successfully' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Comment not found');
+      } else if (error instanceof BadRequestException) {
+        throw new BadRequestException('Unauthorized to delete this comment');
+      } else {
+        throw new InternalServerErrorException('Error deleting comment');
+      }
+    }
+  }
+
+  @Get('/forums/load-forums')
+  async getForums(): Promise<Forum[]> {
+    return this.forumCommentService.getAllForum();
+  }
+
+  @Post('/forum-post')
+  async addForum(
+    @Body('user_id') userId: number,
+    @Body('forum_content') forumContent: string
+  ): Promise<{ message: string }> {
+    if (!userId || !forumContent) {
+      throw new BadRequestException('User ID and forum content are required');
+    }
+    try {
+      await this.forumCommentService.addForum(userId, forumContent);
+        return { message: 'Forum post added successfully!' };
+    } catch (error) {
+      throw new InternalServerErrorException('Error adding forum post');
+    }
+  }
+
+  @Delete('forums/delete/:forumId')
+  async deleteForum(
+    @Param('forumId') forumId: number,
+    @Query('userId') userId: number
+  ): Promise<{ message: string }> {
+    if (!forumId || !userId) {
+      throw new BadRequestException('Comment ID and User ID are required');
+    }
+    try {
+      await this.forumCommentService.deleteForum(forumId, userId);
       return { message: 'Comment deleted successfully' };
     } catch (error) {
       if (error instanceof NotFoundException) {

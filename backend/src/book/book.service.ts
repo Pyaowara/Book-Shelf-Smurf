@@ -73,7 +73,6 @@ export class BookService {
 
   async searchBooks(name: string, category?: string): Promise<Book[]> {
     try {
-      console.log('Searching for books with name:', name, 'and category:', category);
       let queryBuilder = this.bookRepository.createQueryBuilder('book');
     
       if (category) {
@@ -82,7 +81,6 @@ export class BookService {
       else{
         queryBuilder.where('book.book_name_en LIKE :name OR book.book_name_originl LIKE :name', { name: `%${name}%` });
     }
-      console.log("Generated SQL:", queryBuilder.getQueryAndParameters());
       const results = await queryBuilder.getMany();
       if (results.length === 0) {
         throw new NotFoundException('No books found for the search query');
@@ -116,9 +114,6 @@ export class BookService {
     const existingVote = await this.votingRepository.findOne({
       where: { comment_id: commentId, user_id: userId },
     });
-    
-    console.log(`Checking vote for comment ${commentId} by user ${userId}:`, existingVote);
-    
     if (existingVote) {
       if (existingVote.vote_type === 'Upvote') {
         await this.votingRepository.delete({ comment_id: commentId, user_id: userId });
@@ -402,42 +397,5 @@ export class BookService {
       user_id: userId
       },
     });
-  }
-
-  async addForum(userId: number, forumTitle: string): Promise<void> {
-    try {
-      const user = await this.userRepository.findOne({ where: { user_id: userId } });
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-      const forum = this.forumRepository.create({
-        user,
-        forum_title: forumTitle,
-      });
-      await this.forumRepository.save(forum);
-    } catch (error) {
-      console.error('Error saving forum post:', error);
-      throw new InternalServerErrorException('Error adding forum post');
-    }
-  }
-
-  async getAllForum(): Promise<Forum[]> {
-    return await this.forumRepository.createQueryBuilder('forum')
-      .leftJoinAndSelect('forum.user', 'user')
-      .getMany();
-  }
-
-  async deleteForum(forumId: number, userId: number): Promise<void> {
-    const comment = await this.forumRepository.findOne({
-      where: { forum_id: forumId },
-      relations: ['user']
-    });
-    
-    if (!comment)
-      throw new NotFoundException('Comment not found');
-    if (comment.user.user_id !== Number(userId)){
-      throw new BadRequestException('Unauthorized to delete this comment');
-    }
-    await this.forumRepository.delete({ forum_id: forumId });
   }
 }
