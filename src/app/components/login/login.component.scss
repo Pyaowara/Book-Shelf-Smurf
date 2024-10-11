@@ -2,31 +2,25 @@ body {
     margin: 0;
     padding: 0;
     background-color: #3F3F3F;
-    font-family: 'Alice', regular;
-}
-button{
-    font-family: 'Alice', regular;
+    font-family: Arial, sans-serif;
 }
 
 .container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
-        
 
 }
 
 .right-container {
-    border-radius: 55px;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #2C2C2C;
-    padding: 10vh;
+    padding: 2rem;
     min-width: 300px;
-    padding-top: 0.5vh;
+
 }
 
 .login-form {
@@ -64,10 +58,19 @@ button{
     align-items: center;
     margin-top: 1.5rem;
 }
+.left-container {
+    flex: 1;
+    background-image: url('https://i.imgur.com/A0AbSRj.jpg');
+    background-size: cover;
+    background-position: center;
+    min-width: 300px;
+    height: 100%;
+}
 
 .login-button {
     padding: 0.75rem 1.5rem;
-    background-color: #BFBFBF;
+    background-color: #007bff;
+    color: white;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
