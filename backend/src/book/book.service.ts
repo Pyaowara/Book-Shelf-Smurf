@@ -62,6 +62,12 @@ export class BookService {
       .where('book.serie_id = :serieId OR book.book_id IN (SELECT MIN(book_id) FROM book_detail WHERE serie_id != :serieId GROUP BY serie_id)', { serieId: 1 })
       .getMany();
   }
+
+  async findAlls(): Promise<Book[]> {
+    return this.bookRepository.createQueryBuilder('book')
+      .getMany();
+}
+
   async findBookById(bookId: number): Promise<Book> {
     return this.bookRepository.createQueryBuilder('book')
       .leftJoinAndSelect('book.author', 'author')

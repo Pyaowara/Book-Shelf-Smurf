@@ -25,6 +25,11 @@ export class BookController {
     return this.bookService.findAll();
   }
 
+  @Get('/all')
+  async findAlls() {
+    return this.bookService.findAlls();
+  }
+
   @Get(':id')
   async getBookById(@Param('id') id: string): Promise<Book> {
     return this.bookService.findBookById(Number(id));

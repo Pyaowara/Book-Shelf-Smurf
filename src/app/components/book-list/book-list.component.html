@@ -5,8 +5,8 @@
       <div *ngFor="let book of getBooksByCategory(category)" class="book-card" [routerLink]="['/series', book.book_id]">
         <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
         <div class="book-info">
-          <h3>{{ book.book_name_en }}</h3>
-          <p><em>{{ book.book_name_originl }}</em></p>
+          <h3>{{ book.book_name_en === 'No Details' ? book.book_name_th : book.book_name_en }}</h3>
+          <p><em>{{ book.book_name_originl === 'No Details' ? '' : book.book_name_originl }}</em></p>
           <p>{{ getStars(book.book_score) }}</p>
         </div>
       </div>

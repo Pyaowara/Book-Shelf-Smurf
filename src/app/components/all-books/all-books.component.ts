@@ -23,7 +23,7 @@ export class AllBooksComponent implements OnInit {
               private bookService: BookService) {}
 
   async ngOnInit() {
-    this.allBooks$ = this.http.get<any[]>('http://localhost:3000/books').pipe(
+    this.allBooks$ = this.http.get<any[]>('http://localhost:3000/books/all').pipe(
       catchError(error => {
         console.error('Error fetching books:', error);
         return of([]);
