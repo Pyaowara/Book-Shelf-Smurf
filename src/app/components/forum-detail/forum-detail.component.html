@@ -1,7 +1,78 @@
+<br><br><br><br>
+<div class="forum-detail-container">
+    <h1>{{ forumTitle || 'Loading...' }}</h1> 
+
 <div class="post-comment">
     <h4>What's your thought?</h4>
-    <!-- <form (ngSubmit)="postForum()"> -->
-      <!-- <textarea [(ngModel)]="newForum" name="forum" rows="4" placeholder="Write your thought here..." required></textarea>
-      <button type="submit">Post</button> -->
-    <!-- </form> -->
+    <form (ngSubmit)="submitForumComment()">
+      <textarea [(ngModel)]="newForum" name="forum" rows="4" placeholder="Write your thought here..." required></textarea>
+      <button type="submit">Post</button>
+    </form>
+</div>
+  
+  <div *ngIf="forumComments$ | async as comments; else noComments" class="comments-list">
+    <div *ngFor="let comment of comments" class="comment-card">
+      <div class="comment-header">
+        <img *ngIf="comment.user.user_image" [src]="comment.user.user_image" alt="{{ comment.user.user_name }}" class="user-image" />
+        <div class="user-info">
+          <p class="user-name">{{ comment.user.user_name }}</p>
+          <p class="timestamp">{{ comment.time_stamp | date: 'short' }}</p>
+        </div>
+      </div>
+      <div class="comment-body">
+        <p>{{ comment.comment }}</p>
+      </div>
+      <div class="comment-footer">
+        <button 
+          (click)="upvote(comment.forum_comment_id)" 
+          [ngClass]="{'voted': hasUserVoted(comment.forum_comment_id, userId, 'Upvote')}" 
+          class="vote-button">Upvote ({{ comment.upvote }})
+        </button>
+        <button 
+          (click)="downvote(comment.forum_comment_id)" 
+          [ngClass]="{'voted': hasUserVoted(comment.forum_comment_id, userId, 'Downvote')}" 
+          class="vote-button">Downvote ({{ comment.downvote }})
+        </button>
+        <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.forum_comment_id)" class="vote-button">Delete</button>
+        <button (click)="toggleReply(comment.forum_comment_id)" class="reply-button">Reply</button>
+  
+        <div *ngIf="replyMode[comment.forum_comment_id]" class="reply-section">
+          <textarea [(ngModel)]="replyForumComment" name="reply" rows="2" placeholder="Write your reply here..." required></textarea>
+          <button (click)="submitForumReply(comment.forum_comment_id)" class="submit-reply-button">Submit Reply</button>
+        </div>
+  
+        <div *ngIf="comment.replies && comment.replies.length" class="replies-list">
+          <div *ngFor="let reply of comment.replies" class="reply-comment">
+            <div class="reply-header">
+              <img *ngIf="reply.user.user_image" [src]="reply.user.user_image" alt="{{ reply.user.user_name }}" class="user-image" />
+              <div class="user-info">
+                <p class="user-name">{{ reply.user.user_name }}</p>
+                <p class="timestamp">{{ reply.time_stamp | date: 'short' }}</p>
+              </div>
+            </div>
+            <div class="reply-body">
+              <p>{{ reply.comment }}</p>
+            </div>
+            <div class="reply-footer">
+              <button 
+                (click)="upvote(reply.forum_comment_id)" 
+                [ngClass]="{'voted': hasUserVoted(reply.forum_comment_id, userId, 'Upvote')}" 
+                class="vote-button">Upvote ({{ reply.upvote }})
+              </button>
+              <button 
+                (click)="downvote(reply.forum_comment_id)" 
+                [ngClass]="{'voted': hasUserVoted(reply.forum_comment_id, userId, 'Downvote')}" 
+                class="vote-button">Downvote ({{ reply.downvote }})
+              </button>
+              <button *ngIf="reply.user.user_id === userId" (click)="deleteComment(reply.forum_comment_id)" class="vote-button">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  
+  <ng-template #noComments>
+    <p class="no-comments">No comments yet.</p>
+  </ng-template>
+  

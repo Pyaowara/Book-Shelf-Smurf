@@ -12,6 +12,7 @@ import { Voting } from 'src/entity/voting.entity';
 import { History } from 'src/entity/history.entity';
 import { Favorite } from 'src/entity/favorite.entity';
 import { Forum } from 'src/entity/forum.entity';
+import { ForumComment } from 'src/entity/forum_comment.entity';
 
 
 @Injectable()
@@ -48,7 +49,10 @@ export class BookService {
     private readonly farvoriteRepository: Repository<Favorite>,
 
     @InjectRepository(Forum)
-    private readonly forumRepository: Repository<Forum>
+    private readonly forumRepository: Repository<Forum>,
+
+    @InjectRepository(Forum)
+    private readonly forumcommentRepository: Repository<ForumComment>
 
     
   ) {}

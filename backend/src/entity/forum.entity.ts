@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.entity';
+import { ForumComment } from './forum_comment.entity';
 
 @Entity('forum')
 export class Forum {
@@ -31,4 +32,8 @@ export class Forum {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   create_time_stamp: Date;
+
+  @OneToMany(() => ForumComment, (comment) => comment.forum)
+    forumComments: ForumComment[];
+
 }
