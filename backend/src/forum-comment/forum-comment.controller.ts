@@ -1,4 +1,4 @@
-import { Get, Body, Controller, Post, BadRequestException, InternalServerErrorException, Param } from '@nestjs/common';
+import { Get, Body, Controller, Post, NotFoundException, BadRequestException, InternalServerErrorException, Param, Delete, Query } from '@nestjs/common';
 import { ForumCommentService } from './forum-comment.service';
 import { ForumComment } from '../entity/forum_comment.entity';
 
@@ -26,7 +26,6 @@ async findTitle(@Param('id') id: string): Promise<{ title: string }> {
       throw new BadRequestException('All fields (forum_id, comment_detail, user_id) are required');
     }
     try {
-        console.log("Im doing tihs");
       await this.forumCommentService.addForumComment(forumId, commentDetail, userId);
       return { message: 'Forum comment added successfully!' };
     } catch (error) {
@@ -52,4 +51,27 @@ async findTitle(@Param('id') id: string): Promise<{ title: string }> {
       throw new InternalServerErrorException('Error adding reply');
     }
   }
+
+  @Delete(':commentId/delete')
+  async deleteComment(
+    @Param('commentId') commentId: number,
+    @Body('user_id') userId: number
+  ): Promise<{ message: string }> {
+    if (!commentId || !userId) {
+      throw new BadRequestException('Comment ID and User ID are required');
+    }
+    try {
+      await this.forumCommentService.deleteComment(commentId, userId);
+      return { message: 'Comment deleted successfully' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Comment not found');
+      } else if (error instanceof BadRequestException) {
+        throw new BadRequestException('Unauthorized to delete this comment');
+      } else {
+        throw new InternalServerErrorException('Error deleting comment');
+      }
+    }
+  }
+
 }

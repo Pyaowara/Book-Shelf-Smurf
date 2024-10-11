@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException,NotFoundException  } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ForumComment } from '../entity/forum_comment.entity';
@@ -24,6 +24,20 @@ export class ForumCommentService {
     }
     return { title: forum.forum_title }; // Return an object
 }
+
+async deleteComment(commentId: number, userId: number): Promise<void> {
+    const comment = await this.forumCommentRepository.findOne({
+      where: { forum_comment_id: commentId },
+      relations: ['user']
+    });
+    
+    if (!comment)
+      throw new NotFoundException('Comment not found');
+    if (comment.user.user_id !== Number(userId)){
+      throw new BadRequestException('Unauthorized to delete this comment');
+    }
+    await this.forumCommentRepository.delete({ forum_comment_id: commentId });
+  }
 
   async addForumComment(forumId: number, commentDetail: string, userId: number) {
     const forumComment = this.forumCommentRepository.create({

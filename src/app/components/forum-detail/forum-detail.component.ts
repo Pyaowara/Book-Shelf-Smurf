@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-forum-detail',
@@ -55,20 +56,6 @@ export class ForumDetailComponent implements OnInit {
     }
 }
 
-  fetchVotingData(): void {
-    if (this.userId) {
-      this.http.get<any[]>(`http://localhost:3000/forum-comments/voting-status/${this.userId}`).pipe(
-        tap(votes => {
-          this.votingData = votes;
-        }),
-        catchError(error => {
-          console.error('Error fetching voting data:', error);
-          return of([]);
-        })
-      ).subscribe();
-    }
-  }
-
   fetchForumComments(): void {
     this.forumComments$ = this.http.get<any[]>(`http://localhost:3000/forum-comments/findcomment/${this.forumId}`).pipe(
       map(comments => this.organizeComments(comments)),
@@ -77,7 +64,6 @@ export class ForumDetailComponent implements OnInit {
         return of([]);
       })
     );
-    this.fetchVotingData();
   }
 
   organizeComments(comments: any[]): any[] {
@@ -140,30 +126,6 @@ export class ForumDetailComponent implements OnInit {
       this.fetchForumComments();
     });
   }
-
-  upvote(forumCommentId: number): void {
-    if (this.userId === null) return;
-
-    this.http.post(`http://localhost:3000/forum-comments/${forumCommentId}/upvote`, { userId: this.userId }).subscribe(() => {
-      this.fetchForumComments();
-    });
-  }
-
-  downvote(forumCommentId: number): void {
-    if (this.userId === null) return;
-
-    this.http.post(`http://localhost:3000/forum-comments/${forumCommentId}/downvote`, { userId: this.userId }).subscribe(() => {
-      this.fetchForumComments();
-    });
-  }
-
-  hasUserVoted(forumCommentId: number, userId: number | null, voteType: string): boolean {
-    if (userId === null) {
-      return false;
-    }
-    return this.votingData.some(vote => vote.forum_comment_id === forumCommentId && vote.user_id === userId && vote.vote_type === voteType);
-  }
-
   toggleReply(forumCommentId: number): void {
     this.replyMode[forumCommentId] = !this.replyMode[forumCommentId];
   }
