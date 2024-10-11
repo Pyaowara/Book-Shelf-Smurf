@@ -35,16 +35,28 @@ export class RephoneComponent implements OnInit{
     return !isNaN(number) && Number.isInteger(number);
   }
 
+  notifySucces(){
+    this.noti_succes = true;
+    this.noti_fail = false;
+  }
+
+  notifyfail(){
+    this.noti_fail = true;
+    this.noti_succes = false;
+  }
+
   async update(){
     if(this.isNumeric(this.newPhone)){
       try{
         let res = await this.userService.changePhone(this.userData!.user_id, this.newPhone, this.confrimePass);
         this.cookieService.set('userToken', res!.userToken, 30, '/');
         this.message =  res?.message;
+        this.notifySucces();
       }
       catch(err:any){
         console.log('Error:', err);
-        this.message = err.message;
+        this.message = await err.message;
+        this.notifyfail();
       }
     }
     else{
