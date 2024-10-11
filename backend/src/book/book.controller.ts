@@ -306,4 +306,28 @@ async updateCommentVotes(@Param('commentId') commentId: string): Promise<void> {
     }
   }
 
+  @Delete('forums/delete/:forumId')
+  async deleteForum(
+    @Param('forumId') forumId: number,
+    @Query('userId') userId: number
+  ): Promise<{ message: string }> {
+    console.log(forumId, userId);
+    if (!forumId || !userId) {
+      throw new BadRequestException('Comment ID and User ID are required');
+    }
+    try {
+      await this.bookService.deleteForum(forumId, userId);
+      return { message: 'Comment deleted successfully' };
+    } catch (error) {
+      console.log("Im here");
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Comment not found');
+      } else if (error instanceof BadRequestException) {
+        throw new BadRequestException('Unauthorized to delete this comment');
+      } else {
+        throw new InternalServerErrorException('Error deleting comment');
+      }
+    }
+  }
+
 }

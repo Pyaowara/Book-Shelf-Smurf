@@ -422,4 +422,18 @@ export class BookService {
       .leftJoinAndSelect('forum.user', 'user')
       .getMany();
   }
+
+  async deleteForum(forumId: number, userId: number): Promise<void> {
+    const comment = await this.forumRepository.findOne({
+      where: { forum_id: forumId },
+      relations: ['user']
+    });
+    
+    if (!comment)
+      throw new NotFoundException('Comment not found');
+    if (comment.user.user_id !== Number(userId)){
+      throw new BadRequestException('Unauthorized to delete this comment');
+    }
+    await this.forumRepository.delete({ forum_id: forumId });
+  }
 }

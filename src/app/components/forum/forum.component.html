@@ -1,25 +1,42 @@
-<div class="post-comment">
-    <h4>What's your thought?</h4>
-    <form (ngSubmit)="postForum()">
-      <textarea [(ngModel)]="newForum" name="forum" rows="4" placeholder="Write your thought here..." required></textarea>
-      <button type="submit">Post</button>
-    </form>
-  </div>
-  <div *ngIf="forums$ | async as forums; else noComments" class="comments-list">
-    <div *ngFor="let forum of forums" class="comment-card">
-      <div class="comment-header">
-        <img *ngIf="forum.user.user_image" [src]="forum.user.user_image" alt="User image" class="user-image" />
-        <div class="user-info">
-          <p class="user-name">{{ forum.user.user_name }}</p>
-          <p class="timestamp">{{ forum.create_time_stamp | date: 'short' }}</p>
-        </div>
-      </div>
-      <div class="comment-body">
-        <p>{{ forum.forum_title }}</p>
-      </div>
+<br><br><br><br><br>
+    <div class="post-comment">
+        <h4>What's your thought?</h4>
+        <form (ngSubmit)="postForum()">
+          <textarea [(ngModel)]="newForum" name="forum" rows="4" placeholder="Write your thought here..." required></textarea>
+          <button type="submit">Post</button>
+        </form>
     </div>
-  </div>
-
-  <ng-template #noComments>
-    <p class="no-comments">No Forum yet..</p>
-  </ng-template>
+    
+    <div *ngIf="forums$ | async as forums; else noComments" class="forums-list">
+        <div
+          *ngFor="let forum of forums"
+          class="forum-card"
+          (click)="navigateToForum(forum.forum_id)"
+        >
+          <div class="forum-header">
+            <img
+              *ngIf="forum.user.user_image"
+              [src]="forum.user.user_image"
+              alt="User image"
+              class="user-image"
+            />
+            <div class="user-info">
+              <p class="user-name">{{ forum.user.user_name }}</p>
+              <p class="timestamp">{{ forum.create_time_stamp | date: 'short' }}</p>
+            </div>
+          </div>
+          <div class="forum-body">
+            <p>{{ forum.forum_title }}</p>
+          </div>
+          <button *ngIf="forum.user.user_id === userId" (click)="deleteForum(forum.forum_id, $event)" class="vote-button">Delete</button>
+        </div>
+    </div>
+    
+    <ng-template #noComments>
+        <p class="no-comments">No Forum yet..</p>
+    </ng-template>
+    
+    <ng-template #noComments>
+        <p class="no-comments">No Forum yet..</p>
+    </ng-template>
+    

@@ -23,4 +23,9 @@ export class CommentService {
     const params = new HttpParams().set('userId', userId.toString());
     return this.http.delete<any>(`${this.apiUrl}/delete/${commentId}`, { params });
   }
+
+  deleteForum(forumId: number, userId: number): Observable<any> {
+    const params = new HttpParams().set('userId', userId.toString());
+    return this.http.delete<any>(`http://localhost:3000/books/forums/delete/${forumId}`, { params });
+  }
 }

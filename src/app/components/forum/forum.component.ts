@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CommentService } from '../../services/comment-service/comment.service';
 
 @Component({
   selector: 'app-forum',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './forum.component.html',
   styleUrls: ['./forum.component.scss']
 })
@@ -22,7 +23,8 @@ export class ForumComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private commentService: CommentService,
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class ForumComponent implements OnInit {
       this.http.post('http://localhost:3000/books/forum-post', forumPostData).pipe(
         tap(() => {
           this.newForum = '';
+          this.fetchForums();
         }),
         catchError(error => {
           console.error('Error posting forum:', error);
@@ -62,5 +65,26 @@ export class ForumComponent implements OnInit {
         }),
     );
 }
+  navigateToForum(forumId: number): void {
+    this.router.navigate([`/forums/${forumId}`]);
+  }
+
+  deleteForum(forumId: number, event: Event): void {
+    event.stopPropagation();
+    if (this.userId === null) {
+      console.error('User ID is not available');
+      return;
+    }
+    this.commentService.deleteForum(forumId, this.userId).subscribe({
+      next: (response) => {
+        console.log('Comment deleted successfully:', response);
+        this.fetchForums();
+      },
+      error: (err) => {
+        console.error('Error deleting comment:', err);
+      }
+    });
+  }
+
 
 }
