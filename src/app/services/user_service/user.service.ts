@@ -74,6 +74,23 @@ export class UserService{
     }
   }
 
+  public async changeImg(userId:string, userImg:string, password:string){
+    try {
+      return await lastValueFrom(
+        this.http.post<{message:string, userToken:string}>(`http://localhost:3000/user/change/user_image`, {user_id:userId, data:userImg, password:password})
+      );
+    } catch (err:any) {
+      let errorMessage = 'Please fill out all the fields';
+      if (err.status === 409) {
+        errorMessage = 'Email already exists';
+      }
+      else if (err.status === 401) {
+        errorMessage = 'Invalid password';
+      }
+      throw { status: err.status, message: errorMessage };
+    }
+  }
+
   public async changePassword(userId:string, userPassword:string, password:string){
     try {
       return await lastValueFrom(

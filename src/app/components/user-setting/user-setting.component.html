@@ -11,6 +11,7 @@
             <li><button (click)="changePassword()">Change Password</button></li>
             <li><button (click)="changePhone()">Change Phone Number</button></li>
             <li><button (click)="changeEmail()">Change Email</button></li>
+            <li><button (click)="changeImage()">Change Image</button></li>
             <li><button (click)="back()">Back</button></li>
         </ul>
     </div>
@@ -20,5 +21,6 @@
         <app-reemail *ngIf="isVisible === 'reemail'"></app-reemail>
         <app-repassword *ngIf="isVisible === 'repassword'"></app-repassword>
         <app-rephone *ngIf="isVisible === 'rephone'"></app-rephone>
+        <app-reimg *ngIf="isVisible === 'reimg'"></app-reimg>
     </div>
 </div>

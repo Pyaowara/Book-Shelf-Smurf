@@ -8,11 +8,12 @@ import { RenameComponent } from './rename/rename.component';
 import { ReemailComponent } from './reemail/reemail.component';
 import { RepasswordComponent } from './repassword/repassword.component';
 import { RephoneComponent } from './rephone/rephone.component';
+import { ReimgComponent } from './reimg/reimg.component';
 
 @Component({
   selector: 'app-user-setting',
   standalone: true,
-  imports: [CommonModule, FormsModule, RenameComponent, ReemailComponent, RepasswordComponent, RephoneComponent],
+  imports: [CommonModule, FormsModule, RenameComponent, ReemailComponent, RepasswordComponent, RephoneComponent, ReimgComponent],
   templateUrl: './user-setting.component.html',
   styleUrl: './user-setting.component.scss'
 })
@@ -54,5 +55,9 @@ export class UserSettingComponent implements OnInit{
   
   changePassword(){
     this.isVisible = 'repassword';
+  }
+
+  changeImage(){
+    this.isVisible = 'reimg';
   }
 }
