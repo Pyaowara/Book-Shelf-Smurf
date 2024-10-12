@@ -32,6 +32,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
     "ngx-cookie-service": "^18.0.0",
+    "ngx-drag-scroll": "^18.0.0",
+    "package.json": "^0.0.0",
     "rxjs": "~7.8.0",
     "telnet": "^0.0.1",
     "tslib": "^2.3.0",

@@ -4,21 +4,26 @@ body {
   font-family: "Kanit", sans-serif;
 }
 
-.top-menu {
+mat-toolbar {
   position: fixed;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
   color: aliceblue;
   background: #2c2c2c;
   z-index: 10;
-  padding: 0 20px; /* Adjusted padding */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   overflow: hidden;
+}
+mat-icon{
+  color: white;
+}
+mat-sidenav-content{
+  height: calc(205vh - 115vh);
+}
+mat-sidenav{
+  width: 200px;
+  background-color: cornflowerblue;
 }
 
 .search-container {

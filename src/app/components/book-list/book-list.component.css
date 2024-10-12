@@ -9,25 +9,29 @@
   margin-bottom: 30px;
 }
 
-.books-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 10px 0;
+
+
+drag-scroll {
+  height: 46vh;
+  width: 100%;
+  white-space: nowrap;
 }
 
+
 .book-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 150px;
+  display: inline-block;
+  width: 15vh;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
-  padding: 10px;
+  padding: 7.5vh;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  max-height: 300px;
 }
 
 .book-card:hover {
@@ -41,36 +45,60 @@
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 10px;
+  height: 200px;
+
 }
 
 .book-info {
   text-align: center;
 }
 
-.book-info h3 {
+.book-info h3{
   font-size: 1.1em;
   margin-bottom: 5px;
+  text-align: center;
+  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.book-description{
+  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-h3{
-font-weight: 500;
+h3 {
+  font-weight: 500;
 }
 
-p{
+p {
   font-weight: 200;
 }
 
 .book-info p {
   margin: 0;
   font-size: 0.9em;
+  font-weight: 200;
+  min-height: 1.5em;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
 }
 
-.list-Dev{
+.list-Dev {
   border-radius: 55px;
   border: 2px solid red;
   padding: 10px;
   background-color: white;
   text-align: center;
-  
   position: relative;
+}
+
+.show-scroll {
+  overflow-x: auto; /* เปิดการเลื่อนแนวนอนเมื่อเมาส์เข้าใกล้ */
+  transition: overflow 0.3s; /* เพิ่มการเปลี่ยนแปลงให้สวยงาม */
 }

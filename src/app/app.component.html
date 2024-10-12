@@ -4,32 +4,50 @@
 
 <body>
   <div *ngIf="shouldShowControls()">
+
     <div *ngIf="isLeftMenuVisible">
         <div id="left-menu" class="left-menu">
-          <button (click)="goToBookList()" id="home-button" class="home-button">Home</button>
-          <button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button>
-          <button (click)="goToAllHistory()" id="history-button" class="history-button">History</button>
-          <button (click)="goToFavorite()" class="wishlist-button">Wishlist</button>
-          <button (click)="goToForums()" class="wishlist-button">Forums</button>
-          <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddBooks()" class="book_add">Add Book</button>
-          <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddSeries()" class="serie_add">Add Serie</button>
-          <button *ngIf="userData?.user_permission === 'Manager'"(click)="goToAddPublisher()" class="publisher_add">Add publisher</button>
-          <button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddAuthor()" class="author-add">Add Author</button>
+          <mat-list>
+            <mat-list-item><button (click)="goToBookList()" id="home-button" class="home-button">Home</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button (click)="goToAllHistory()" id="history-button" class="history-button">History</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button (click)="goToFavorite()" class="wishlist-button">Wishlist</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button (click)="goToForums()" class="wishlist-button">Forums</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddBooks()" class="book_add">Add Book</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddSeries()" class="serie_add">Add Serie</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button *ngIf="userData?.user_permission === 'Manager'"(click)="goToAddPublisher()" class="publisher_add">Add publisher</button></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddAuthor()" class="author-add">Add Author</button></mat-list-item>
+        </mat-list>
         </div>
     </div>
-    
-    <div class="top-menu">
-      <button (click)="leftMenuToggleButton()" id="leftMenuToggleButton" class="menu-toggle-button">☰</button>
+
+<mat-toolbar>
+      <button mat-icon-button (click)="leftMenuToggleButton()" class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
       <div class="search-container">
-        <button (click)="goToAllBooks()" class="back-button"></button>
-        <input type="search" [(ngModel)]="searchQuery" placeholder="Search for a book..." id="search-input" class="search-input"/>
-        <button (click)="searchBooks()" class="search-button">Search</button>
-        <button (click)="toggleFilterModal()" class="filter-button">Filter</button>
+            <button (click)="goToAllBooks()" class="back-button"></button>
+            <input type="search" [(ngModel)]="searchQuery" placeholder="Search for a book..." id="search-input" class="search-input"/>
+            <button (click)="searchBooks()" class="search-button">Search</button>
+            <button (click)="toggleFilterModal()" class="filter-button">Filter</button>
       </div>
-      <div class="nav-buttons">
-        <button (click)="goToUserProfile()" class="user-profile-button">User</button>
-      </div>
-    </div>
+          <div class="nav-buttons">
+            <button (click)="goToUserProfile()" class="user-profile-button">User</button>
+          </div>
+</mat-toolbar>
+
+  <!-- <mat-sidenav-container>
+  <mat-sidenav opened>Start</mat-sidenav>
+  <mat-sidenav-content>Main</mat-sidenav-content>
+  </mat-sidenav-container> -->
 
     <div *ngIf="isFilterModalVisible" class="filter-modal">
       <div class="filter-modal-content">

@@ -1,27 +1,30 @@
 <br><br><br>
 <div class="book-list-container">
-  <div class="list-Dev">
-    <h1>จัดทำโดย</h1>
-    <p>นายพงศ์พันธุ์		แก้วป้องปก		รหัสนักศึกษา	66070123</p>
-    <p>นายพงศ์พิสุทธิ์	        ทัพวงษ์		        รหัสนักศึกษา   66070124</p>
-    <p>นายพิชญุตม์		เพ็ชรเย็น		รหัสนักศึกษา	66070133</p>
-    <p>นายพิสิษฐ์		งามเลิศพัฒนสิริ	รหัสนักศึกษา	66070136</p>
-    <p>นายเพชรแพรทอง	อินอุทัย		รหัสนักศึกษา	66070139</p>
-    <p>นายภัทรพล		เยาวราช		รหัสนักศึกษา	66070148</p>
-    <p>นายศิรเชษฐ์		โชติฐากุลอนันต์	รหัสนักศึกษา	66070191</p>
-    <p>นายศุภณัฐ		อรุณ			รหัสนักศึกษา	66070198</p>
-  </div>
-  <div *ngFor="let category of categories" class="category-container">
+    <div class="list-Dev">
+      <h1>จัดทำโดย</h1>
+      <p>นายพงศ์พันธุ์		แก้วป้องปก		รหัสนักศึกษา	66070123</p>
+      <p>นายพงศ์พิสุทธิ์	        ทัพวงษ์		        รหัสนักศึกษา   66070124</p>
+      <p>นายพิชญุตม์		เพ็ชรเย็น		รหัสนักศึกษา	66070133</p>
+      <p>นายพิสิษฐ์		งามเลิศพัฒนสิริ	รหัสนักศึกษา	66070136</p>
+      <p>นายเพชรแพรทอง	อินอุทัย		รหัสนักศึกษา	66070139</p>
+      <p>นายภัทรพล		เยาวราช		รหัสนักศึกษา	66070148</p>
+      <p>นายศิรเชษฐ์		โชติฐากุลอนันต์	รหัสนักศึกษา	66070191</p>
+      <p>นายศุภณัฐ		อรุณ			รหัสนักศึกษา	66070198</p>
+    </div>
+    <br>
+    <div *ngFor="let category of categories" class="category-container">
     <h2>{{ category }}</h2>
     <div class="books-container">
-      <div *ngFor="let book of getBooksByCategory(category)" class="book-card" [routerLink]="['/series', book.book_id]">
-        <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image"/>
-        <div class="book-info">
-          <h3>{{ book.book_name_en === 'No Details' ? book.book_name_th : book.book_name_en }}</h3>
-          <p><em>{{ book.book_name_originl === 'No Details' ? '' : book.book_name_originl }}</em></p>
-          <p>{{ getStars(book.book_score) }}</p>
+      <drag-scroll>
+        <div *ngFor="let book of getBooksByCategory(category)" class="book-card" [routerLink]="['/series', book.book_id]" >
+          <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image">
+          <div class="book-info">
+            <h3>{{ book.book_name_en === 'No Details' ? book.book_name_th : book.book_name_en }}</h3>
+            <p class="book-description"><em>{{ book.book_name_originl === 'No Details' ? '' : book.book_name_originl }}</em></p>
+            <p class="book-description">{{ getStars(book.book_score) }}</p>
+          </div>
         </div>
-      </div>
+      </drag-scroll>
     </div>
   </div>
 </div>
