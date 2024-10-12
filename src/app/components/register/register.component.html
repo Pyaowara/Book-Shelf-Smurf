@@ -1,49 +1,35 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-
 <body>
     <div class="container">
-        <div class="left-container"></div>
         <div class="right-container">
-            <form class="register-form">
-                <h1 class="register-title">Register</h1>
-                    <div class="input-group">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" [(ngModel)]="users.user_email" name="user_email" placeholder="Enter your Email">
-                    </div>
-                    <div class="input-group">
-                        <label for="phone" class="form-label">Phone number</label>
-                        <input type="text" class="form-control" [(ngModel)]="users.user_phone" name="user_phone" placeholder="Confirm  your Password">
-                    </div>
-                    <div class="input-group">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" [(ngModel)]="users.user_name" name="user_name" placeholder="Enter Username">
-                    </div>
-                    <div class="input-group">
-                        <label for="Password" class="form-label">Password</label>
-                        <input type="password" class="form-control" [(ngModel)]="users.user_pass" name="user_pass" placeholder="Enter Password">
-                    </div>
-                    <div class="input-group">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" [(ngModel)]="confirm_pass" name="user_confirm_pass" placeholder="Confirm  your Password">
-                    </div>
-                    <div class="register-message">{{registerMessage}}</div><br>
-
-                    
-                    <div class="block_container">
-                        <div class="button-register">
-                            <button type="submit" class="login-button" (click)="register()">Create Account</button>
-                        </div>
-                        <div class="button-login">
-                            <button type="submit" class="login-button" (click)="login()">Login</button>
-                        </div>
-                    </div>
+            <form class="login-form" (ngSubmit)="register()">
+                <h1 class="login-title">Register</h1>
+                <div class="input-group">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" [(ngModel)]="users.user_email" name="user_email" placeholder="Enter your Email" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone" class="form-label">Phone number</label>
+                    <input type="text" class="form-control" [(ngModel)]="users.user_phone" name="user_phone" placeholder="Enter your Phone" required>
+                </div>
+                <div class="input-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" [(ngModel)]="users.user_name" name="user_name" placeholder="Enter Username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" [(ngModel)]="users.user_pass" name="user_pass" placeholder="Enter Password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" [(ngModel)]="confirm_pass" name="user_confirm_pass" placeholder="Confirm your Password" required>
+                </div>
+                <div class="login-message">{{registerMessage}}</div><br>
+                
+                <div class="button-group">
+                    <button type="submit" class="login-button" (click)="register()">Create</button>
+                    <button class="login-button"><a routerLink="/login" class="register-link">Login</a></button>
+                </div>                
             </form>
         </div> 
     </div>
 </body>
-</html>

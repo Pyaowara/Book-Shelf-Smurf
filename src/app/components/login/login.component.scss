@@ -2,126 +2,121 @@ body {
     margin: 0;
     padding: 0;
     background-color: #3F3F3F;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .container {
     display: flex;
-    flex-wrap: wrap;
-    height: 100vh;
-
+    justify-content: center;
+    align-items: center;
 }
 
 .right-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-radius: 20px;
     background-color: #2C2C2C;
-    padding: 2rem;
-    min-width: 300px;
-
+    padding: 7rem; /* Increased padding for more space inside */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Added shadow for depth */
+    max-width: 500px; /* Increased max width */
+    width: 100%; /* Ensure it takes the full width up to the max */
 }
 
 .login-form {
     width: 100%;
-    max-width: 400px;
-    text-align: left;
 }
 
 .login-title {
-    color: white;
-    font-size: 2rem;
+    color: #ff6600; /* Title color */
+    font-size: 2.5rem; /* Increased title size */
     margin-bottom: 1.5rem;
+    text-align: center; /* Centered title */
 }
 
 .input-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem; /* Space below each input */
 }
 
 .form-label {
     color: white;
     margin-bottom: 0.5rem;
     display: block;
+    font-weight: bold; /* Bold labels */
 }
 
 .form-control {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
+    padding: 1rem; /* Increase padding for height */
+    border: 1px solid #ff6600; /* Border color */
     border-radius: 5px;
     font-size: 1rem;
+    background-color: #444; /* Input background color */
+    color: white; /* Text color */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+
+
+.form-control:focus {
+    border-color: #ff6600; /* Highlight border on focus */
+    outline: none; /* Remove outline */
 }
 
 .button-group {
     display: flex;
+    justify-content: space-between; /* Space buttons evenly */
     align-items: center;
-    margin-top: 1.5rem;
-}
-.left-container {
-    flex: 1;
-    background-image: url('https://i.imgur.com/A0AbSRj.jpg');
-    background-size: cover;
-    background-position: center;
-    min-width: 300px;
-    height: 100%;
 }
 
-.login-button {
-    padding: 0.75rem 1.5rem;
-    background-color: #007bff;
+.login-button, .register-button {
+    padding: 0.75rem 1.5rem; /* Same padding for both buttons */
+    background-color: #ff6600; /* Button background color */
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    margin-right: 1rem;
+    transition: background-color 0.3s, transform 0.2s; /* Transitions for hover effects */
+    width: 48%; /* Set both buttons to the same width */
 }
 
-.register-link {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-}
-
-.register-link:hover {
-    text-decoration: underline;
+.login-button:hover, .register-button:hover {
+    background-color: #e65c00; /* Darken button on hover */
+    transform: translateY(-2px); /* Lift button on hover */
 }
 
 .login-message {
     color: white;
     font-size: 1rem;
     margin-top: 1rem;
+    text-align: center; /* Centered message */
 }
 
-/* Hide the image container on small screens */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .left-container {
-        display: none;
-    }
     .right-container {
-        flex: 1;
-        width: 100%;
-        padding: 1.5rem;
-        border-radius: 0;
+        padding: 2rem; /* Adjusted for smaller screens */
+        border-radius: 0; /* Remove border radius */
         min-width: unset;
-        height: auto;
-    }
-    .login-form {
-        max-width: 90%;
     }
 }
 
 @media (max-width: 480px) {
     .login-title {
-        font-size: 1.5rem;
+        font-size: 2rem; /* Adjust title size for smaller screens */
     }
     .form-control {
         padding: 0.5rem;
         font-size: 0.9rem;
+        margin-left: 0; /* Remove left margin for smaller screens */
+        margin-right: 0; /* Remove right margin for smaller screens */
     }
-    .login-button {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+    .login-button, .register-button {
+        padding: 0.5rem 1rem; /* Adjust button size for smaller screens */
+        font-size: 0.9rem; /* Adjust font size */
+        width: 100%; /* Full width for buttons on small screens */
+        margin-bottom: 0.5rem; /* Space between buttons */
     }
 }
