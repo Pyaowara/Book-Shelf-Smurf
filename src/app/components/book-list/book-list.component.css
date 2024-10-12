@@ -69,14 +69,17 @@ drag-scroll {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+
 }
 
 h3 {
   font-weight: 500;
+    color: black;
 }
 
 p {
   font-weight: 200;
+    color: black;
 }
 
 .book-info p {
@@ -90,6 +93,7 @@ p {
 }
 
 .list-Dev {
+  color: black;
   border-radius: 55px;
   border: 2px solid red;
   padding: 10px;

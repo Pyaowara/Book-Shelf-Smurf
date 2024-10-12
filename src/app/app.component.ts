@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
 
   public userData: UserProfileResponse | null = null;
   isLeftMenuVisible: boolean = false;
-  opened: boolean = false;
+  opened= false;
   searchQuery: string = '';
   isFilterModalVisible: boolean = false;
 

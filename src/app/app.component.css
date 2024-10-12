@@ -3,27 +3,30 @@ body {
   margin: 0;
   font-family: "Kanit", sans-serif;
 }
+mat-sidenav-container{
+  height: 100vh;
+  background-color: #3F3F3F;
+}
 
 mat-toolbar {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: aliceblue;
-  background: #2c2c2c;
-  z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background-color: #2c2c2c;
+  z-index: 1000;
 }
 mat-icon{
   color: white;
 }
 mat-sidenav-content{
-  height: calc(205vh - 115vh);
+  padding-top: 70px;
+  height: calc(100vh - 70px);
 }
 mat-sidenav{
   width: 200px;
-  background-color: cornflowerblue;
+  background-color: #2C2C2C;
 }
 
 .search-container {
@@ -60,7 +63,6 @@ button {
   padding-right: 20px; /* Padding to ensure buttons don't overflow */
 }
 
-.wishlist-button,
 .user-profile-button {
   background-color: #515151;
   border: none;
@@ -72,7 +74,6 @@ button {
   transition: background-color 0.3s ease;
 }
 
-.wishlist-button:hover,
 .user-profile-button:hover {
   background-color: #3f3f3f;
 }
@@ -157,6 +158,9 @@ button {
   justify-content: center;
   align-items: center;
 }
+button{
+  color: white;
+}
 
 .filter-modal-content {
   background-color: #fff;
@@ -171,6 +175,11 @@ h2 {
   font-size: 1.5rem;
   color: #333;
   text-align: center;
+  color: black;
+
+}
+label{
+  color: black;
 }
 
 .category-select {
@@ -230,10 +239,13 @@ h2 {
 .category-checkbox {
   display: flex;
   align-items: center;
+  color: black;
+
 }
 
 .category-checkbox input {
   margin-right: 10px; /* Space between checkbox and label */
+
 }
 
 @media (max-width: 600px) {

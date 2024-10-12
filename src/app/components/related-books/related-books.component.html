@@ -1,6 +1,4 @@
 <div class="book-detail-container">
-  <br><br><br>
-  
     <div *ngIf="book$ | async as book; else loading" class="book-detail">
       <div class="book-header">
         <h2>{{ book.book_name_en }}</h2>
@@ -30,7 +28,7 @@
       </div>
   
       <div *ngIf="seriesBooks$ | async as seriesBooks">
-        <h3>Books in the Same Series</h3>
+        <h3 style="color: black;">Books in the Same Series</h3>
         <div class="related-books-container">
           <div *ngFor="let seriesBook of seriesBooks" class="related-book-card" (click)="navigateToBook(seriesBook.book_id)">
             <div class="related-book-info">

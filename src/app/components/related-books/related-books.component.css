@@ -20,6 +20,9 @@
     font-size: 2em;
     margin: 0;
   }
+  p,h2{
+  color: black;
+  }
   
   .book-header h3 {
     font-size: 1.5em;
@@ -47,6 +50,7 @@
   
   .book-info p {
     margin: 5px 0;
+    color: black;
   }
   
   .book-description {
@@ -99,5 +103,5 @@
   .related-book-info p {
     margin: 0;
     font-size: 1em;
+    color: black;
   }
-  

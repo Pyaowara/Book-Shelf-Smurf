@@ -1,13 +1,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
 <body>
   <div *ngIf="shouldShowControls()">
-
-    <div *ngIf="isLeftMenuVisible">
-        <div id="left-menu" class="left-menu">
-          <mat-list>
+    <mat-sidenav-container>
+  <mat-sidenav [(opened)]="opened" mode="over">
+          <mat-list class="side-content">
             <mat-list-item><button (click)="goToBookList()" id="home-button" class="home-button">Home</button></mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item><button (click)="goToAllBooks()" id="book-button" class="book-button">Books</button></mat-list-item>
@@ -17,20 +15,19 @@
             <mat-list-item><button (click)="goToFavorite()" class="wishlist-button">Wishlist</button></mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item><button (click)="goToForums()" class="wishlist-button">Forums</button></mat-list-item>
-            <mat-divider></mat-divider>
+            <mat-divider *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'"></mat-divider>
             <mat-list-item><button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddBooks()" class="book_add">Add Book</button></mat-list-item>
-            <mat-divider></mat-divider>
+            <mat-divider *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'"></mat-divider>
             <mat-list-item><button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddSeries()" class="serie_add">Add Serie</button></mat-list-item>
-            <mat-divider></mat-divider>
+            <mat-divider *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'"></mat-divider>
             <mat-list-item><button *ngIf="userData?.user_permission === 'Manager'"(click)="goToAddPublisher()" class="publisher_add">Add publisher</button></mat-list-item>
-            <mat-divider></mat-divider>
+            <mat-divider *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'"></mat-divider>
             <mat-list-item><button *ngIf="userData?.user_permission === 'Manager' || userData?.user_permission === 'Publisher'" (click)="goToAddAuthor()" class="author-add">Add Author</button></mat-list-item>
-        </mat-list>
-        </div>
-    </div>
-
+          </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
 <mat-toolbar>
-      <button mat-icon-button (click)="leftMenuToggleButton()" class="example-icon" aria-label="Example icon-button with menu icon">
+      <button mat-button mat-icon-button (click)="opened=!opened" class="example-icon" aria-label="Example icon-button with menu icon">
         <mat-icon>menu</mat-icon>
       </button>
       <div class="search-container">
@@ -43,12 +40,6 @@
             <button (click)="goToUserProfile()" class="user-profile-button">User</button>
           </div>
 </mat-toolbar>
-
-  <!-- <mat-sidenav-container>
-  <mat-sidenav opened>Start</mat-sidenav>
-  <mat-sidenav-content>Main</mat-sidenav-content>
-  </mat-sidenav-container> -->
-
     <div *ngIf="isFilterModalVisible" class="filter-modal">
       <div class="filter-modal-content">
         <h2>Select Categories</h2>
@@ -66,9 +57,12 @@
         </div>
       </div>
     </div>
-    
 
-  </div>
-  
-  <router-outlet></router-outlet>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+</div>
+
 </body>

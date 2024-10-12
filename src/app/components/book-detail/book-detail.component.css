@@ -26,6 +26,9 @@
   text-align: center;
   margin-bottom: 20px;
 }
+.book-header p{
+  color: black !important;
+}
 
 .book-header h2 {
   font-size: 2em;
@@ -61,10 +64,14 @@
 .book-info p {
   margin: 5px 0;
   line-height: 1.6;
+  color: black;
 }
 
 .book-description {
   margin-top: 20px;
+}
+.book-description p{
+  color: black;
 }
 
 .book-description h3 {
@@ -75,6 +82,7 @@
 
 .comments-section {
   margin-top: 40px;
+  color: black;
 }
 
 .post-comment {

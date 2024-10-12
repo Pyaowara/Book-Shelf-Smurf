@@ -1,4 +1,3 @@
-<br><br><br><br>
 <div class="book-list-container">
   <div class="books-container">
       <div *ngFor="let book of searchResults$ | async" class="book-card" [routerLink]="['/book', book.book_id]" (click)="saveHistory(book.book_id)">

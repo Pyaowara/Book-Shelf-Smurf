@@ -6,6 +6,7 @@ import { Router, RouterModule  } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
+// import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-book-list',
@@ -19,7 +20,7 @@ import { DragScrollComponent, DragScrollItemDirective } from 'ngx-drag-scroll';
     MatSlideToggleModule,
     DragScrollComponent,
     DragScrollItemDirective,
-
+    // MatSidenavModule,
   ],
 })
 export class BookListComponent {

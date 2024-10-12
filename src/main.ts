@@ -52,6 +52,6 @@ export const routes: Routes = [
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(withFetch()),
-    provideRouter(routes)
+    provideRouter(routes), provideAnimationsAsync()
   ],
 });
