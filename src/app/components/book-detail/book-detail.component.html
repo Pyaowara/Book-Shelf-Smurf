@@ -28,6 +28,23 @@
       <button type="submit" *ngIf="userData?.user_permission === 'Manager' || userData?.publisher_id == book.publisher.publisher_id" (click)="editBook()">Edit Book</button>
       <button type="submit" *ngIf="userData?.user_permission === 'Manager' || userData?.publisher_id == book.publisher.publisher_id" (click)="dropBook()">Delete</button>
     </div>
+
+    <div class="book-description">
+      <h3>Where to buy?</h3>
+    </div>
+    <div class="shop-links">
+      <button *ngFor="let shop of shopLinks" (click)="redirectToShop(shop.shop_link)" class="shop-button">
+        <ng-container *ngIf="shop.shop_image !== ''; else showDetail">
+          <img [src]="shop.shop_image" alt="Shop Image" class="shop-image" />
+        </ng-container>
+        <ng-template #showDetail>
+          {{ shop.shop_detail }}
+        </ng-template>
+      </button>
+    </div>
+    
+    
+
     <div class="book-description">
       <h3>Description</h3>
       <p>{{ book.book_descriptions }}</p>

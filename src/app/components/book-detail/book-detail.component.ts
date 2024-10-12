@@ -9,6 +9,7 @@ import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user_service/user.service';
 import { BookService } from '../../services/book-service/book.service';
+import { BookShopService  } from '../../services/book-service/book-shop.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -30,6 +31,7 @@ export class BookDetailComponent implements OnInit {
   votingData: any[] = [];
   isFavorite: boolean = false;
   allfavorite: any;
+  shopLinks: any[] = [];
   
 
   constructor(
@@ -39,7 +41,8 @@ export class BookDetailComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private userService: UserService,
-    private bookService: BookService
+    private bookService: BookService,
+    private bookShopService: BookShopService
   ) {}
 
   async ngOnInit() {
@@ -57,8 +60,16 @@ export class BookDetailComponent implements OnInit {
     }
     await this.loadDataUser();
     await this.loadFavorite();
+    this.loadShopLinks();
     this.fetchVotingData();
     this.fetchComments();
+  }
+
+  loadShopLinks(): void {
+    console.log("Hyewa");
+    this.bookShopService.getShopsByBookId(Number(this.bookId)).subscribe((data) => {
+      this.shopLinks = data;
+    });
   }
 
   async loadDataUser() {
@@ -254,4 +265,9 @@ export class BookDetailComponent implements OnInit {
     this.bookService.dropBook(Number(this.bookId));
     await this.router.navigate(['booklist']);
   }
+
+  redirectToShop(shopLink: string): void {
+    window.open(shopLink, '_blank');
+  }
+  
 }

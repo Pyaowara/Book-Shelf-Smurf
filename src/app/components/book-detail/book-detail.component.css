@@ -43,6 +43,7 @@
   display: flex;
   align-items: flex-start;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .book-image {
@@ -267,3 +268,31 @@ button[type="reset"]:hover {
 .reply-button:hover {
   background-color: #ff8d41;
 }
+
+.shop-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.shop-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shop-button img {
+  max-width: 100px;
+  height: auto;
+}
+
+.shop-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
