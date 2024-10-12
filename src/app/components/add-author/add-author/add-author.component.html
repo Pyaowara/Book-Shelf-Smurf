@@ -1,12 +1,6 @@
 <br><br><br><br>
 <div class="container">
-    ADD AUTHOR<br><br>
-    <!-- input name author -->
-    <input type="text" [(ngModel)]="author_name" placeholder="Enter author name"><br><br>
-
-    <!-- input  author descrip -->
-    <input type="text" [(ngModel)]="author_description" placeholder="Enter author description"><br><br>
-
+    <h3>Add Author</h3>
     <!-- input image publisher -->
     <label for="file-input" class="image-label">
         <img *ngIf="base64Image" [src]="base64Image" alt="Image preview" class="image-preview" />
@@ -16,5 +10,21 @@
         <input type="file" id="file-input" (change)="onFileChange($event)" accept="image/*" />
     </label><br><br>
 
-    <button type="submit" (click)="submit()">submit</button>
+    <!-- input name author -->
+    <input class="texin" type="text" [(ngModel)]="author_name" placeholder="Enter author name"><br>
+
+    <!-- input  author descrip -->
+    <input class="texin" type="text" [(ngModel)]="author_description" placeholder="Enter author description"><br><br>
+
+    <button type="submit" (click)="submit()">submit</button><br><br>
+
+    <div *ngIf="noti_succes" class="alert">
+        <span class="closebtn" (click)="noti_succes = false;">&times;</span>
+        Update successful.
+    </div>
+    
+    <div *ngIf="noti_fail" class="alert" style="background-color: #F66358;">
+        <span class="closebtn" (click)="noti_fail = false;">&times;</span>
+        {{message}}
+    </div>
 </div>

@@ -1,24 +1,27 @@
 <br><br><br><br>
 <div class="container">
-    <div class="headtext">EDIT BOOK</div>
+    <div class="headtext"><h3>Add Book</h3></div>
+
     <div class="input">
         <!-- input book_name_th -->
-        <input type="text" [(ngModel)]="book_name_th" placeholder="Enter book name (Thai)"><br><br>
+        <input class="texin" type="text" [(ngModel)]="book_name_th" placeholder="Enter book name (Thai)"><br>
 
         <!-- input book_name_en -->
-        <input type="text" [(ngModel)]="book_name_en" placeholder="Enter book name (English)"><br><br>
+        <input class="texin" type="text" [(ngModel)]="book_name_en" placeholder="Enter book name (English)"><br>
 
         <!-- input book_name_original -->
-        <input type="text" [(ngModel)]="book_name_originl" placeholder="Enter original book name"><br><br>
+        <input class="texin" type="text" [(ngModel)]="book_name_originl" placeholder="Enter original book name"><br>
 
         <!-- input book_image -->
+        <br>
         <label for="file-input" class="image-label">
             <img *ngIf="base64Image" [src]="base64Image" alt="Image preview" class="image-preview" />
             <img *ngIf="!base64Image"
                 src="https://t3.ftcdn.net/jpg/04/60/01/36/360_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg"
                 alt="Upload Image" class="image-preview" />
             <input type="file" id="file-input" (change)="onFileChange($event)" accept="image/*" />
-        </label><br><br>
+        </label><br>
+        <br>
 
         <!-- input book_category -->
         <div class="headtext">book category</div>
@@ -30,7 +33,7 @@
         </div><br>
 
         <!-- input book_descriptions -->
-        <input type="text" [(ngModel)]="book_descriptions" placeholder="Enter book descriptions"><br><br>
+        <textarea class="texin" type="text" [(ngModel)]="book_descriptions" placeholder="Enter book descriptions"></textarea><br>
 
         <!-- input book_status -->
         <div class="headtext">status</div>
@@ -39,16 +42,16 @@
             <option value="Not Available">Not Available</option>
             <option value="Now Available">Now Available</option>
             <option value="Unknown">Unknown</option>
-        </select><br><br>
+        </select><br>
 
 
         <!-- input book_price -->
-        <div class="headtext">price</div>
-        <input type="number" [(ngModel)]="book_price" placeholder="Enter book price"><br><br>
+        <div class="texin" class="headtext">price</div>
+        <input class="texin" type="number" [(ngModel)]="book_price" placeholder="Enter book price"><br>
 
         <!-- input book_pages -->
-        <div class="headtext">pages</div>
-        <input type="number" [(ngModel)]="book_pages" placeholder="Enter number of pages"><br><br>
+        <div class="texin" class="headtext">pages</div>
+        <input class="texin" type="number" [(ngModel)]="book_pages" placeholder="Enter number of pages"><br>
 
         <!-- input Language -->
         <div class="headtext">language</div>
@@ -60,20 +63,20 @@
             <option value="Korean">Korean</option>
             <option value="Chinese">Chinese</option>
             <option value="Japanese">Japanese</option>
-        </select><br><br>
+        </select><br>
 
         <!-- input release_date -->
         <div class="headtext">release</div>
-        <input type="date" [(ngModel)]="release_date" placeholder="Select release date"><br><br>
+        <input class="texin"type="date" [(ngModel)]="release_date" placeholder="Select release date"><br>
 
         <!-- input author -->
-        <div class="headtext">author</div>
+        <div class="texin" class="headtext">author</div>
         <select id="author" [(ngModel)]="selectedAuthor" name="author">
             <option value="" disabled selected>Select a author</option>
             <option *ngFor="let aut of author_all" [value]="aut.author_id">
                 {{ aut.author_name }}
             </option>
-        </select><br><br>
+        </select><br>
 
         <!-- input publisher -->
         <div *ngIf="userData?.publisher_id === null">
@@ -83,7 +86,7 @@
                 <option *ngFor="let pub of publisher_all" [value]="pub.publisher_id">
                     {{ pub.publisher_name }}
                 </option>
-            </select><br><br>
+            </select><br>
         </div>
 
         <!-- input serie -->
@@ -93,21 +96,31 @@
             <option *ngFor="let serie of serie_all" [value]="serie.serie_id">
                 {{ serie.serie_name_th }}
             </option>
-        </select><br><br>
+        </select><br>
 
         <!-- linkshop -->
-        <div class="headtext">number of shop link</div>
-        <input type="number" [(ngModel)]="numberOfLinks" placeholder="Enter number of link" (input)="shop_book()"><br>
+        <div class="texin" class="headtext">Link Shop amount </div>
+        <input class="texin" type="number" [(ngModel)]="numberOfLinks" placeholder="Enter number of link" (input)="shop_book()"><br><br>
         <div *ngFor="let link of links; let i = index">
-            <input type="text" [(ngModel)]="links[i].shop_link" placeholder="Shop Link {{ i + 1 }}">
-            <input type="text" [(ngModel)]="links[i].shop_detail" placeholder="Shop Detail {{ i + 1 }}">
-            <input type="file" [(ngModel)]="links[i].shop_image" (change)="onFileChangeShopLink($event, i)"
+            <div class="headtext">Shop Link {{i+1}}</div>
+            <input class="texin" type="text" [(ngModel)]="links[i].shop_link" placeholder="Shop Link {{ i + 1 }}">
+            <input class="texin" type="text" [(ngModel)]="links[i].shop_detail" placeholder="Shop Detail {{ i + 1 }}">
+            <input class="texin" type="file" [(ngModel)]="links[i].shop_image" (change)="onFileChangeShopLink($event, i)"
                 accept="image/*">
         </div>
 
         <!-- submit -->
-        <br><button type="submit" (click)="submit()">Update</button><br>
-        {{message}}
+        <button class="button" type="submit" (click)="submit()">Update</button><br><br>
+        
+        <div *ngIf="noti_succes" class="alert">
+            <span class="closebtn" (click)="noti_succes = false;">&times;</span>
+            Update successful.
+        </div>
+        
+        <div *ngIf="noti_fail" class="alert" style="background-color: #F66358;">
+            <span class="closebtn" (click)="noti_fail = false;">&times;</span>
+            {{message}}
+        </div>
 
     </div>
 

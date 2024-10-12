@@ -17,6 +17,8 @@ export class AddAuthorComponent {
   author_name:string = '';
   author_description:string = '';
   message:string = '';
+  noti_succes:boolean = false;
+  noti_fail:boolean = false;
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -32,25 +34,24 @@ export class AddAuthorComponent {
     }
   }
 
+  notifySucces(){
+    this.noti_succes = true;
+    this.noti_fail = false;
+  }
+
+  notifyfail(){
+    this.noti_fail = true;
+    this.noti_succes = false;
+  }
+
   async submit(){
     if(this.author_name == ''){
       this.message = 'Please fill in all information.';
+      this.notifyfail();
       return;
     }
     let res = await this.bookService.addAuthor(this.author_name, this.base64Image!, this.author_description);
     this.message = res.message;
-    this.notify();
-  }
-
-  notify(){
-    alert(this.message);
-    this.reset();
-  }
-
-  reset(){
-    this.base64Image = null;
-    this.author_name= '';
-    this.author_description= '';
-    this.message= '';
+    this.notifySucces();
   }
 }

@@ -1,9 +1,9 @@
 <br><br><br><br>
 <div class="container">
-    <p>ADD PUBLISHER</p><br>
+    <h3>Add Publisher</h3>
 
     <!-- input name publisher -->
-        <input type="text" [(ngModel)]="publisher_name" placeholder="Enter publisher name"><br><br>
+    <input class="texin" type="text" [(ngModel)]="publisher_name" placeholder="Enter publisher name"><br><br>
 
     <!-- input image publisher -->
     <label for="file-input" class="image-label">
@@ -14,7 +14,16 @@
         <input type="file" id="file-input" (change)="onFileChange($event)" accept="image/*" />
     </label><br><br>
 
-    <button type="submit" (click)="submit()">submit</button>
-    <br>{{message}}
+    <button type="submit" (click)="submit()">submit</button><br><br>
+
+    <div *ngIf="noti_succes" class="alert">
+        <span class="closebtn" (click)="noti_succes = false;">&times;</span>
+        Update successful.
+    </div>
+    
+    <div *ngIf="noti_fail" class="alert" style="background-color: #F66358;">
+        <span class="closebtn" (click)="noti_fail = false;">&times;</span>
+        {{message}}
+    </div>
 </div>
 

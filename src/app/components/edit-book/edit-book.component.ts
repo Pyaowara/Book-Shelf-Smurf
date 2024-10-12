@@ -46,6 +46,8 @@ export class EditBookComponent implements OnInit {
   publisher_all: { publisher_id: string, publisher_name: string, publisher_image: string }[] = [];
   serie_all: { serie_id: string, serie_name_th: string, serie_name_en: string, serie_name_original: string, serie_status: string, serie_detail: string }[] = [];
   author_all: {author_id:string, author_name:string, author_description:string, author_image:string}[] = [];
+  noti_succes:boolean = false;
+  noti_fail:boolean = false;
 
   categories = [
     { id: 'fiction', label: 'Fiction', selected: false },
@@ -175,6 +177,16 @@ export class EditBookComponent implements OnInit {
     }
   }
 
+  notifySucces(){
+    this.noti_succes = true;
+    this.noti_fail = false;
+  }
+
+  notifyfail(){
+    this.noti_fail = true;
+    this.noti_succes = false;
+  }
+
   getSelectedValues() {
     const selectedValues = this.categories
       .filter(category => category.selected)
@@ -194,6 +206,7 @@ export class EditBookComponent implements OnInit {
         let res_addshop = await this.bookService.addShops(this.links);
         if (res_addshop) {
           this.message = res_addshop.message;
+          this.notifySucces();
         }
       }
       this.message = 'Update book sucess';
@@ -201,6 +214,7 @@ export class EditBookComponent implements OnInit {
     }
     catch{
       this.message = 'Update book faill';
+      this.notifyfail();
     }
 
   }
