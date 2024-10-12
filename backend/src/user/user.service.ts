@@ -35,6 +35,7 @@ export class UserService {
       ...userDetails,
       user_pass: passwordHash,
       user_permission: '3',
+      user_image: 'https://i.imgur.com/tdrsXyg.jpeg',
     });
 
     await this.userRepository.save(newUser);
