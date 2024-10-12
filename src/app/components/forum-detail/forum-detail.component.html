@@ -23,7 +23,9 @@
                 <p>{{ comment.comment }}</p>
             </div>
             <div class="comment-footer">
-                <button *ngIf="comment.user.user_id === userId" (click)="deleteComment(comment.forum_comment_id)" class="vote-button">Delete</button>
+                <button *ngIf="comment.user.user_id === userId" 
+                (click)="confirmDeleteComment(comment.forum_comment_id, $event)" 
+                class="vote-button">Delete</button>        
                 <button (click)="toggleReply(comment.forum_comment_id)" class="reply-button">Reply</button>
 
                 <div *ngIf="replyMode[comment.forum_comment_id]" class="reply-section">
@@ -44,7 +46,9 @@
                             <p>{{ reply.comment }}</p>
                         </div>
                         <div class="reply-footer">
-                            <button *ngIf="reply.user.user_id === userId" (click)="deleteComment(reply.forum_comment_id)" class="vote-button">Delete</button>
+                            <button *ngIf="reply.user.user_id === userId" 
+                            (click)="confirmDeleteComment(reply.forum_comment_id, $event)" 
+                            class="vote-button">Delete</button>
                         </div>
                     </div>
                 </div>

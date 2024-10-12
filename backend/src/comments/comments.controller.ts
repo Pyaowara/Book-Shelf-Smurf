@@ -13,7 +13,8 @@ export class CommentsController {
         @Body('book_id') bookId: number,
         @Body('comment_detail') commentDetail: string,
         @Body('user_id') userId: number,
-        @Body('score') score: number
+        @Body('score') score: number,
+        @Body('spoiler') spoiler: boolean
     ): Promise<{ message: string }> {
         if (!bookId || !commentDetail || !userId || !score) {
         throw new BadRequestException('All fields (book_id, comment_detail, user_id, score) are required');
@@ -24,12 +25,13 @@ export class CommentsController {
         }
 
         try {
-        await this.commentService.addComment(bookId, commentDetail, userId, score);
+        await this.commentService.addComment(bookId, commentDetail, userId, score, spoiler);
         return { message: 'Comment added successfully!' };
         } catch (error) {
         throw new InternalServerErrorException('Error adding comment');
         }
     }
+
     @Get(':id/comments')
     async findCommentsByBookId(@Param('id') id: string): Promise<Comment[]> {
         return this.commentService.findCommentsByBookId(Number(id));

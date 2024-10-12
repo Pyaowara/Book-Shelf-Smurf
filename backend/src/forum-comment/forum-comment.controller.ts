@@ -58,6 +58,7 @@ async findTitle(@Param('id') id: string): Promise<{ title: string }> {
     @Param('commentId') commentId: number,
     @Body('user_id') userId: number
   ): Promise<{ message: string }> {
+    console.log("Niga what");
     if (!commentId || !userId) {
       throw new BadRequestException('Comment ID and User ID are required');
     }

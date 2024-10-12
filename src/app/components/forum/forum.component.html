@@ -28,7 +28,9 @@
           <div class="forum-body">
             <p>{{ forum.forum_title }}</p>
           </div>
-          <button *ngIf="forum.user.user_id === userId" (click)="deleteForum(forum.forum_id, $event)" class="vote-button">Delete</button>
+          <button *ngIf="forum.user.user_id === userId" 
+        (click)="confirmDelete(forum.forum_id, $event)" 
+        class="vote-button">Delete</button>
         </div>
     </div>
     

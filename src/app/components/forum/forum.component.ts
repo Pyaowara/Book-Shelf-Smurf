@@ -86,5 +86,13 @@ export class ForumComponent implements OnInit {
     });
   }
 
+  confirmDelete(forumId: number, event: Event): void {
+    event.stopPropagation();
+    const confirmation = confirm("Are you sure you want to delete this forum post?");
+    if (confirmation) {
+      this.deleteForum(forumId, event);
+    }
+  }
+
 
 }

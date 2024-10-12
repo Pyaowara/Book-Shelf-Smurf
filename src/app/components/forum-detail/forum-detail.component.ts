@@ -116,6 +116,7 @@ export class ForumDetailComponent implements OnInit {
   }
 
   deleteComment(forumCommentId: number): void {
+    console.log(forumCommentId);
     if (this.userId === null) {
       console.error('User ID is not available');
       return;
@@ -129,4 +130,13 @@ export class ForumDetailComponent implements OnInit {
   toggleReply(forumCommentId: number): void {
     this.replyMode[forumCommentId] = !this.replyMode[forumCommentId];
   }
+
+  confirmDeleteComment(commentId: number, event: Event): void {
+    event.stopPropagation();
+    const confirmation = confirm("Are you sure you want to delete this comment?");
+    if (confirmation) {
+      this.deleteComment(commentId);
+    }
+  }
+  
 }

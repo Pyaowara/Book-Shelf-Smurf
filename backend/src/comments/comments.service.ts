@@ -21,9 +21,10 @@ export class CommentsService {
     @InjectRepository(Voting)
     private readonly votingRepository: Repository<Voting>,){}
 
-    async addComment(bookId: number, commentDetail: string, userId: number, score: number): Promise<void> {
+    async addComment(bookId: number, commentDetail: string, userId: number, score: number, spoiler: boolean): Promise<void> {
         const book = await this.bookRepository.findOne({ where: { book_id: bookId } });
         const user = await this.userRepository.findOne({ where: { user_id: userId } });
+
       
         if (!book) {
           throw new NotFoundException('Book not found');
@@ -38,6 +39,7 @@ export class CommentsService {
           comment_detail: commentDetail,
           user,
           score,
+          spoiler
         });
       
         await this.commentRepository.save(comment);

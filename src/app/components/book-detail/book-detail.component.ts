@@ -32,6 +32,9 @@ export class BookDetailComponent implements OnInit {
   isFavorite: boolean = false;
   allfavorite: any;
   shopLinks: any[] = [];
+  isChecked: boolean = false;
+  spoilerVisibility: { [key: number]: boolean } = {};
+  
   
 
   constructor(
@@ -66,10 +69,14 @@ export class BookDetailComponent implements OnInit {
   }
 
   loadShopLinks(): void {
-    console.log("Hyewa");
     this.bookShopService.getShopsByBookId(Number(this.bookId)).subscribe((data) => {
       this.shopLinks = data;
     });
+  }
+
+  toggleSpoiler(commentId: number): void {
+    this.spoilerVisibility[commentId] = !this.spoilerVisibility[commentId];
+    console.log(this.spoilerVisibility[commentId]);
   }
 
   async loadDataUser() {
@@ -186,7 +193,8 @@ export class BookDetailComponent implements OnInit {
         book_id: parseInt(this.bookId, 10),
         comment_detail: this.newComment,
         user_id: this.userId,
-        score: this.newScore
+        score: this.newScore,
+        spoiler: this.isChecked
       }).subscribe(() => {
         this.newComment = '';
         this.fetchComments();
@@ -261,13 +269,30 @@ export class BookDetailComponent implements OnInit {
     this.isFavorite = !this.isFavorite;
   }
 
-  async dropBook(){
-    this.bookService.dropBook(Number(this.bookId));
+  async dropBook(): Promise<void> {
+    await this.bookService.dropBook(Number(this.bookId));
     await this.router.navigate(['booklist']);
   }
+  
 
   redirectToShop(shopLink: string): void {
     window.open(shopLink, '_blank');
+  }
+
+  confirmDeleteComment(commentId: number, event: Event): void {
+    event.stopPropagation();
+    const confirmation = confirm("Are you sure you want to delete this comment?");
+    if (confirmation) {
+      this.deleteComment(commentId);
+    }
+  }
+
+  confirmDropBook(event: Event): void {
+    event.stopPropagation();
+    const confirmation = confirm("Are you sure you want to delete this book?");
+    if (confirmation) {
+      this.dropBook();
+    }
   }
   
 }

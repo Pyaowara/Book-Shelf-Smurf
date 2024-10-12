@@ -32,4 +32,7 @@ export class Comment {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'time_stamp' })
   time_stamp: Date;
+
+  @Column({ type: 'tinyint', default: 0, name: 'spoiler' })
+  spoiler: boolean;
 }
