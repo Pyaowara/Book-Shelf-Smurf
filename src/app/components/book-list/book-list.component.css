@@ -93,12 +93,11 @@ p {
 }
 
 .list-Dev {
-  color: black;
+  color: transparent;
   border-radius: 55px;
   padding: 10px;
   text-align: center;
   position: relative;
-  opacity: 0;
 }
 
 .sale-image {
@@ -107,6 +106,6 @@ p {
 }
 
 .show-scroll {
-  overflow-x: auto; /* เปิดการเลื่อนแนวนอนเมื่อเมาส์เข้าใกล้ */
-  transition: overflow 0.3s; /* เพิ่มการเปลี่ยนแปลงให้สวยงาม */
+  overflow-x: auto;
+  transition: overflow 0.3s;
 }
