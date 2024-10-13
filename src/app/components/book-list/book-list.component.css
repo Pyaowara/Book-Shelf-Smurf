@@ -95,11 +95,15 @@ p {
 .list-Dev {
   color: black;
   border-radius: 55px;
-  border: 2px solid red;
   padding: 10px;
-  background-color: white;
   text-align: center;
   position: relative;
+  opacity: 0;
+}
+
+.sale-image {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .show-scroll {
