@@ -1,21 +1,21 @@
 <div class="book-list-container">
-  <div class="list-dev">
+  <div class="list-Dev">
     <img src="https://i.ibb.co/1QxGV9C/image.png" alt="image" class="sale-image">
-</div>
-    <br>
-    <div *ngFor="let category of categories" class="category-container">
-    <h2>{{ category }}</h2>
-    <div class="books-container">
-      <drag-scroll>
-        <div *ngFor="let book of getBooksByCategory(category)" class="book-card" [routerLink]="['/series', book.book_id]" >
-          <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image">
-          <div class="book-info">
-            <h3>{{ book.book_name_en === 'No Details' ? book.book_name_th : book.book_name_en }}</h3>
-            <p class="book-description"><em>{{ book.book_name_originl === 'No Details' ? '' : book.book_name_originl }}</em></p>
-            <p class="book-description">{{ getStars(book.book_score) }}</p>
-          </div>
-        </div>
-      </drag-scroll>
-    </div>
   </div>
+  <br>
+  <div *ngFor="let category of categories" class="category-container">
+  <h2>{{ category }}</h2>
+  <div class="books-container">
+    <drag-scroll>
+      <div *ngFor="let book of getBooksByCategory(category)" class="book-card" [routerLink]="['/series', book.book_id]" >
+        <img *ngIf="book.book_image" [src]="book.book_image" alt="{{ book.book_name_en }}" class="book-image">
+        <div class="book-info">
+          <h3>{{ book.book_name_en === 'No Details' ? book.book_name_th : book.book_name_en }}</h3>
+          <p class="book-description"><em>{{ book.book_name_originl === 'No Details' ? '' : book.book_name_originl }}</em></p>
+          <p class="book-description">{{ getStars(book.book_score) }}</p>
+        </div>
+      </div>
+    </drag-scroll>
+  </div>
+</div>
 </div>

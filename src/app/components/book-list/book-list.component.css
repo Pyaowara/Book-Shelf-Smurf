@@ -92,45 +92,17 @@ p {
   padding-top: 10px;
 }
 
-  .list-dev {
-    background-color: transparent; /* Make background transparent */
-    border: none; /* Remove border */
-    border-radius: 0; /* Remove rounded corners */
-    padding: 0; /* Remove padding */
-    text-align: center; /* Center the content */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Add drop shadow */
-    display: inline-block; /* Ensure it wraps tightly around the image */
-}
-
-.sale-image {
-    width: 100%; /* Make the image responsive */
-    max-width: 500px; /* Optional: Set a max width for the image */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 8px; /* Optional: add rounded corners to the image */
-    transition: transform 0.3s; /* Transition for hover effect */
-}
-
-h3 {
-  font-weight: 500;
+.list-Dev {
   color: black;
-}
-
-p {
-  font-weight: 200;
-  color: black;
-}
-
-.book-info p {
-  margin: 0;
-  font-size: 0.9em;
-  font-weight: 200;
-  min-height: 1.5em;
-  align-items: center;
-  justify-content: center;
-  padding-top: 10px;
+  border-radius: 55px;
+  border: 2px solid red;
+  padding: 10px;
+  background-color: white;
+  text-align: center;
+  position: relative;
 }
 
 .show-scroll {
-  overflow-x: auto;
-  transition: overflow 0.3s;
+  overflow-x: auto; /* เปิดการเลื่อนแนวนอนเมื่อเมาส์เข้าใกล้ */
+  transition: overflow 0.3s; /* เพิ่มการเปลี่ยนแปลงให้สวยงาม */
 }
