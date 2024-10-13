@@ -90,29 +90,25 @@ p {
   align-items: center;
   justify-content: center;
   padding-top: 10px;
-}.list-dev {
-  /* Remove background color and borders */
-  background-color: transparent; /* Make background transparent */
-  border: none; /* Remove border */
-  border-radius: 0; /* Remove rounded corners */
-  padding: 0; /* Remove padding */
-  text-align: center; /* Center the content */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Add drop shadow */
-  display: inline-block; /* Ensure it wraps tightly around the image */
-  margin: 20px; /* Optional: Add margin for spacing around the image */
+}
+
+  .list-dev {
+    background-color: transparent; /* Make background transparent */
+    border: none; /* Remove border */
+    border-radius: 0; /* Remove rounded corners */
+    padding: 0; /* Remove padding */
+    text-align: center; /* Center the content */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Add drop shadow */
+    display: inline-block; /* Ensure it wraps tightly around the image */
 }
 
 .sale-image {
-  width: 100%; /* Make the image responsive */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 8px; /* Optional: add rounded corners to the image */
-  transition: transform 0.3s; /* Transition for hover effect */
+    width: 100%; /* Make the image responsive */
+    max-width: 500px; /* Optional: Set a max width for the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Optional: add rounded corners to the image */
+    transition: transform 0.3s; /* Transition for hover effect */
 }
-
-.sale-image:hover {
-  transform: scale(1.05); /* Slightly enlarge on hover */
-}
-
 
 h3 {
   font-weight: 500;
@@ -135,6 +131,6 @@ p {
 }
 
 .show-scroll {
-  overflow-x: auto; /* Horizontal scroll */
-  transition: overflow 0.3s; /* Smooth transition */
+  overflow-x: auto;
+  transition: overflow 0.3s;
 }
