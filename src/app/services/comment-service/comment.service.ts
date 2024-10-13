@@ -7,7 +7,7 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = 'http://localhost:3000/comments/comments';
+  private apiUrl = 'https://book-back-lovat.vercel.app/comments/comments';
 
   constructor(private http: HttpClient) {}
 
@@ -27,6 +27,6 @@ export class CommentService {
 
   deleteForum(forumId: number, userId: number): Observable<any> {
     const params = new HttpParams().set('userId', userId.toString());
-    return this.http.delete<any>(`http://localhost:3000/forum-comments/forums/delete/${forumId}`, { params });
+    return this.http.delete<any>(`https://book-back-lovat.vercel.app/forum-comments/forums/delete/${forumId}`, { params });
   }
 }

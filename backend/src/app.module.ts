@@ -17,6 +17,9 @@ import { BookShopModule } from './book-shop/book-shop.module';
       port: 3306,
       database: 'book_v2',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      host: process.env.DB_HOST,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
       //ห้ามเปลี่ยนเป็น True นะไอสัส
       //ห้ามเปลี่ยนเป็น True นะไอสัส
       //ห้ามเปลี่ยนเป็น True นะไอสัส

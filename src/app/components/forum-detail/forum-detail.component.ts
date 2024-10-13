@@ -44,7 +44,7 @@ export class ForumDetailComponent implements OnInit {
 
   fetchForumTitle(): void {
     if (this.forumId) {
-        this.http.get<{ title: string }>(`http://localhost:3000/forum-comments/${this.forumId}`).pipe(
+        this.http.get<{ title: string }>(`https://book-back-lovat.vercel.app/forum-comments/${this.forumId}`).pipe(
             catchError(error => {
                 console.error('Error fetching forum title:', error);
                 return of({ title: 'Unknown Forum' });
@@ -57,7 +57,7 @@ export class ForumDetailComponent implements OnInit {
 }
 
   fetchForumComments(): void {
-    this.forumComments$ = this.http.get<any[]>(`http://localhost:3000/forum-comments/findcomment/${this.forumId}`).pipe(
+    this.forumComments$ = this.http.get<any[]>(`https://book-back-lovat.vercel.app/forum-comments/findcomment/${this.forumId}`).pipe(
       map(comments => this.organizeComments(comments)),
       catchError(error => {
         console.error('Error fetching forum comments:', error);
@@ -88,7 +88,7 @@ export class ForumDetailComponent implements OnInit {
 
   submitForumComment(): void {
     if (this.newForum.trim() && this.forumId && this.userId !== null) {
-      this.http.post(`http://localhost:3000/forum-comments/add`, {
+      this.http.post(`https://book-back-lovat.vercel.app/forum-comments/add`, {
         forum_id: this.forumId,
         comment_detail: this.newForum,
         user_id: this.userId,
@@ -101,7 +101,7 @@ export class ForumDetailComponent implements OnInit {
 
   submitForumReply(forumCommentId: number): void {
     if (this.replyForumComment.trim() && this.forumId && this.userId !== null) {
-      this.http.post(`http://localhost:3000/forum-comments/reply`, {
+      this.http.post(`https://book-back-lovat.vercel.app/forum-comments/reply`, {
         forum_id: this.forumId,
         comment_detail: this.replyForumComment,
         user_id: this.userId,
@@ -121,7 +121,7 @@ export class ForumDetailComponent implements OnInit {
       console.error('User ID is not available');
       return;
     }
-    this.http.delete(`http://localhost:3000/forum-comments/${forumCommentId}/delete`, {
+    this.http.delete(`https://book-back-lovat.vercel.app/forum-comments/${forumCommentId}/delete`, {
       body: { user_id: this.userId }
     }).subscribe(() => {
       this.fetchForumComments();

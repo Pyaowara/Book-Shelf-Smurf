@@ -51,7 +51,7 @@ export class BookDetailComponent implements OnInit {
   async ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('id');
     if (this.bookId) {
-      this.book$ = this.http.get<any>(`http://localhost:3000/books/${this.bookId}`).pipe(
+      this.book$ = this.http.get<any>(`https://book-back-lovat.vercel.app/books/${this.bookId}`).pipe(
         catchError(error => {
           console.error('Error fetching book:', error);
           return of({});
@@ -96,7 +96,7 @@ export class BookDetailComponent implements OnInit {
 
   fetchVotingData(): void {
     if (this.userId) {
-      this.http.get<any[]>(`http://localhost:3000/books/voting-status/${this.userId}`).pipe(
+      this.http.get<any[]>(`https://book-back-lovat.vercel.app/books/voting-status/${this.userId}`).pipe(
         tap(votes => {
           this.votingData = votes;
         }),
@@ -112,7 +112,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   fetchComments(): void {
-    this.comments$ = this.http.get<any[]>(`http://localhost:3000/comments/${this.bookId}/comments`).pipe(
+    this.comments$ = this.http.get<any[]>(`https://book-back-lovat.vercel.app/comments/${this.bookId}/comments`).pipe(
         map(comments => this.organizeComments(comments)),
         catchError(error => {
             console.error('Error fetching comments:', error);
@@ -166,7 +166,7 @@ export class BookDetailComponent implements OnInit {
   upvote(commentId: number): void {
     if (this.userId === null) return;
 
-    this.http.post(`http://localhost:3000/comments/comments/${commentId}/upvote`, { userId: this.userId }).subscribe({
+    this.http.post(`https://book-back-lovat.vercel.app/comments/comments/${commentId}/upvote`, { userId: this.userId }).subscribe({
       next: () => {
         this.fetchComments();
         this.updateCommentVotes(commentId);
@@ -178,7 +178,7 @@ export class BookDetailComponent implements OnInit {
   downvote(commentId: number): void {
     if (this.userId === null) return;
 
-    this.http.post(`http://localhost:3000/comments/comments/${commentId}/downvote`, { userId: this.userId }).subscribe({
+    this.http.post(`https://book-back-lovat.vercel.app/comments/comments/${commentId}/downvote`, { userId: this.userId }).subscribe({
       next: () => {
         this.fetchComments();
         this.updateCommentVotes(commentId);
@@ -205,9 +205,9 @@ export class BookDetailComponent implements OnInit {
 
   updateBookScore(): void {
     if (this.bookId) {
-      this.http.patch(`http://localhost:3000/books/${this.bookId}/update-score`, {}).subscribe({
+      this.http.patch(`https://book-back-lovat.vercel.app/books/${this.bookId}/update-score`, {}).subscribe({
         next: () => {
-          this.book$ = this.http.get<any>(`http://localhost:3000/books/${this.bookId}`).pipe(
+          this.book$ = this.http.get<any>(`https://book-back-lovat.vercel.app/books/${this.bookId}`).pipe(
             catchError(error => {
               console.error('Error fetching book:', error);
               return of({});
@@ -227,7 +227,7 @@ export class BookDetailComponent implements OnInit {
 }
 
   updateCommentVotes(commentId: number): void {
-    this.http.patch(`http://localhost:3000/comments/comments/${commentId}/update-votes`, {}).subscribe({
+    this.http.patch(`https://book-back-lovat.vercel.app/comments/comments/${commentId}/update-votes`, {}).subscribe({
       next: () => {
         this.fetchComments();
       },

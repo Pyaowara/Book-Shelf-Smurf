@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NgIf, NgFor, AsyncPipe } from '@angular/common';
-import { Router, RouterModule } from '@angular/router'; // Import RouterModule
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserProfileResponse } from '../../services/user_service/user.respones.interface';
 import { UserService } from '../../services/user_service/user.service';
@@ -14,7 +14,7 @@ import { BookService } from '../../services/book-service/book.service';
   templateUrl: './searched-book.component.html',
   styleUrls: ['./searched-book.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, AsyncPipe, RouterModule, FormsModule] // Add RouterModule to imports
+  imports: [NgIf, NgFor, AsyncPipe, RouterModule, FormsModule]
 })
 export class SearchedBookComponent implements OnInit {
   searchResults$: Observable<any[]> = new Observable();
@@ -33,7 +33,7 @@ export class SearchedBookComponent implements OnInit {
       const query = params['query'] || '';
       const category = params['categories'] || '';
       console.log(query, category);
-      this.searchResults$ = this.http.get<any[]>(`http://localhost:3000/books/searched/f?name=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`);
+      this.searchResults$ = this.http.get<any[]>(`https://book-back-lovat.vercel.app/books/searched/f?name=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`);
     });
     await this.loadData();
   }

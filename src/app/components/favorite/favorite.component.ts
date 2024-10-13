@@ -27,7 +27,7 @@ export class FavoriteComponent implements OnInit{
   async ngOnInit(){
     await this.loadData();
     this.route.queryParams.subscribe(params => {
-      this.favorite$ = this.http.get<any[]>(`http://localhost:3000/books/get/favorite/`+this.userData?.user_id);
+      this.favorite$ = this.http.get<any[]>(`https://book-back-lovat.vercel.app/books/get/favorite/`+this.userData?.user_id);
     });
   }
 

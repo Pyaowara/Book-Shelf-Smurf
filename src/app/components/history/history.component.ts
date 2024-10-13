@@ -35,7 +35,7 @@ export class HistoryComponent implements OnInit{
 
   fetchBooks(){
     this.route.queryParams.subscribe(params => {
-      this.history$ = this.http.get<any[]>(`http://localhost:3000/books/get/history/` + this.userData?.user_id).pipe(
+      this.history$ = this.http.get<any[]>(`https://book-back-lovat.vercel.app/books/get/history/` + this.userData?.user_id).pipe(
         map(history => 
           history.map(item => {
             return {

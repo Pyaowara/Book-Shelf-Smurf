@@ -15,9 +15,9 @@ export class AuthService {
   // private loginApiUrl = 'https://books-shelves.vercel.app/login';
   // private registerApiUrl = 'https://books-shelves.vercel.app/register';
   // private validateTokenApiUrl = 'https://books-shelves.vercel.app/validate-token';
-  private loginApiUrl = 'http://localhost:3000/user/login';
-  private registerApiUrl = 'http://localhost:3000/user/register';
-  private validateTokenApiUrl = 'http://localhost:3000/user/validate-token';
+  private loginApiUrl = 'https://book-back-lovat.vercel.app/user/login';
+  private registerApiUrl = 'https://book-back-lovat.vercel.app/user/register';
+  private validateTokenApiUrl = 'https://book-back-lovat.vercel.app/user/validate-token';
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -95,7 +95,7 @@ export class AuthService {
       return of(null);
     }
   
-    return this.http.post<{ userId: number }>('http://localhost:3000/user/getUserId', { token: userToken }).pipe(
+    return this.http.post<{ userId: number }>('https://book-back-lovat.vercel.app/user/getUserId', { token: userToken }).pipe(
       map(response => response.userId),
       catchError(error => {
         console.error('Error fetching user ID:', error);

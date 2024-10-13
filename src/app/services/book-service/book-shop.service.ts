@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BookShopService {
-  private apiUrl = 'http://localhost:3000/book-shop/shops';
+  private apiUrl = 'https://book-back-lovat.vercel.app/book-shop/shops';
 
   constructor(private http: HttpClient) {}
 

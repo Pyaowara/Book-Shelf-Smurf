@@ -8,7 +8,7 @@ import { lastValueFrom, Observable } from 'rxjs';
 })
 export class BookService {
 
-  private apiUrl = 'http://localhost:3000/books'; // Your backend URL
+  private apiUrl = 'https://book-back-lovat.vercel.app/books'; // Your backend URL
 
   constructor(private http: HttpClient) { }
 
@@ -273,7 +273,7 @@ export class BookService {
   async getBookById(book_id:string|null){
     try {
       return await lastValueFrom(
-        this.http.get<any>(`http://localhost:3000/books/`+book_id)
+        this.http.get<any>(`https://book-back-lovat.vercel.app/books/`+book_id)
       );
     } catch (err) {
       return null;
@@ -283,7 +283,7 @@ export class BookService {
   async getShop(book_id:string|null){
     try {
       return await lastValueFrom(
-        this.http.get<any>(`http://localhost:3000/books/get/shop/`+book_id)
+        this.http.get<any>(`https://book-back-lovat.vercel.app/books/get/shop/`+book_id)
       );
     } catch (err) {
       return null;
